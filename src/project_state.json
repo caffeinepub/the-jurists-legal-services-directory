@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "Law firm application with Google Forms integration for contact form submissions instead of custom form implementation",
+  "architectural_notes": [
+    "Switching from custom backend contact form storage to Google Forms for lead capture"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-leads-page-accessible-only-to-authenticated-admin-users-that-displays-all-contact-form-submissions-with-filtering-by-jurisdiction-and-status",
+      "title": "Create a leads page accessible only to authenticated admin users that displays all contact form submissions with filtering by jurisdiction and status",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-admin-initialization-page-where-the-first-user-can-set-themselves-as-admin-by-connecting-their-internet-identity",
+      "title": "Create an admin initialization page where the first user can set themselves as admin by connecting their Internet Identity",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-contact-form-on-frontend-that-submits-to-backend-with-validation-for-name-phone-email-jurisdiction-practice-area-and-message-fields",
+      "title": "Implement contact form on frontend that submits to backend with validation for name, phone, email, jurisdiction, practice area, and message fields",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-home-page-featuring-hero-section-practice-area-cards-for-family-law-corporate-law-criminal-defense-civil-law-and-property-law-with-descriptions",
+      "title": "Create home page featuring hero section, practice area cards for Family Law, Corporate Law, Criminal Defense, Civil Law, and Property Law with descriptions",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-navigation-header-with-the-jurists-branding-main-navigation-links-jurisdiction-dropdown-and-internet-identity-authentication-controls",
+      "title": "Implement navigation header with The Jurists branding, main navigation links, jurisdiction dropdown, and Internet Identity authentication controls",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-jurisdiction-specific-pages-for-hyderabad-secunderabad-rangareddy-and-cyberabad-highlighting-local-legal-services-with-embedded-contact-forms",
+      "title": "Create jurisdiction-specific pages for Hyderabad, Secunderabad, Rangareddy, and Cyberabad highlighting local legal services with embedded contact forms",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-debug-and-fix-the-leads-page-routing-issue-where-the-leads-page-intermittently-becomes-inaccessible-after-initially-loading-ensuring-the-route-remains-consistently-available-in-the-tanstack-router-configuration",
+      "title": "Debug and fix the leads page routing issue where the /leads page intermittently becomes inaccessible after initially loading, ensuring the route remains consistently available in the TanStack Router configuration",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-and-ensure-the-leadspage-component-is-properly-registered-in-the-router-configuration-with-correct-lazy-loading-and-authentication-guards",
+      "title": "Verify and ensure the LeadsPage component is properly registered in the router configuration with correct lazy loading and authentication guards",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-error-boundary-handling-to-the-leads-page-route-to-catch-and-display-any-runtime-errors-that-might-cause-the-page-to-unmount-unexpectedly",
+      "title": "Add error boundary handling to the leads page route to catch and display any runtime errors that might cause the page to unmount unexpectedly",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-investigate-and-fix-any-react-query-cache-invalidation-or-state-management-issues-that-might-cause-the-leads-page-to-unmount-or-become-unavailable-after-initial-render",
+      "title": "Investigate and fix any React Query cache invalidation or state management issues that might cause the leads page to unmount or become unavailable after initial render",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-contactform-component-implementation-with-an-embedded-google-forms-iframe-that-includes-fields-for-name-phone-email-jurisdiction-dropdown-with-options-hyderabad-secunderabad-rangareddy-cyberabad-practice-area-dropdown-with-options-family-law-corporate-law-criminal-defense-civil-law-property-law-and-message",
+      "title": "Replace the ContactForm component implementation with an embedded Google Forms iframe that includes fields for name, phone, email, jurisdiction (dropdown with options: Hyderabad, Secunderabad, Rangareddy, Cyberabad), practice area (dropdown with options: Family Law, Corporate Law, Criminal Defense, Civil Law, Property Law), and message",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-contactpage-to-display-the-google-forms-embedded-form-with-appropriate-styling-and-layout-that-matches-the-luxury-legal-theme",
+      "title": "Update the ContactPage to display the Google Forms embedded form with appropriate styling and layout that matches the luxury legal theme",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-all-jurisdiction-specific-pages-hyderabad-secunderabad-rangareddy-cyberabad-to-use-the-google-forms-embedded-contact-form-instead-of-the-custom-form",
+      "title": "Update all jurisdiction-specific pages (Hyderabad, Secunderabad, Rangareddy, Cyberabad) to use the Google Forms embedded contact form instead of the custom form",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-servicedetailpage-to-use-the-google-forms-embedded-contact-form-instead-of-the-custom-contactform-component",
+      "title": "Update ServiceDetailPage to use the Google Forms embedded contact form instead of the custom ContactForm component",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-2",
+      "summary": "Create a complete law firm application from scratch with backend contact form submission storage including fields for name, phone, email, jurisdiction, practice area, message, timestamp, and status tracking",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Implement admin access control system with initialization capability where the first user to initialize becomes the admin",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Replace custom contact form with embedded Google Forms containing same fields (name, phone, email, jurisdiction, practice area, message)",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "The Jurists",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,0 +1,85 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-replace-the-contactform-component-implementation-with-an-embedded-google-forms-iframe-that-includes-fields-for-name-phone-email-jurisdiction-dropdown-with-options-hyderabad-secunderabad-rangareddy-cyberabad-practice-area-dropdown-with-options-family-law-corporate-law-criminal-defense-civil-law-property-law-and-message",
+      "featureTitle": "Replace the ContactForm component implementation with an embedded Google Forms iframe that includes fields for name, phone, email, jurisdiction (dropdown with options: Hyderabad, Secunderabad, Rangareddy, Cyberabad), practice area (dropdown with options: Family Law, Corporate Law, Criminal Defense, Civil Law, Property Law), and message",
+      "files": [
+        "frontend/src/components/ContactForm.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-contactpage-to-display-the-google-forms-embedded-form-with-appropriate-styling-and-layout-that-matches-the-luxury-legal-theme",
+      "featureTitle": "Update the ContactPage to display the Google Forms embedded form with appropriate styling and layout that matches the luxury legal theme",
+      "files": [
+        "frontend/src/pages/ContactPage.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-all-jurisdiction-specific-pages-hyderabad-secunderabad-rangareddy-cyberabad-to-use-the-google-forms-embedded-contact-form-instead-of-the-custom-form",
+      "featureTitle": "Update all jurisdiction-specific pages (Hyderabad, Secunderabad, Rangareddy, Cyberabad) to use the Google Forms embedded contact form instead of the custom form",
+      "files": [
+        "frontend/src/pages/JurisdictionPage.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-servicedetailpage-to-use-the-google-forms-embedded-contact-form-instead-of-the-custom-contactform-component",
+      "featureTitle": "Update ServiceDetailPage to use the Google Forms embedded contact form instead of the custom ContactForm component",
+      "files": [
+        "frontend/src/pages/ServiceDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

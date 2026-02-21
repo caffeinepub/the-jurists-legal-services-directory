@@ -1,0 +1,91 @@
+{
+  "kind": "build_request",
+  "title": "Replace custom contact form with embedded Google Forms",
+  "projectName": "The Jurists",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-13",
+      "text": "Replace the ContactForm component implementation with an embedded Google Forms iframe that includes fields for name, phone, email, jurisdiction (dropdown with options: Hyderabad, Secunderabad, Rangareddy, Cyberabad), practice area (dropdown with options: Family Law, Corporate Law, Criminal Defense, Civil Law, Property Law), and message",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "enable google forms instead of our built in form in the website with same set of questions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "ContactForm.tsx component renders a Google Forms iframe instead of custom form elements",
+        "The embedded Google Form contains all original fields: name, phone, email, jurisdiction, practice area, and message",
+        "The iframe is responsive and maintains consistent styling with the rest of the site",
+        "Form submissions go directly to Google Forms instead of the backend canister"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Update the ContactPage to display the Google Forms embedded form with appropriate styling and layout that matches the luxury legal theme",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ]
+      },
+      "acceptanceCriteria": [
+        "ContactPage.tsx renders the updated ContactForm component with Google Forms embed",
+        "The embedded form maintains visual consistency with the deep navy and gold color scheme",
+        "Contact information cards remain visible alongside the Google Form"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Update all jurisdiction-specific pages (Hyderabad, Secunderabad, Rangareddy, Cyberabad) to use the Google Forms embedded contact form instead of the custom form",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ]
+      },
+      "acceptanceCriteria": [
+        "JurisdictionPage.tsx component renders the Google Forms embed",
+        "Each jurisdiction page displays the same Google Form with consistent styling",
+        "Jurisdiction-specific content remains visible above or alongside the form"
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Update ServiceDetailPage to use the Google Forms embedded contact form instead of the custom ContactForm component",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ]
+      },
+      "acceptanceCriteria": [
+        "ServiceDetailPage.tsx renders the Google Forms embed",
+        "Service details and benefits remain visible above the form",
+        "Form styling is consistent with the page layout"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify backend/main.mo or any backend logic",
+    "Do not modify frontend/src/hooks/useInternetIdentity.ts",
+    "Do not modify frontend/src/hooks/useActor.ts",
+    "Do not modify frontend/src/main.tsx",
+    "Do not modify frontend/src/components/ui directory",
+    "The Google Forms URL must be provided by the user or use a placeholder that can be easily replaced"
+  ],
+  "nonGoals": [
+    "Removing the backend contact form submission storage functionality",
+    "Removing the leads page or admin dashboard",
+    "Modifying the authentication system",
+    "Creating a new Google Form (user must provide their own Google Forms URL)",
+    "Implementing form validation in the frontend (Google Forms handles this)"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
