@@ -2,6 +2,9 @@ import { Scale, Award, Users, Target, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Link } from '@tanstack/react-router';
+import SEOHead from '../components/SEOHead';
+import StructuredData, { generateOrganizationSchema, generateLocalBusinessSchema } from '../components/StructuredData';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 export default function AboutPage() {
   const values = [
@@ -38,15 +41,24 @@ export default function AboutPage() {
 
   return (
     <div className="flex flex-col">
+      <SEOHead
+        title="About Us"
+        description="Learn about The Jurists - Hyderabad's trusted legal firm with expertise in family, corporate, criminal, and property law. Our values: integrity, excellence, client focus."
+        canonical="https://thejurists.in/about"
+        keywords="about The Jurists, law firm Hyderabad, legal team Telangana"
+      />
+      <StructuredData data={[generateOrganizationSchema(), generateLocalBusinessSchema()]} />
+
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="container">
-          <div className="max-w-4xl mx-auto text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-              About The Jurists
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Your trusted legal partner across Hyderabad, Secunderabad, Rangareddy, and Cyberabad.
-            </p>
+          <div className="max-w-4xl mx-auto">
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About', href: '/about' }]} />
+            <div className="text-center space-y-6">
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight">About The Jurists</h1>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Your trusted legal partner across Hyderabad, Secunderabad, Rangareddy, and Cyberabad.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -57,23 +69,23 @@ export default function AboutPage() {
             <div className="space-y-6">
               <h2 className="text-4xl md:text-5xl font-bold">Our Story</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                The Jurists was founded with a vision to provide accessible, high-quality legal services across Telangana. 
+                The Jurists was founded with a vision to provide accessible, high-quality legal services across Telangana.
                 We combine deep legal expertise with a client-first approach to deliver exceptional results.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Our team of experienced lawyers specializes in diverse practice areas, from corporate law and criminal defense 
-                to family law and property matters. We serve individuals, families, and businesses across Hyderabad, 
+                Our team of experienced lawyers specializes in diverse practice areas, from corporate law and criminal defense
+                to family law and property matters. We serve individuals, families, and businesses across Hyderabad,
                 Secunderabad, Rangareddy, and Cyberabad.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                With a proven track record of successful cases and satisfied clients, we have established ourselves as 
+                With a proven track record of successful cases and satisfied clients, we have established ourselves as
                 a trusted name in legal services throughout Telangana.
               </p>
             </div>
             <div className="relative">
               <img
                 src="/assets/generated/lawyer-consultation.dim_600x400.jpg"
-                alt="The Jurists Legal Team"
+                alt="The Jurists legal team in Hyderabad office"
                 loading="lazy"
                 className="rounded-2xl shadow-lg border border-border/50"
               />

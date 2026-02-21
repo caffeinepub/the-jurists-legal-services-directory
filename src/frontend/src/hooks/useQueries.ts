@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
 import { useInternetIdentity } from './useInternetIdentity';
-import type { 
-  ContactFormSubmission, 
-  CreateContactFormSubmissionInput, 
+import type {
+  ContactFormSubmission,
+  CreateContactFormSubmissionInput,
   UserProfile,
   Variant,
-  Variant__3
+  Variant__3,
+  BlogArticle,
+  Variant__1,
 } from '../backend';
 
 export function useGetCallerUserProfile() {
@@ -75,7 +77,7 @@ export function useGetContactFormSubmissionsByJurisdiction(jurisdiction: Variant
   const { actor, isFetching } = useActor();
 
   return useQuery<ContactFormSubmission[]>({
-    queryKey: ['contactFormSubmissions', 'jurisdiction', jurisdiction],
+    queryKey: ['contactFormSubmissions', jurisdiction],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getContactFormSubmissionsByJurisdiction(jurisdiction);
@@ -88,7 +90,7 @@ export function useGetContactFormSubmissionsByStatus(status: Variant) {
   const { actor, isFetching } = useActor();
 
   return useQuery<ContactFormSubmission[]>({
-    queryKey: ['contactFormSubmissions', 'status', status],
+    queryKey: ['contactFormSubmissions', status],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getContactFormSubmissionsByStatus(status);
@@ -114,25 +116,17 @@ export function useUpdateContactFormSubmissionStatus() {
 
 export function useIsCallerAdmin() {
   const { actor, isFetching } = useActor();
-  const { identity } = useInternetIdentity();
 
   return useQuery<boolean>({
-    queryKey: ['isCallerAdmin', identity?.getPrincipal().toString()],
+    queryKey: ['isAdmin'],
     queryFn: async () => {
-      if (!actor || !identity) return false;
-      try {
-        const result = await actor.isCallerAdmin();
-        return result;
-      } catch (error) {
-        console.error('Error checking admin status:', error);
-        return false;
-      }
+      if (!actor) return false;
+      return actor.isCallerAdmin();
     },
-    enabled: !!actor && !isFetching && !!identity,
+    enabled: !!actor && !isFetching,
     staleTime: 60000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    retry: 1,
   });
 }
 
@@ -140,19 +134,12 @@ export function useIsAdminActorFieldInitialized() {
   const { actor, isFetching } = useActor();
 
   return useQuery<boolean>({
-    queryKey: ['isAdminActorFieldInitialized'],
+    queryKey: ['isAdminInitialized'],
     queryFn: async () => {
       if (!actor) return false;
-      try {
-        return await actor.isAdminActorFieldInitialized();
-      } catch (error) {
-        console.error('Error checking admin initialization:', error);
-        return false;
-      }
+      return actor.isAdminActorFieldInitialized();
     },
     enabled: !!actor && !isFetching,
-    staleTime: 10000,
-    retry: 1,
   });
 }
 
@@ -163,18 +150,51 @@ export function useInitializeAccessControl() {
   return useMutation({
     mutationFn: async () => {
       if (!actor) throw new Error('Actor not available');
-      try {
-        await actor.initializeAccessControl();
-      } catch (error: any) {
-        if (error.message?.includes('already initialized')) {
-          return;
-        }
-        throw error;
-      }
+      return actor.initializeAccessControl();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['isAdminActorFieldInitialized'] });
-      queryClient.invalidateQueries({ queryKey: ['isCallerAdmin'] });
+      queryClient.invalidateQueries({ queryKey: ['isAdminInitialized'] });
+      queryClient.invalidateQueries({ queryKey: ['isAdmin'] });
     },
+  });
+}
+
+// Blog article queries
+export function useGetAllBlogArticles() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<BlogArticle[]>({
+    queryKey: ['blogArticles'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllBlogArticles();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useGetBlogArticleById(id: bigint) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<BlogArticle | null>({
+    queryKey: ['blogArticle', id.toString()],
+    queryFn: async () => {
+      if (!actor) return null;
+      return actor.getBlogArticleById(id);
+    },
+    enabled: !!actor && !isFetching && id > 0n,
+  });
+}
+
+export function useGetBlogArticlesByCategory(category: Variant__1) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<BlogArticle[]>({
+    queryKey: ['blogArticles', category],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getBlogArticlesByCategory(category);
+    },
+    enabled: !!actor && !isFetching,
   });
 }

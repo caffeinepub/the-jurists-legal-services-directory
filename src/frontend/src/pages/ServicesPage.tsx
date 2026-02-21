@@ -1,142 +1,144 @@
 import { Link } from '@tanstack/react-router';
-import { Heart, Building2, Shield, Gavel, Home, FileText, Banknote, Landmark, Rocket, Users, ArrowRight } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
+import { Heart, Building2, Shield, Gavel, Home, FileText, Landmark, Briefcase, Users, Calculator } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import SEOHead from '../components/SEOHead';
+import StructuredData, { generateLocalBusinessSchema, generateOrganizationSchema } from '../components/StructuredData';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 export default function ServicesPage() {
   const services = [
     {
-      title: 'Family Law',
-      description: 'Comprehensive family law services including divorce, child custody, matrimonial disputes, adoption, maintenance, and domestic violence cases.',
       icon: Heart,
+      title: 'Family Law',
+      description: 'Comprehensive family law services including divorce, child custody, matrimonial disputes, and family legal matters.',
       href: '/services/family-law',
       image: '/assets/generated/family-law-consultation.dim_800x500.jpg',
+      alt: 'Family law attorney consultation for divorce and custody cases',
     },
     {
-      title: 'Corporate Law',
-      description: 'Expert corporate legal services for businesses including company formation, compliance, contracts, mergers & acquisitions, and corporate governance.',
       icon: Building2,
+      title: 'Corporate Law',
+      description: 'Business legal services including company formation, contracts, compliance, mergers, and corporate governance.',
       href: '/services/corporate-law',
       image: '/assets/generated/corporate-law-meeting.dim_800x500.jpg',
+      alt: 'Corporate law services for businesses in Hyderabad',
     },
     {
-      title: 'Criminal Defense',
-      description: 'Aggressive criminal defense representation for all charges including bail applications, trial defense, appeals, and white-collar crime defense.',
       icon: Shield,
+      title: 'Criminal Defense',
+      description: 'Expert criminal defense representation including bail applications, trial defense, appeals, and legal counsel.',
       href: '/services/criminal-defense',
       image: '/assets/generated/criminal-defense-courtroom.dim_800x500.jpg',
+      alt: 'Criminal defense attorney representing clients in court',
     },
     {
-      title: 'Civil Litigation',
-      description: 'Expert civil litigation services for property disputes, contract disputes, recovery suits, injunctions, and damages claims.',
       icon: Gavel,
+      title: 'Civil Litigation',
+      description: 'Civil dispute resolution including contract disputes, recovery suits, property disputes, and civil proceedings.',
       href: '/services/civil-litigation',
       image: '/assets/generated/civil-litigation-documents.dim_800x500.jpg',
+      alt: 'Civil litigation legal documents and case files',
     },
     {
-      title: 'Property Law',
-      description: 'Complete real estate legal services including property transactions, title verification, documentation, property disputes, and lease agreements.',
       icon: Home,
+      title: 'Property Law',
+      description: 'Real estate legal services including property transactions, title verification, disputes, and land matters.',
       href: '/services/property-law',
       image: '/assets/generated/property-law-documents.dim_800x500.jpg',
+      alt: 'Property law documentation and real estate legal services',
     },
     {
-      title: 'Documentation Services',
-      description: 'Professional legal documentation services including drafting, notarization, affidavits, power of attorney, agreements, and wills.',
-      icon: FileText,
-      href: '/services/documentation',
-      image: '/assets/generated/documentation-services.dim_800x500.jpg',
-    },
-    {
-      title: 'Tax Law',
-      description: 'Comprehensive tax law services including GST compliance, income tax planning, tax disputes, and representation before tax authorities.',
-      icon: Banknote,
-      href: '/services/tax-law',
-      image: '/assets/generated/tax-law-consultation.dim_800x500.jpg',
-    },
-    {
-      title: 'Intellectual Property Law',
-      description: 'Complete IP protection services including trademark registration, patent filing, copyright protection, and IP litigation.',
       icon: Landmark,
+      title: 'IP Law',
+      description: 'Intellectual property protection including trademarks, patents, copyrights, and IP litigation services.',
       href: '/services/ip-law',
       image: '/assets/generated/ip-law-documents.dim_800x500.jpg',
+      alt: 'Intellectual property law and patent services',
     },
     {
-      title: 'Startup & Business Law',
-      description: 'Specialized legal services for startups including business structuring, funding agreements, ESOP, compliance, and contracts.',
-      icon: Rocket,
-      href: '/services/startup-law',
-      image: '/assets/generated/startup-law-meeting.dim_800x500.jpg',
+      icon: Calculator,
+      title: 'Tax Law',
+      description: 'Tax advisory and compliance services including tax planning, disputes, GST, and income tax matters.',
+      href: '/services/tax-law',
+      image: '/assets/generated/tax-law-consultation.dim_800x500.jpg',
+      alt: 'Tax law consultation and advisory services',
     },
     {
-      title: 'Employment & Labor Law',
-      description: 'Expert employment law services including employment contracts, workplace disputes, termination matters, and labor compliance.',
       icon: Users,
+      title: 'Employment Law',
+      description: 'Workplace legal services including labor disputes, employment contracts, compliance, and HR matters.',
       href: '/services/employment-law',
       image: '/assets/generated/employment-law-workplace.dim_800x500.jpg',
+      alt: 'Employment law services for workplace disputes',
+    },
+    {
+      icon: Briefcase,
+      title: 'Startup Law',
+      description: 'Legal services for startups including business formation, funding, contracts, and regulatory compliance.',
+      href: '/services/startup-law',
+      image: '/assets/generated/startup-law-meeting.dim_800x500.jpg',
+      alt: 'Startup legal services and business formation',
+    },
+    {
+      icon: FileText,
+      title: 'Documentation Services',
+      description: 'Legal documentation including notarization, affidavits, agreements, and document drafting services.',
+      href: '/services/documentation-services',
+      image: '/assets/generated/documentation-services.dim_800x500.jpg',
+      alt: 'Legal documentation and notary services',
     },
   ];
 
   return (
     <div className="flex flex-col">
+      <SEOHead
+        title="Legal Services"
+        description="Comprehensive legal services including family law, corporate law, criminal defense, civil litigation, property law, IP law, and more in Hyderabad."
+        canonical="https://thejurists.in/services"
+        keywords="legal services Hyderabad, law firm services, attorney services Telangana"
+      />
+      <StructuredData data={[generateLocalBusinessSchema(), generateOrganizationSchema()]} />
+
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-              Our Legal Services
-            </h1>
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">Legal Services</h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Comprehensive legal solutions across all practice areas in Hyderabad, Secunderabad, Rangareddy, and Cyberabad.
+              Comprehensive legal expertise across 10 major practice areas to serve all your legal needs
             </p>
           </div>
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-16">
         <div className="container">
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services' }]} />
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service) => (
-              <Link key={service.title} to={service.href}>
-                <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-2 h-full group">
-                  <div className="aspect-[16/10] overflow-hidden relative">
+              <Link key={service.href} to={service.href}>
+                <Card className="h-full hover:shadow-lg transition-all duration-300 group">
+                  <div className="relative h-48 overflow-hidden rounded-t-lg">
                     <img
                       src={service.image}
-                      alt={service.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      alt={service.alt}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-4 right-4">
-                      <div className="w-12 h-12 rounded-xl bg-primary/90 backdrop-blur-sm flex items-center justify-center">
-                        <service.icon className="h-6 w-6 text-primary-foreground" />
-                      </div>
-                    </div>
                   </div>
-                  <CardHeader className="space-y-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                        {service.title}
-                      </CardTitle>
-                      <ArrowRight className="h-5 w-5 text-secondary group-hover:translate-x-1 transition-transform flex-shrink-0 mt-1" />
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <service.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <CardTitle className="text-xl">{service.title}</CardTitle>
                     </div>
-                    <CardDescription className="leading-relaxed">{service.description}</CardDescription>
                   </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{service.description}</p>
+                  </CardContent>
                 </Card>
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-muted/20">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h2 className="text-4xl md:text-5xl font-bold">Need Legal Assistance?</h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Contact us today for a free consultation. Our experienced legal team is ready to help you.
-            </p>
-            <Button size="lg" className="text-base px-8" asChild>
-              <Link to="/contact">Get Free Consultation</Link>
-            </Button>
           </div>
         </div>
       </section>

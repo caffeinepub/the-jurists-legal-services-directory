@@ -1,13 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Replace the custom contact form implementation with an embedded Google Forms iframe across all pages that use contact forms.
+**Goal:** Add sitemap.xml and robots.txt files to complete SEO implementation for The Jurists legal services website.
 
 **Planned changes:**
-- Replace ContactForm component implementation with a Google Forms iframe embed
-- Update ContactPage to display the embedded Google Form
-- Update all jurisdiction-specific pages (Hyderabad, Secunderabad, Rangareddy, Cyberabad) to use the Google Forms embed
-- Update ServiceDetailPage to use the Google Forms embed
-- Ensure the embedded form maintains responsive design and matches the luxury legal theme with deep navy and gold color scheme
+- Create sitemap.xml file in frontend/public containing all public pages (home, about, services, service details, blog, contact, jurisdiction pages) with proper XML formatting, lastmod dates, changefreq, and priority values
+- Create robots.txt file in frontend/public that allows all search engine crawlers, permits crawling of all content, and references the sitemap location
 
-**User-visible outcome:** Users can submit contact inquiries through an embedded Google Form on the contact page, jurisdiction pages, and service detail pages. The form includes fields for name, phone, email, jurisdiction (dropdown), practice area (dropdown), and message. Submissions go directly to Google Forms instead of the backend.
+**User-visible outcome:** Search engines can efficiently discover and crawl all pages on The Jurists website, improving search engine indexing and visibility.

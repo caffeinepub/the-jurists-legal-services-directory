@@ -13,17 +13,15 @@ export interface SitemapEntry {
     priority?: bigint;
     lastMod?: string;
 }
-export interface ContactFormSubmission {
-    id: bigint;
-    status: Variant;
-    name: string;
-    email: string;
-    jurisdiction: Variant__3;
-    message?: string;
-    timestamp: Time;
-    phoneNumber: string;
-}
 export type Time = bigint;
+export interface BlogArticle {
+    id: bigint;
+    title: string;
+    content: string;
+    publishedDate: Time;
+    author: string;
+    category: Variant__1;
+}
 export interface TrendingTopic {
     id: bigint;
     popularityScore: bigint;
@@ -40,6 +38,23 @@ export interface LegalListing {
     jurisdiction: Variant__3;
     specialization: Variant__1;
 }
+export interface ServiceDetails {
+    title: string;
+    description: string;
+    practiceArea: Variant__1;
+    jurisdiction: Variant__3;
+    keywords: Array<string>;
+}
+export interface ContactFormSubmission {
+    id: bigint;
+    status: Variant;
+    name: string;
+    email: string;
+    jurisdiction: Variant__3;
+    message?: string;
+    timestamp: Time;
+    phoneNumber: string;
+}
 export interface CreateContactFormSubmissionInput {
     name: string;
     email: string;
@@ -50,13 +65,6 @@ export interface CreateContactFormSubmissionInput {
 export interface UserProfile {
     name: string;
     email?: string;
-}
-export interface ServiceDetails {
-    title: string;
-    description: string;
-    practiceArea: Variant__1;
-    jurisdiction: Variant__3;
-    keywords: Array<string>;
 }
 export enum UserRole {
     admin = "admin",
@@ -92,12 +100,16 @@ export enum Variant__3 {
 }
 export interface backendInterface {
     addLegalListing(listing: LegalListing): Promise<void>;
+    addOrUpdateBlogArticle(article: BlogArticle): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     createContactFormSubmission(input: CreateContactFormSubmissionInput): Promise<bigint>;
     createTrendingTopic(title: string, keywords: Array<string>, popularityScore: bigint, practiceArea: Variant__1, trendRelevance: Variant__2): Promise<bigint>;
+    getAllBlogArticles(): Promise<Array<BlogArticle>>;
     getAllContactFormSubmissions(): Promise<Array<ContactFormSubmission>>;
     getAllServices(): Promise<Array<ServiceDetails>>;
     getAllTrendingTopics(): Promise<Array<TrendingTopic>>;
+    getBlogArticleById(id: bigint): Promise<BlogArticle | null>;
+    getBlogArticlesByCategory(category: Variant__1): Promise<Array<BlogArticle>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getContactFormSubmissionsByJurisdiction(jurisdiction: Variant__3): Promise<Array<ContactFormSubmission>>;

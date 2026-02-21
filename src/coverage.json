@@ -1,57 +1,35 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-21T09:25:32.880Z",
+  "generatedAt": "2026-02-21T10:17:49.194Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 4,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-13",
-        "summary": "Replace the ContactForm component implementation with an embedded Google Forms iframe that includes fields for name, phone, email, jurisdiction (dropdown with options: Hyderabad, Secunderabad, Rangareddy, Cyberabad), practice area (dropdown with options: Family Law, Corporate Law, Criminal Defense, Civil Law, Property Law), and message",
+        "id": "REQ-31",
+        "summary": "Create a sitemap.xml file at frontend/public/sitemap.xml containing all public pages including home (/), about (/about), services (/services), service detail pages (/services/family-law, /services/corporate-law, /services/criminal-defense, /services/civil-law, /services/property-law, /services/real-estate-law, /services/intellectual-property, /services/employment-law, /services/litigation), blog list (/blog), blog detail pages (using article IDs from backend), contact (/contact), jurisdiction pages (/jurisdiction/hyderabad, /jurisdiction/secunderabad, /jurisdiction/rangareddy, /jurisdiction/cyberabad), with proper XML formatting, lastmod dates, changefreq values, and priority values according to page importance",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/ContactForm.tsx"
+          "frontend/public/sitemap.xml"
         ],
         "matchedFiles": [
-          "frontend/src/components/ContactForm.tsx"
+          "frontend/public/sitemap.xml"
         ]
       },
       {
-        "id": "REQ-14",
-        "summary": "Update the ContactPage to display the Google Forms embedded form with appropriate styling and layout that matches the luxury legal theme",
+        "id": "REQ-32",
+        "summary": "Create a robots.txt file at frontend/public/robots.txt that allows all search engine crawlers (User-agent: *), permits crawling of all content (Allow: /), includes a reference to the sitemap location (Sitemap: https://[domain]/sitemap.xml), and optionally includes crawl-delay directive if needed for rate limiting",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/ContactPage.tsx"
+          "frontend/public/robots.txt"
         ],
         "matchedFiles": [
-          "frontend/src/pages/ContactPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-15",
-        "summary": "Update all jurisdiction-specific pages (Hyderabad, Secunderabad, Rangareddy, Cyberabad) to use the Google Forms embedded contact form instead of the custom form",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/JurisdictionPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/JurisdictionPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-16",
-        "summary": "Update ServiceDetailPage to use the Google Forms embedded contact form instead of the custom ContactForm component",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/ServiceDetailPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/ServiceDetailPage.tsx"
+          "frontend/public/robots.txt"
         ]
       }
     ]
@@ -61,10 +39,8 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/ContactForm.tsx",
-    "frontend/src/pages/ContactPage.tsx",
-    "frontend/src/pages/JurisdictionPage.tsx",
-    "frontend/src/pages/ServiceDetailPage.tsx",
+    "frontend/public/robots.txt",
+    "frontend/public/sitemap.xml",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

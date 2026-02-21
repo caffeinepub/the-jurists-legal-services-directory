@@ -6,8 +6,8 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ googleFormsUrl }: ContactFormProps) {
-  // Default placeholder URL - replace with your actual Google Forms URL
-  const formUrl = googleFormsUrl || 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true';
+  // User-provided Google Forms URL
+  const formUrl = googleFormsUrl || 'https://docs.google.com/forms/d/e/1FAIpQLScwbjL6QpOP03v9AOZ4RXBWrsCjvRLgrdj86UHzAvUQZKyfUA/viewform?embedded=true';
 
   return (
     <Card className="w-full border-primary/20 shadow-luxury">
@@ -20,13 +20,13 @@ export default function ContactForm({ googleFormsUrl }: ContactFormProps) {
       <CardContent className="p-0">
         <iframe
           src={formUrl}
-          width="100%"
-          height="800"
+          width="640"
+          height="978"
           frameBorder="0"
           marginHeight={0}
           marginWidth={0}
           title="Contact Form - Request a Consultation"
-          className="w-full min-h-[800px]"
+          className="w-full min-h-[978px]"
         >
           Loading form...
         </iframe>

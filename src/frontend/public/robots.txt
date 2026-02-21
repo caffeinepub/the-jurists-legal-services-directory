@@ -1,0 +1,8 @@
+# Robots.txt for The Jurists - Legal Services Website
+# Allow all search engines to crawl all content
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://thejurists.in/sitemap.xml

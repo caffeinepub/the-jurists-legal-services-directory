@@ -1,70 +1,42 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Replace custom contact form with embedded Google Forms",
+  "title": "Add sitemap.xml and robots.txt for SEO completion",
   "requirements": [
     {
-      "id": "REQ-13",
-      "summary": "Replace the ContactForm component implementation with an embedded Google Forms iframe that includes fields for name, phone, email, jurisdiction (dropdown with options: Hyderabad, Secunderabad, Rangareddy, Cyberabad), practice area (dropdown with options: Family Law, Corporate Law, Criminal Defense, Civil Law, Property Law), and message",
+      "id": "REQ-31",
+      "summary": "Create sitemap.xml with all public pages and blog articles",
       "acceptanceCriteria": [
-        "ContactForm.tsx component renders a Google Forms iframe instead of custom form elements",
-        "The embedded Google Form contains all original fields: name, phone, email, jurisdiction, practice area, and message",
-        "The iframe is responsive and maintains consistent styling with the rest of the site",
-        "Form submissions go directly to Google Forms instead of the backend canister"
+        "sitemap.xml file exists at frontend/public/sitemap.xml",
+        "All public routes are included with full URLs",
+        "XML follows proper sitemap protocol format",
+        "Each URL entry includes loc, lastmod, changefreq, and priority tags",
+        "Blog article URLs are dynamically included based on published articles",
+        "File is accessible at the root domain when deployed"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ContactForm.tsx",
-          "operation": "modify",
-          "description": "Replace the custom form validation and submission logic with a Google Forms iframe embed. Remove all form input fields, validation hooks, and backend mutation calls. Add a Google Forms iframe that uses a configurable URL prop (defaulting to a placeholder). Style the iframe to be responsive (100% width, minimum height of 600px) and maintain visual consistency with the luxury legal theme using the existing navy and gold color scheme. The iframe should have a title attribute for accessibility and include appropriate border styling to match the site design."
+          "path": "frontend/public/sitemap.xml",
+          "operation": "create",
+          "description": "Create sitemap.xml file containing all public pages including home (/), about (/about), services (/services), service detail pages for all nine practice areas (/services/family-law, /services/corporate-law, /services/criminal-defense, /services/civil-law, /services/property-law, /services/real-estate-law, /services/intellectual-property, /services/employment-law, /services/litigation), blog list (/blog), all published blog article detail pages using article IDs from the backend, contact (/contact), and jurisdiction pages (/jurisdiction/hyderabad, /jurisdiction/secunderabad, /jurisdiction/rangareddy, /jurisdiction/cyberabad). Each URL entry must include loc with full domain URL, lastmod with ISO 8601 date format, changefreq (daily for blog/home, weekly for services, monthly for static pages), and priority (1.0 for home, 0.9 for services, 0.8 for service details and blog list, 0.7 for blog articles and jurisdictions, 0.6 for about/contact). Format the file with proper XML declaration, urlset namespace (http://www.sitemaps.org/schemas/sitemap/0.9), proper indentation, and valid XML structure. Use the current date for lastmod on static pages and actual publication dates for blog articles when available."
         }
       ]
     },
     {
-      "id": "REQ-14",
-      "summary": "Update the ContactPage to display the Google Forms embedded form with appropriate styling and layout that matches the luxury legal theme",
+      "id": "REQ-32",
+      "summary": "Create robots.txt allowing all crawlers with sitemap reference",
       "acceptanceCriteria": [
-        "ContactPage.tsx renders the updated ContactForm component with Google Forms embed",
-        "The embedded form maintains visual consistency with the deep navy and gold color scheme",
-        "Contact information cards remain visible alongside the Google Form"
+        "robots.txt file exists at frontend/public/robots.txt",
+        "File allows all user agents to crawl all pages",
+        "Sitemap URL reference is included in the file",
+        "File is accessible at the root domain when deployed",
+        "Syntax follows robots.txt standard format"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/ContactPage.tsx",
-          "operation": "modify",
-          "description": "Update the ContactPage to pass a googleFormsUrl prop to the ContactForm component. Use a placeholder URL like 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true' that can be easily replaced with the actual Google Forms URL. Ensure the contact information cards (email, location, office hours) remain visible and properly spaced above or alongside the embedded form. Maintain the existing luxury theme styling with deep navy backgrounds and gold accents."
-        }
-      ]
-    },
-    {
-      "id": "REQ-15",
-      "summary": "Update all jurisdiction-specific pages (Hyderabad, Secunderabad, Rangareddy, Cyberabad) to use the Google Forms embedded contact form instead of the custom form",
-      "acceptanceCriteria": [
-        "JurisdictionPage.tsx component renders the Google Forms embed",
-        "Each jurisdiction page displays the same Google Form with consistent styling",
-        "Jurisdiction-specific content remains visible above or alongside the form"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/JurisdictionPage.tsx",
-          "operation": "modify",
-          "description": "Update the JurisdictionPage component to render the modified ContactForm component with the Google Forms iframe. Pass the same googleFormsUrl prop (using the placeholder URL). Ensure the jurisdiction-specific legal services information, practice areas, and tailored content remain visible and properly positioned above the embedded form. Maintain consistent styling with the deep navy and gold luxury theme throughout the page layout."
-        }
-      ]
-    },
-    {
-      "id": "REQ-16",
-      "summary": "Update ServiceDetailPage to use the Google Forms embedded contact form instead of the custom ContactForm component",
-      "acceptanceCriteria": [
-        "ServiceDetailPage.tsx renders the Google Forms embed",
-        "Service details and benefits remain visible above the form",
-        "Form styling is consistent with the page layout"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/ServiceDetailPage.tsx",
-          "operation": "modify",
-          "description": "Update the ServiceDetailPage component to render the modified ContactForm component with the Google Forms iframe. Pass the googleFormsUrl prop using the same placeholder URL. Ensure service descriptions, services offered list, and benefits section remain visible above the embedded contact form. Maintain visual consistency with the luxury legal theme and ensure proper spacing between the service details and the form section."
+          "path": "frontend/public/robots.txt",
+          "operation": "create",
+          "description": "Create robots.txt file with proper syntax allowing all search engine crawlers. Include 'User-agent: *' directive to target all bots, 'Allow: /' directive to permit crawling of all site content, and 'Sitemap:' directive with the full sitemap URL (https://[production-domain]/sitemap.xml). Use standard robots.txt formatting with one directive per line, blank lines between sections for readability, and comments explaining each section. Ensure the file uses plain text format with LF line endings and no BOM marker."
         }
       ]
     }

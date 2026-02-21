@@ -9,6 +9,8 @@ import ServicesPage from './pages/ServicesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
+import BlogListPage from './pages/BlogListPage';
+import BlogDetailPage from './pages/BlogDetailPage';
 import Layout from './components/Layout';
 import ProfileSetupModal from './components/ProfileSetupModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -43,6 +45,18 @@ const contactRoute = createRoute({
   component: ContactPage,
 });
 
+const blogListRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/blog',
+  component: BlogListPage,
+});
+
+const blogDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/blog/$articleId',
+  component: BlogDetailPage,
+});
+
 const familyLawRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/services/family-law',
@@ -75,8 +89,8 @@ const propertyLawRoute = createRoute({
 
 const documentationRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/services/documentation',
-  component: () => <ServiceDetailPage service="documentation" />,
+  path: '/services/documentation-services',
+  component: () => <ServiceDetailPage service="documentation-services" />,
 });
 
 const taxLawRoute = createRoute({
@@ -148,6 +162,8 @@ const routeTree = rootRoute.addChildren([
   servicesRoute,
   aboutRoute,
   contactRoute,
+  blogListRoute,
+  blogDetailRoute,
   familyLawRoute,
   corporateLawRoute,
   criminalDefenseRoute,
@@ -175,7 +191,7 @@ function NotFoundComponent() {
   );
 }
 
-const router = createRouter({ 
+const router = createRouter({
   routeTree,
   defaultNotFoundComponent: NotFoundComponent,
 });
@@ -190,7 +206,7 @@ export default function App() {
   const { identity, isInitializing } = useInternetIdentity();
   const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
   const { data: isAdmin } = useIsCallerAdmin();
-  
+
   const isAuthenticated = !!identity;
   const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;
 

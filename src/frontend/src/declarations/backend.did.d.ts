@@ -10,6 +10,14 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface BlogArticle {
+  'id' : bigint,
+  'title' : string,
+  'content' : string,
+  'publishedDate' : Time,
+  'author' : string,
+  'category' : Variant__1,
+}
 export interface ContactFormSubmission {
   'id' : bigint,
   'status' : Variant,
@@ -82,6 +90,7 @@ export type Variant__3 = { 'Secunderabad' : null } |
   { 'Hyderabad' : null };
 export interface _SERVICE {
   'addLegalListing' : ActorMethod<[LegalListing], undefined>,
+  'addOrUpdateBlogArticle' : ActorMethod<[BlogArticle], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'createContactFormSubmission' : ActorMethod<
     [CreateContactFormSubmissionInput],
@@ -91,12 +100,15 @@ export interface _SERVICE {
     [string, Array<string>, bigint, Variant__1, Variant__2],
     bigint
   >,
+  'getAllBlogArticles' : ActorMethod<[], Array<BlogArticle>>,
   'getAllContactFormSubmissions' : ActorMethod<
     [],
     Array<ContactFormSubmission>
   >,
   'getAllServices' : ActorMethod<[], Array<ServiceDetails>>,
   'getAllTrendingTopics' : ActorMethod<[], Array<TrendingTopic>>,
+  'getBlogArticleById' : ActorMethod<[bigint], [] | [BlogArticle]>,
+  'getBlogArticlesByCategory' : ActorMethod<[Variant__1], Array<BlogArticle>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getContactFormSubmissionsByJurisdiction' : ActorMethod<

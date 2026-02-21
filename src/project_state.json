@@ -1,12 +1,14 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
+  "projectStateVersion": 13,
   "summary": "Law firm application with Google Forms integration for contact form submissions instead of custom form implementation",
   "architectural_notes": [
-    "Switching from custom backend contact form storage to Google Forms for lead capture"
+    "Using Google Form embed URL: https://docs.google.com/forms/d/e/1FAIpQLScwbjL6QpOP03v9AOZ4RXBWrsCjvRLgrdj86UHzAvUQZKyfUA/viewform?embedded=true for contact form integration",
+    "SEO implementation will include JSON-LD structured data for legal services and local business information",
+    "Meta tags and Open Graph tags will be added to all pages for better social sharing and search engine indexing"
   ],
   "known_issues": [],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-leads-page-accessible-only-to-authenticated-admin-users-that-displays-all-contact-form-submissions-with-filtering-by-jurisdiction-and-status",
@@ -119,6 +121,118 @@
         "REQ-16"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-replace-the-placeholder-google-forms-url-in-the-contactform-component-with-the-user-provided-embed-url-https-docs-google-com-forms-d-e-1faipqlscwbjl6qpop03v9aoz4rxbwrscjvrlgrdj86uhzavuqzkyfua-viewform-embedded-true",
+      "title": "Replace the placeholder Google Forms URL in the ContactForm component with the user-provided embed URL: https://docs.google.com/forms/d/e/1FAIpQLScwbjL6QpOP03v9AOZ4RXBWrsCjvRLgrdj86UHzAvUQZKyfUA/viewform?embedded=true",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-iframe-dimensions-in-the-contactform-component-to-match-the-user-provided-specifications-width-640-height-978",
+      "title": "Update the iframe dimensions in the ContactForm component to match the user-provided specifications: width=\"640\" height=\"978\"",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-seo-meta-tags-to-all-pages-including-descriptive-title-tags-50-60-characters-meta-descriptions-150-160-characters-and-open-graph-tags-og-title-og-description-og-image-og-url-for-social-sharing-optimization",
+      "title": "Add SEO meta tags to all pages including descriptive title tags (50-60 characters), meta descriptions (150-160 characters), and Open Graph tags (og:title, og:description, og:image, og:url) for social sharing optimization",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-json-ld-structured-data-schema-org-on-all-pages-including-localbusiness-schema-with-name-address-telephone-geo-coordinates-and-opening-hours-plus-legalservice-schema-for-each-practice-area-with-service-type-area-served-and-provider-details",
+      "title": "Implement JSON-LD structured data (schema.org) on all pages including LocalBusiness schema with name, address, telephone, geo coordinates, and opening hours, plus LegalService schema for each practice area with service type, area served, and provider details",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-proper-semantic-html-heading-hierarchy-single-h1-per-page-logical-h2-h6-structure-across-all-pages-ensuring-each-page-has-exactly-one-h1-containing-primary-keywords",
+      "title": "Add proper semantic HTML heading hierarchy (single H1 per page, logical H2-H6 structure) across all pages ensuring each page has exactly one H1 containing primary keywords",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-descriptive-alt-text-to-all-images-across-the-site-including-practice-area-icons-jurisdiction-images-and-any-decorative-images-using-relevant-keywords-naturally",
+      "title": "Add descriptive alt text to all images across the site including practice area icons, jurisdiction images, and any decorative images, using relevant keywords naturally",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-optimize-all-page-urls-to-be-descriptive-and-keyword-rich-ensuring-jurisdiction-pages-use-format-jurisdiction-location-and-service-pages-use-services-practice-area-with-hyphens-separating-words",
+      "title": "Optimize all page URLs to be descriptive and keyword-rich, ensuring jurisdiction pages use format /jurisdiction/[location] and service pages use /services/[practice-area] with hyphens separating words",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-blog-articles-section-accessible-at-blog-with-at-least-5-initial-articles-covering-common-legal-questions-in-practice-areas-family-law-corporate-law-criminal-defense-civil-law-property-law-and-jurisdiction-specific-legal-information-for-hyderabad-secunderabad-rangareddy-and-cyberabad",
+      "title": "Create a blog/articles section accessible at /blog with at least 5 initial articles covering common legal questions in practice areas (family law, corporate law, criminal defense, civil law, property law) and jurisdiction-specific legal information for Hyderabad, Secunderabad, Rangareddy, and Cyberabad",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-canonical-urls-to-all-pages-to-prevent-duplicate-content-issues-pointing-to-the-preferred-version-of-each-page",
+      "title": "Add canonical URLs to all pages to prevent duplicate content issues, pointing to the preferred version of each page",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-breadcrumb-navigation-with-structured-data-breadcrumblist-schema-on-all-non-homepage-pages-to-improve-navigation-and-provide-additional-structured-data-for-search-engines",
+      "title": "Implement breadcrumb navigation with structured data (BreadcrumbList schema) on all non-homepage pages to improve navigation and provide additional structured data for search engines",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-faq-sections-with-faq-schema-markup-to-each-practice-area-detail-page-answering-common-legal-questions-relevant-to-that-practice-area",
+      "title": "Add FAQ sections with FAQ schema markup to each practice area detail page answering common legal questions relevant to that practice area",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-optimize-the-contact-page-and-jurisdiction-pages-to-include-complete-nap-name-address-phone-information-in-both-visible-text-and-schema-markup-plus-embed-a-google-map-iframe-showing-office-location",
+      "title": "Optimize the Contact page and jurisdiction pages to include complete NAP (Name, Address, Phone) information in both visible text and schema markup, plus embed a Google Map iframe showing office location",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-sitemap-xml-file-at-frontend-public-sitemap-xml-containing-all-public-pages-including-home-about-about-services-services-service-detail-pages-services-family-law-services-corporate-law-services-criminal-defense-services-civil-law-services-property-law-services-real-estate-law-services-intellectual-property-services-employment-law-services-litigation-blog-list-blog-blog-detail-pages-using-article-ids-from-backend-contact-contact-jurisdiction-pages-jurisdiction-hyderabad-jurisdiction-secunderabad-jurisdiction-rangareddy-jurisdiction-cyberabad-with-proper-xml-formatting-lastmod-dates-changefreq-values-and-priority-values-according-to-page-importance",
+      "title": "Create a sitemap.xml file at frontend/public/sitemap.xml containing all public pages including home (/), about (/about), services (/services), service detail pages (/services/family-law, /services/corporate-law, /services/criminal-defense, /services/civil-law, /services/property-law, /services/real-estate-law, /services/intellectual-property, /services/employment-law, /services/litigation), blog list (/blog), blog detail pages (using article IDs from backend), contact (/contact), jurisdiction pages (/jurisdiction/hyderabad, /jurisdiction/secunderabad, /jurisdiction/rangareddy, /jurisdiction/cyberabad), with proper XML formatting, lastmod dates, changefreq values, and priority values according to page importance",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-robots-txt-file-at-frontend-public-robots-txt-that-allows-all-search-engine-crawlers-user-agent-permits-crawling-of-all-content-allow-includes-a-reference-to-the-sitemap-location-sitemap-https-domain-sitemap-xml-and-optionally-includes-crawl-delay-directive-if-needed-for-rate-limiting",
+      "title": "Create a robots.txt file at frontend/public/robots.txt that allows all search engine crawlers (User-agent: *), permits crawling of all content (Allow: /), includes a reference to the sitemap location (Sitemap: https://[domain]/sitemap.xml), and optionally includes crawl-delay directive if needed for rate limiting",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -140,7 +254,19 @@
     },
     {
       "id": "AR-4",
-      "summary": "Replace custom contact form with embedded Google Forms containing same fields (name, phone, email, jurisdiction, practice area, message)",
+      "summary": "Implement comprehensive SEO optimization including meta tags, Open Graph tags, structured data (schema markup for LocalBusiness and LegalService), optimized page titles and descriptions, and heading hierarchy across all pages",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add blog/articles section with legal content covering practice areas and jurisdiction-specific legal information to improve content freshness and keyword targeting",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Implement sitemap.xml generation and robots.txt configuration for improved search engine crawling",
       "reqIds": [],
       "status": "pending"
     }

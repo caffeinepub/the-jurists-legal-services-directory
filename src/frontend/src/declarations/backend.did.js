@@ -32,6 +32,15 @@ export const LegalListing = IDL.Record({
   'jurisdiction' : Variant__3,
   'specialization' : Variant__1,
 });
+export const Time = IDL.Int;
+export const BlogArticle = IDL.Record({
+  'id' : IDL.Nat,
+  'title' : IDL.Text,
+  'content' : IDL.Text,
+  'publishedDate' : Time,
+  'author' : IDL.Text,
+  'category' : Variant__1,
+});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
@@ -53,7 +62,6 @@ export const Variant = IDL.Variant({
   'resolved' : IDL.Null,
   'contacted' : IDL.Null,
 });
-export const Time = IDL.Int;
 export const ContactFormSubmission = IDL.Record({
   'id' : IDL.Nat,
   'status' : Variant,
@@ -94,6 +102,7 @@ export const SitemapEntry = IDL.Record({
 
 export const idlService = IDL.Service({
   'addLegalListing' : IDL.Func([LegalListing], [], []),
+  'addOrUpdateBlogArticle' : IDL.Func([BlogArticle], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'createContactFormSubmission' : IDL.Func(
       [CreateContactFormSubmissionInput],
@@ -105,6 +114,7 @@ export const idlService = IDL.Service({
       [IDL.Nat],
       [],
     ),
+  'getAllBlogArticles' : IDL.Func([], [IDL.Vec(BlogArticle)], ['query']),
   'getAllContactFormSubmissions' : IDL.Func(
       [],
       [IDL.Vec(ContactFormSubmission)],
@@ -112,6 +122,12 @@ export const idlService = IDL.Service({
     ),
   'getAllServices' : IDL.Func([], [IDL.Vec(ServiceDetails)], ['query']),
   'getAllTrendingTopics' : IDL.Func([], [IDL.Vec(TrendingTopic)], ['query']),
+  'getBlogArticleById' : IDL.Func([IDL.Nat], [IDL.Opt(BlogArticle)], ['query']),
+  'getBlogArticlesByCategory' : IDL.Func(
+      [Variant__1],
+      [IDL.Vec(BlogArticle)],
+      ['query'],
+    ),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getContactFormSubmissionsByJurisdiction' : IDL.Func(
@@ -206,6 +222,15 @@ export const idlFactory = ({ IDL }) => {
     'jurisdiction' : Variant__3,
     'specialization' : Variant__1,
   });
+  const Time = IDL.Int;
+  const BlogArticle = IDL.Record({
+    'id' : IDL.Nat,
+    'title' : IDL.Text,
+    'content' : IDL.Text,
+    'publishedDate' : Time,
+    'author' : IDL.Text,
+    'category' : Variant__1,
+  });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
@@ -224,7 +249,6 @@ export const idlFactory = ({ IDL }) => {
     'resolved' : IDL.Null,
     'contacted' : IDL.Null,
   });
-  const Time = IDL.Int;
   const ContactFormSubmission = IDL.Record({
     'id' : IDL.Nat,
     'status' : Variant,
@@ -265,6 +289,7 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     'addLegalListing' : IDL.Func([LegalListing], [], []),
+    'addOrUpdateBlogArticle' : IDL.Func([BlogArticle], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'createContactFormSubmission' : IDL.Func(
         [CreateContactFormSubmissionInput],
@@ -276,6 +301,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Nat],
         [],
       ),
+    'getAllBlogArticles' : IDL.Func([], [IDL.Vec(BlogArticle)], ['query']),
     'getAllContactFormSubmissions' : IDL.Func(
         [],
         [IDL.Vec(ContactFormSubmission)],
@@ -283,6 +309,16 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getAllServices' : IDL.Func([], [IDL.Vec(ServiceDetails)], ['query']),
     'getAllTrendingTopics' : IDL.Func([], [IDL.Vec(TrendingTopic)], ['query']),
+    'getBlogArticleById' : IDL.Func(
+        [IDL.Nat],
+        [IDL.Opt(BlogArticle)],
+        ['query'],
+      ),
+    'getBlogArticlesByCategory' : IDL.Func(
+        [Variant__1],
+        [IDL.Vec(BlogArticle)],
+        ['query'],
+      ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getContactFormSubmissionsByJurisdiction' : IDL.Func(

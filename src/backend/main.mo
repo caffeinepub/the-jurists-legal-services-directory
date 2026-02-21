@@ -1,14 +1,12 @@
-import List "mo:core/List";
-import Map "mo:core/Map";
-import Time "mo:core/Time";
-import Nat "mo:core/Nat";
-import Order "mo:core/Order";
 import Array "mo:core/Array";
+import List "mo:core/List";
 import AccessControl "authorization/access-control";
-import Runtime "mo:core/Runtime";
+import Map "mo:core/Map";
+import Order "mo:core/Order";
+import Nat "mo:core/Nat";
+import Time "mo:core/Time";
 import Principal "mo:core/Principal";
-
-
+import Runtime "mo:core/Runtime";
 
 actor {
   module Jurisdiction {
@@ -312,6 +310,63 @@ actor {
       }
     );
     entries;
+  };
+
+  // Blog Article Type and Functionality
+
+  public type BlogArticle = {
+    id : Nat;
+    title : Text;
+    content : Text;
+    publishedDate : Time.Time;
+    author : Text;
+    category : PracticeArea.Variant;
+  };
+
+  // Use List for persistent blog article storage
+  let blogArticles = List.empty<BlogArticle>();
+  var nextBlogArticleId = 1;
+
+  // Blog article management
+  public shared ({ caller }) func addOrUpdateBlogArticle(article : BlogArticle) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can manage blog articles");
+    };
+
+    let filtered = blogArticles.filter(
+      func(existing) { existing.id != article.id }
+    );
+    blogArticles.clear();
+    blogArticles.addAll(filtered.values());
+
+    let fullArticle = {
+      article with id = if (article.id == 0) {
+        nextBlogArticleId;
+      } else {
+        article.id;
+      };
+    };
+    blogArticles.add(fullArticle);
+
+    if (article.id == 0) {
+      nextBlogArticleId += 1;
+    };
+  };
+
+  public query ({ caller }) func getAllBlogArticles() : async [BlogArticle] {
+    blogArticles.toArray();
+  };
+
+  public query ({ caller }) func getBlogArticleById(id : Nat) : async ?BlogArticle {
+    blogArticles.values().find(
+      func(article) { article.id == id }
+    );
+  };
+
+  public query ({ caller }) func getBlogArticlesByCategory(category : PracticeArea.Variant) : async [BlogArticle] {
+    blogArticles.toArray().filter(
+      func(article) { article.category == category }
+    );
   };
 
   // Trending topics functionality
@@ -631,4 +686,3 @@ actor {
     ),
   ].values());
 };
-

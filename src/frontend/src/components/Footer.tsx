@@ -8,6 +8,7 @@ export default function Footer() {
   const quickLinks = [
     { href: '/', label: 'Home' },
     { href: '/services', label: 'Services' },
+    { href: '/blog', label: 'Blog' },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
   ];
@@ -42,6 +43,18 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               Comprehensive legal services across Hyderabad, Secunderabad, Rangareddy, and Cyberabad.
             </p>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <MapPin className="h-4 w-4" />
+                <span>Hyderabad, Telangana, India</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Mail className="h-4 w-4" />
+                <a href="mailto:thejuristshyd@gmail.com" className="hover:text-primary transition-colors">
+                  thejuristshyd@gmail.com
+                </a>
+              </div>
+            </div>
           </div>
 
           <div>
@@ -93,23 +106,21 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border/40 pt-8 space-y-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>
-              © {currentYear} The Jurists. All rights reserved.
-            </p>
-            <p className="flex items-center gap-2">
-              Built with <Heart className="h-4 w-4 text-red-500 fill-red-500" /> using{' '}
-              <a
-                href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(appIdentifier)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                caffeine.ai
-              </a>
-            </p>
-          </div>
+        <div className="border-t border-border/40 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © {currentYear} The Jurists. All rights reserved.
+          </p>
+          <p className="text-sm text-muted-foreground flex items-center gap-1">
+            Built with <Heart className="h-4 w-4 text-red-500 fill-red-500" /> using{' '}
+            <a
+              href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(appIdentifier)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              caffeine.ai
+            </a>
+          </p>
         </div>
       </div>
     </footer>
