@@ -1,90 +1,56 @@
 {
   "kind": "build_request",
-  "title": "Revert theme/images, remove mobile number, remove login button",
+  "title": "Fix email address and apply 42nd draft theme",
   "projectName": "The Jurists",
-  "priority": "high",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Revert the visual theme to the previous version: restore the original color palette, typography, and styling that existed before version 44. Undo any theme changes introduced in version 44.",
+      "text": "Replace all occurrences of the current email address in the frontend with 'thejuristshyd@gmail.com'. This includes ContactPage.tsx, Footer.tsx, and any other component or page that displays an email address.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "I want the old theme and images back"
+          "email is - thejuristshyd@gmail.com fix that"
         ]
       },
       "acceptanceCriteria": [
-        "The site's color scheme, fonts, and layout match the pre-version-44 appearance.",
-        "No visual changes from the v44 theme update remain visible."
+        "Every visible email address on the site shows 'thejuristshyd@gmail.com'",
+        "mailto: links (if any) use 'thejuristshyd@gmail.com'",
+        "No old/placeholder email address remains anywhere in the UI"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Restore all original images that were replaced or removed in version 44. Revert any CSS-based visuals back to the original image assets.",
+      "text": "Revert the visual theme (color palette, typography, spacing, component styling, and any decorative elements) to match the 42nd draft version of the site. Apply this theme consistently across all pages and components including Header, Footer, HomePage, ContactPage, AboutPage, ServicesPage, and all other visible pages.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "I want the old theme and images back"
+          "I want the theme of 42nd draft"
         ]
       },
       "acceptanceCriteria": [
-        "All images that existed before the v44 update are displayed again.",
-        "No CSS placeholder visuals are shown in place of original images."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Remove the mobile/phone number from every location it appears across the entire site, including the Header, Footer, Contact page (contact info cards), and any other components or pages that display it.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "remove the mobile number from everywhere on site"
-        ]
-      },
-      "acceptanceCriteria": [
-        "No phone or mobile number is visible anywhere on the site.",
-        "The Footer no longer displays a phone number.",
-        "The Contact page no longer displays a phone number.",
-        "No other page or component displays a phone number."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Remove the login button from the Header navigation. The login/authentication UI element (Internet Identity login button) must not be visible to any site visitor.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "remove the login button"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The login button is not rendered in the desktop navigation.",
-        "The login button is not rendered in the mobile navigation menu.",
-        "No login or sign-in prompt is visible to unauthenticated users on any page."
+        "The color palette, font choices, and overall visual style match the 42nd draft",
+        "The theme is applied consistently across all pages and shared components (Header, Footer, etc.)",
+        "No elements from later theme versions remain visible",
+        "index.css and tailwind.config.js reflect the 42nd draft design tokens"
       ]
     }
   ],
   "constraints": [
-    "Do not modify backend logic or data models.",
-    "Do not alter immutable frontend paths: useInternetIdentity.ts, useActor.ts, main.tsx, or the ui components directory.",
-    "The admin-only routes (LeadsPage, InitializeAdminPage) may retain internal authentication logic but must not expose the login button publicly."
+    "Do not re-add the phone number that was previously removed",
+    "Do not re-add the login button that was previously removed",
+    "Do not modify files in frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui"
   ],
   "nonGoals": [
-    "Do not add any new features or content.",
-    "Do not change the site's copy, services, or SEO metadata.",
-    "Do not remove admin authentication functionality from protected routes — only hide the public-facing login button."
+    "Adding any new features or pages",
+    "Changing backend logic or data models",
+    "Modifying SEO metadata beyond what is needed for the email fix"
   ],
   "imageRequirements": {
     "required": [],

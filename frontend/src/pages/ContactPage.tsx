@@ -13,8 +13,8 @@ const contactInfo = [
   {
     icon: <Mail className="h-5 w-5" />,
     title: 'Email Us',
-    details: ['contact@thejurists.in'],
-    link: 'mailto:contact@thejurists.in',
+    details: ['thejuristshyd@gmail.com'],
+    link: 'mailto:thejuristshyd@gmail.com',
   },
   {
     icon: <Clock className="h-5 w-5" />,

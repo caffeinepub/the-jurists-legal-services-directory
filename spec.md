@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Revert the site's theme and images to the pre-v44 state, and remove the mobile number and login button from all public-facing areas of the site.
+**Goal:** Fix the contact email address across the site and revert the visual theme to match the 42nd draft.
 
 **Planned changes:**
-- Restore the original color palette, typography, and styling from before version 44
-- Restore all original images that were replaced or removed in version 44
-- Remove the phone/mobile number from the Header, Footer, Contact page, and any other location it appears
-- Remove the login button from both desktop and mobile navigation so it is not visible to any site visitor
+- Replace all occurrences of the email address in the frontend (ContactPage.tsx, Footer.tsx, and any other component) with `thejuristshyd@gmail.com`, including `mailto:` links
+- Revert the color palette, typography, spacing, component styling, and decorative elements to match the 42nd draft across all pages and shared components (Header, Footer, HomePage, ContactPage, AboutPage, ServicesPage, etc.)
+- Update `index.css` and `tailwind.config.js` to reflect the 42nd draft design tokens
 
-**User-visible outcome:** The site looks and feels as it did before version 44, with no phone number or login button displayed anywhere to visitors.
+**User-visible outcome:** Every email address shown on the site is `thejuristshyd@gmail.com`, and the entire site visually matches the 42nd draft theme consistently across all pages.

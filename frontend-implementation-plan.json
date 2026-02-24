@@ -1,123 +1,103 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Revert theme/images, remove mobile number, remove login button",
+  "title": "Fix email address and apply 42nd draft theme",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Revert the visual theme to the previous version by restoring the original color palette, typography, and styling that existed before version 44",
+      "summary": "Replace all occurrences of the current email address in the frontend with 'thejuristshyd@gmail.com'",
       "acceptanceCriteria": [
-        "The site's color scheme, fonts, and layout match the pre-version-44 appearance.",
-        "No visual changes from the v44 theme update remain visible."
+        "Every visible email address on the site shows 'thejuristshyd@gmail.com'",
+        "mailto: links (if any) use 'thejuristshyd@gmail.com'",
+        "No old/placeholder email address remains anywhere in the UI"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/pages/ContactPage.tsx",
           "operation": "modify",
-          "description": "Revert all CSS custom properties and color palette definitions to their pre-v44 state. Restore the original OKLCH color values, typography settings, and any other theme variables that were changed in version 44. Remove any v44-specific styles."
+          "description": "Replace the current email address with 'thejuristshyd@gmail.com' in all email display locations and mailto: links within the ContactPage component."
         },
         {
-          "path": "frontend/tailwind.config.js",
+          "path": "frontend/src/components/Footer.tsx",
           "operation": "modify",
-          "description": "Revert Tailwind configuration to pre-v44 settings. Restore original color token definitions, theme extensions, spacing values, and any other configuration changes introduced in v44."
+          "description": "Replace the current email address with 'thejuristshyd@gmail.com' in the Footer component where contact information is displayed."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Restore all original images that were replaced or removed in version 44 and revert any CSS-based visuals back to the original image assets",
+      "summary": "Revert the visual theme (color palette, typography, spacing, component styling, and decorative elements) to match the 42nd draft version",
       "acceptanceCriteria": [
-        "All images that existed before the v44 update are displayed again.",
-        "No CSS placeholder visuals are shown in place of original images."
+        "The color palette, font choices, and overall visual style match the 42nd draft",
+        "The theme is applied consistently across all pages and shared components (Header, Footer, etc.)",
+        "No elements from later theme versions remain visible",
+        "index.css and tailwind.config.js reflect the 42nd draft design tokens"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/HomePage.tsx",
+          "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Restore original hero section image reference that existed before v44. Replace any CSS-based background or placeholder with the original image asset reference from frontend/public/assets/generated/hero-legal-services.dim_1200x600.jpg. Ensure the img element or background-image CSS properly loads the pre-v44 hero image."
+          "description": "Revert the global stylesheet to the 42nd draft version, restoring the original color palette (CSS custom properties for navy/gold luxury theme), typography (Playfair Display and Lato fonts), spacing, and utility classes. Ensure both light and dark mode variables match the 42nd draft configuration."
         },
         {
-          "path": "frontend/src/pages/ServiceDetailPage.tsx",
+          "path": "frontend/tailwind.config.js",
           "operation": "modify",
-          "description": "Restore original service detail page images that existed before v44. Ensure each service detail displays its corresponding original image from the assets directory (e.g., family-law-consultation, corporate-law-meeting, civil-litigation-documents, etc.). Remove any CSS placeholder visuals introduced in v44."
+          "description": "Revert Tailwind configuration to the 42nd draft version, restoring the original OKLCH-based color tokens, serif/sans font families, luxury box shadows, border radius variables, and animation settings (accordion/fade-in)."
         },
         {
-          "path": "frontend/src/pages/JurisdictionPage.tsx",
+          "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Restore original jurisdiction-specific images that existed before v44. Ensure the page displays the original hyderabad-courthouse.dim_800x500.jpg or other location-specific images. Replace any CSS-based visuals with the original image references."
+          "description": "Revert Header component styling to match the 42nd draft theme, ensuring navigation, dropdowns, and mobile menu use the correct color palette, typography, spacing, and decorative elements from the 42nd draft."
         },
-        {
-          "path": "frontend/src/pages/AboutPage.tsx",
-          "operation": "modify",
-          "description": "Restore any original images or visual elements on the About page that were changed in v44. Replace CSS placeholders with the original image assets such as lawyer-consultation.dim_600x400.jpg or legal-documents-gavel.dim_800x500.jpg if they were part of the pre-v44 design."
-        },
-        {
-          "path": "frontend/src/pages/ContactPage.tsx",
-          "operation": "modify",
-          "description": "Restore any original background images, hero images, or decorative visuals on the Contact page that were replaced with CSS in v44. Ensure all image references point to the original assets in frontend/public/assets/generated/."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Remove the mobile/phone number from every location it appears across the entire site including Header, Footer, Contact page contact info cards, and any other components or pages",
-      "acceptanceCriteria": [
-        "No phone or mobile number is visible anywhere on the site.",
-        "The Footer no longer displays a phone number.",
-        "The Contact page no longer displays a phone number.",
-        "No other page or component displays a phone number."
-      ],
-      "file_operations": [
         {
           "path": "frontend/src/components/Footer.tsx",
           "operation": "modify",
-          "description": "Remove all phone number and mobile number display elements from the Footer component. Delete any JSX elements, text nodes, or links that render a phone number. Ensure the contact section no longer includes phone/mobile information while preserving email and location details."
+          "description": "Revert Footer component styling to match the 42nd draft theme, ensuring brand info, links, and layout use the correct color palette, typography, and spacing from the 42nd draft."
         },
         {
-          "path": "frontend/src/components/Header.tsx",
+          "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Remove any phone number display from the Header component if present. Check both desktop and mobile navigation for phone number elements and remove them."
+          "description": "Revert HomePage styling to match the 42nd draft theme, ensuring the hero section, practice areas grid, and 'Why Choose Us' section use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
         },
         {
           "path": "frontend/src/pages/ContactPage.tsx",
           "operation": "modify",
-          "description": "Remove all phone number and mobile number display from the contact info cards section. Delete the entire contact info card that displays the phone number, or remove only the phone number field if the card contains other information. Ensure no phone number is visible on the Contact page while preserving email, location, and hours information."
+          "description": "Revert ContactPage styling to match the 42nd draft theme, ensuring the hero section, contact info cards, form, and map embed use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
         },
         {
           "path": "frontend/src/pages/AboutPage.tsx",
           "operation": "modify",
-          "description": "Remove any phone number references from the About page if present. Search for and delete any contact information sections, team member cards, or other elements that display a phone number."
+          "description": "Revert AboutPage styling to match the 42nd draft theme, ensuring the hero section, firm story, team members, and core values sections use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
+        },
+        {
+          "path": "frontend/src/pages/ServicesPage.tsx",
+          "operation": "modify",
+          "description": "Revert ServicesPage styling to match the 42nd draft theme, ensuring the service cards grid with icons, descriptions, and gradient styling use the correct color palette, typography, spacing, and visual elements from the 42nd draft."
         },
         {
           "path": "frontend/src/pages/ServiceDetailPage.tsx",
           "operation": "modify",
-          "description": "Remove any phone number display from service detail pages if present in contact sections or CTAs. Ensure no service detail page shows a phone number."
+          "description": "Revert ServiceDetailPage styling to match the 42nd draft theme, ensuring the detail view, features list, and layout use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
         },
         {
           "path": "frontend/src/pages/JurisdictionPage.tsx",
           "operation": "modify",
-          "description": "Remove any phone number display from jurisdiction pages if present in location-specific contact information. Ensure no jurisdiction page shows a phone number."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Remove the login button from the Header navigation so the Internet Identity login button is not visible to any site visitor",
-      "acceptanceCriteria": [
-        "The login button is not rendered in the desktop navigation.",
-        "The login button is not rendered in the mobile navigation menu.",
-        "No login or sign-in prompt is visible to unauthenticated users on any page."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/Header.tsx",
-          "operation": "modify",
-          "description": "Remove the Internet Identity login button from both desktop and mobile navigation sections in the Header component. Delete or comment out the LoginButton component rendering and any associated authentication UI elements. Ensure the admin routes (LeadsPage, InitializeAdminPage) remain protected but do not expose the login button publicly. The header should no longer display any login, sign-in, or authentication prompt to visitors."
+          "description": "Revert JurisdictionPage styling to match the 42nd draft theme, ensuring the location-specific content, service listings, and layout use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
         },
         {
-          "path": "frontend/src/pages/InitializeAdminPage.tsx",
+          "path": "frontend/src/pages/BlogListPage.tsx",
           "operation": "modify",
-          "description": "Ensure the InitializeAdminPage retains its internal login functionality for admin setup but is not linked or accessible from public navigation. This page should remain functional for admin initialization but not be publicly discoverable."
+          "description": "Revert BlogListPage styling to match the 42nd draft theme, ensuring the article cards grid, category badges, excerpts, and navigation use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
+        },
+        {
+          "path": "frontend/src/pages/BlogDetailPage.tsx",
+          "operation": "modify",
+          "description": "Revert BlogDetailPage styling to match the 42nd draft theme, ensuring the article title, author info, date display, category badge, and content rendering use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
+        },
+        {
+          "path": "frontend/src/components/ContactForm.tsx",
+          "operation": "modify",
+          "description": "Revert ContactForm component styling to match the 42nd draft theme, ensuring the Card container, luxury theme borders, and iframe embed use the correct color palette, spacing, and visual styling from the 42nd draft."
         }
       ]
     }

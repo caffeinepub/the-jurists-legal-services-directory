@@ -2,11 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-revert-the-visual-theme-to-the-previous-version-restore-the-original-color-palette-typography-and-styling-that-existed-before-version-44-undo-any-theme-changes-introduced-in-version-44",
-      "featureTitle": "Revert the visual theme to the previous version: restore the original color palette, typography, and styling that existed before version 44. Undo any theme changes introduced in version 44.",
+      "featureId": "feature-replace-all-occurrences-of-the-current-email-address-in-the-frontend-with-thejuristshyd-gmail-com-this-includes-contactpage-tsx-footer-tsx-and-any-other-component-or-page-that-displays-an-email-address",
+      "featureTitle": "Replace all occurrences of the current email address in the frontend with 'thejuristshyd@gmail.com'. This includes ContactPage.tsx, Footer.tsx, and any other component or page that displays an email address.",
       "files": [
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/pages/ContactPage.tsx"
       ],
       "components": [
         "authorization@3.0.0",
@@ -23,14 +23,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-restore-all-original-images-that-were-replaced-or-removed-in-version-44-revert-any-css-based-visuals-back-to-the-original-image-assets",
-      "featureTitle": "Restore all original images that were replaced or removed in version 44. Revert any CSS-based visuals back to the original image assets.",
+      "featureId": "feature-revert-the-visual-theme-color-palette-typography-spacing-component-styling-and-any-decorative-elements-to-match-the-42nd-draft-version-of-the-site-apply-this-theme-consistently-across-all-pages-and-components-including-header-footer-homepage-contactpage-aboutpage-servicespage-and-all-other-visible-pages",
+      "featureTitle": "Revert the visual theme (color palette, typography, spacing, component styling, and any decorative elements) to match the 42nd draft version of the site. Apply this theme consistently across all pages and components including Header, Footer, HomePage, ContactPage, AboutPage, ServicesPage, and all other visible pages.",
       "files": [
-        "frontend/src/pages/AboutPage.tsx",
-        "frontend/src/pages/ContactPage.tsx",
-        "frontend/src/pages/HomePage.tsx",
-        "frontend/src/pages/JurisdictionPage.tsx",
-        "frontend/src/pages/ServiceDetailPage.tsx"
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/pages/ContactPage.tsx"
       ],
       "components": [
         "authorization@3.0.0",
@@ -43,51 +40,6 @@
       ],
       "testIds": [
         "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-mobile-phone-number-from-every-location-it-appears-across-the-entire-site-including-the-header-footer-contact-page-contact-info-cards-and-any-other-components-or-pages-that-display-it",
-      "featureTitle": "Remove the mobile/phone number from every location it appears across the entire site, including the Header, Footer, Contact page (contact info cards), and any other components or pages that display it.",
-      "files": [
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/components/Header.tsx",
-        "frontend/src/pages/AboutPage.tsx",
-        "frontend/src/pages/ContactPage.tsx",
-        "frontend/src/pages/JurisdictionPage.tsx",
-        "frontend/src/pages/ServiceDetailPage.tsx"
-      ],
-      "components": [
-        "authorization@3.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-login-button-from-the-header-navigation-the-login-authentication-ui-element-internet-identity-login-button-must-not-be-visible-to-any-site-visitor",
-      "featureTitle": "Remove the login button from the Header navigation. The login/authentication UI element (Internet Identity login button) must not be visible to any site visitor.",
-      "files": [
-        "frontend/src/components/Header.tsx"
-      ],
-      "components": [
-        "authorization@3.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
       ],
       "confidence": "high"
     }
