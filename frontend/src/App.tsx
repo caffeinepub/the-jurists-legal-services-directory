@@ -1,22 +1,21 @@
+import React from 'react';
 import { RouterProvider, createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
-import { useInternetIdentity } from './hooks/useInternetIdentity';
-import { useGetCallerUserProfile, useIsCallerAdmin } from './hooks/useQueries';
+import { ThemeProvider } from 'next-themes';
+import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
+import ServicesPage from './pages/ServicesPage';
+import ServiceDetailPage from './pages/ServiceDetailPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import BlogListPage from './pages/BlogListPage';
+import BlogDetailPage from './pages/BlogDetailPage';
 import JurisdictionPage from './pages/JurisdictionPage';
 import LeadsPage from './pages/LeadsPage';
 import InitializeAdminPage from './pages/InitializeAdminPage';
-import ServicesPage from './pages/ServicesPage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
-import ServiceDetailPage from './pages/ServiceDetailPage';
-import BlogListPage from './pages/BlogListPage';
-import BlogDetailPage from './pages/BlogDetailPage';
-import Layout from './components/Layout';
-import ProfileSetupModal from './components/ProfileSetupModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Toaster } from './components/ui/sonner';
-import { ThemeProvider } from 'next-themes';
 
+// Root route — Layout uses <Outlet /> internally
 const rootRoute = createRootRoute({
   component: Layout,
 });
@@ -33,6 +32,12 @@ const servicesRoute = createRoute({
   component: ServicesPage,
 });
 
+const serviceDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/services/$serviceSlug',
+  component: ServiceDetailPage,
+});
+
 const aboutRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/about',
@@ -45,7 +50,7 @@ const contactRoute = createRoute({
   component: ContactPage,
 });
 
-const blogListRoute = createRoute({
+const blogRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/blog',
   component: BlogListPage,
@@ -57,85 +62,50 @@ const blogDetailRoute = createRoute({
   component: BlogDetailPage,
 });
 
-const familyLawRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/family-law',
-  component: () => <ServiceDetailPage service="family-law" />,
-});
-
-const corporateLawRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/corporate-law',
-  component: () => <ServiceDetailPage service="corporate-law" />,
-});
-
-const criminalDefenseRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/criminal-defense',
-  component: () => <ServiceDetailPage service="criminal-defense" />,
-});
-
-const civilLitigationRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/civil-litigation',
-  component: () => <ServiceDetailPage service="civil-litigation" />,
-});
-
-const propertyLawRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/property-law',
-  component: () => <ServiceDetailPage service="property-law" />,
-});
-
-const documentationRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/documentation-services',
-  component: () => <ServiceDetailPage service="documentation-services" />,
-});
-
-const taxLawRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/tax-law',
-  component: () => <ServiceDetailPage service="tax-law" />,
-});
-
-const ipLawRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/ip-law',
-  component: () => <ServiceDetailPage service="ip-law" />,
-});
-
-const startupLawRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/startup-law',
-  component: () => <ServiceDetailPage service="startup-law" />,
-});
-
-const employmentLawRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/services/employment-law',
-  component: () => <ServiceDetailPage service="employment-law" />,
-});
-
 const hyderabadRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/jurisdiction/hyderabad',
+  path: '/hyderabad',
   component: () => <JurisdictionPage jurisdiction="Hyderabad" />,
 });
 
 const secunderabadRoute = createRoute({
   getParentRoute: () => rootRoute,
+  path: '/secunderabad',
+  component: () => <JurisdictionPage jurisdiction="Secunderabad" />,
+});
+
+const rangareddyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/rangareddy',
+  component: () => <JurisdictionPage jurisdiction="Rangareddy" />,
+});
+
+const cyberabadRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/cyberabad',
+  component: () => <JurisdictionPage jurisdiction="Cyberabad" />,
+});
+
+// Keep legacy jurisdiction paths working
+const legacyHyderabadRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/jurisdiction/hyderabad',
+  component: () => <JurisdictionPage jurisdiction="Hyderabad" />,
+});
+
+const legacySecunderabadRoute = createRoute({
+  getParentRoute: () => rootRoute,
   path: '/jurisdiction/secunderabad',
   component: () => <JurisdictionPage jurisdiction="Secunderabad" />,
 });
 
-const rangareddy = createRoute({
+const legacyRangareddyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/jurisdiction/rangareddy',
   component: () => <JurisdictionPage jurisdiction="Rangareddy" />,
 });
 
-const cyberabadRoute = createRoute({
+const legacyCyberabadRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/jurisdiction/cyberabad',
   component: () => <JurisdictionPage jurisdiction="Cyberabad" />,
@@ -151,35 +121,48 @@ const leadsRoute = createRoute({
   ),
 });
 
+const adminLeadsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/admin/leads',
+  component: () => (
+    <ErrorBoundary>
+      <LeadsPage />
+    </ErrorBoundary>
+  ),
+});
+
 const initializeAdminRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/initialize-admin',
   component: InitializeAdminPage,
 });
 
+const adminInitializeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/admin/initialize',
+  component: InitializeAdminPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   servicesRoute,
+  serviceDetailRoute,
   aboutRoute,
   contactRoute,
-  blogListRoute,
+  blogRoute,
   blogDetailRoute,
-  familyLawRoute,
-  corporateLawRoute,
-  criminalDefenseRoute,
-  civilLitigationRoute,
-  propertyLawRoute,
-  documentationRoute,
-  taxLawRoute,
-  ipLawRoute,
-  startupLawRoute,
-  employmentLawRoute,
   hyderabadRoute,
   secunderabadRoute,
-  rangareddy,
+  rangareddyRoute,
   cyberabadRoute,
+  legacyHyderabadRoute,
+  legacySecunderabadRoute,
+  legacyRangareddyRoute,
+  legacyCyberabadRoute,
   leadsRoute,
+  adminLeadsRoute,
   initializeAdminRoute,
+  adminInitializeRoute,
 ]);
 
 function NotFoundComponent() {
@@ -203,28 +186,9 @@ declare module '@tanstack/react-router' {
 }
 
 export default function App() {
-  const { identity, isInitializing } = useInternetIdentity();
-  const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
-  const { data: isAdmin } = useIsCallerAdmin();
-
-  const isAuthenticated = !!identity;
-  const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;
-
-  if (isInitializing) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <RouterProvider router={router} />
-      {showProfileSetup && <ProfileSetupModal />}
       <Toaster />
     </ThemeProvider>
   );

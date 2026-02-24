@@ -4,15 +4,58 @@
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": false,
-  "existing_features": [],
-  "new_feature_requests": [
+  "isFixRequest": true,
+  "existing_features": [
     {
-      "id": "AR-1",
-      "summary": "Deploy the backend Motoko canister and frontend React application to the Internet Computer production network (mainnet).",
+      "id": "feature-revert-the-visual-theme-to-the-previous-version-restore-the-original-color-palette-typography-and-styling-that-existed-before-version-44-undo-any-theme-changes-introduced-in-version-44",
+      "title": "Revert the visual theme to the previous version: restore the original color palette, typography, and styling that existed before version 44. Undo any theme changes introduced in version 44.",
       "reqIds": [
         "REQ-1"
       ],
+      "version": 1
+    },
+    {
+      "id": "feature-restore-all-original-images-that-were-replaced-or-removed-in-version-44-revert-any-css-based-visuals-back-to-the-original-image-assets",
+      "title": "Restore all original images that were replaced or removed in version 44. Revert any CSS-based visuals back to the original image assets.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-mobile-phone-number-from-every-location-it-appears-across-the-entire-site-including-the-header-footer-contact-page-contact-info-cards-and-any-other-components-or-pages-that-display-it",
+      "title": "Remove the mobile/phone number from every location it appears across the entire site, including the Header, Footer, Contact page (contact info cards), and any other components or pages that display it.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-login-button-from-the-header-navigation-the-login-authentication-ui-element-internet-identity-login-button-must-not-be-visible-to-any-site-visitor",
+      "title": "Remove the login button from the Header navigation. The login/authentication UI element (Internet Identity login button) must not be visible to any site visitor.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Revert to old theme and images",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Remove mobile number from everywhere on the site",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Remove the login button",
+      "reqIds": [],
       "status": "pending"
     }
   ],

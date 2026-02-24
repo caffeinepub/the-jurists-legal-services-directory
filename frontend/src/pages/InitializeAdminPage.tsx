@@ -25,7 +25,7 @@ export default function InitializeAdminPage() {
 
   useEffect(() => {
     if (isAlreadyInitialized && isAdmin && identity) {
-      navigate({ to: '/leads', replace: true });
+      navigate({ to: '/leads' });
     }
   }, [isAlreadyInitialized, isAdmin, identity, navigate]);
 
@@ -40,16 +40,16 @@ export default function InitializeAdminPage() {
     try {
       await initializeAccessControlMutation.mutateAsync();
       setInitSuccess(true);
-      
+
       await refetchAdminStatus();
       await refetchInitStatus();
-      
+
       setTimeout(() => {
-        navigate({ to: '/leads', replace: true });
+        navigate({ to: '/leads' });
       }, 2000);
     } catch (err: any) {
       console.error('Admin initialization error:', err);
-      
+
       if (err.message?.includes('already initialized')) {
         setError('Admin access has already been initialized by another user.');
       } else {
@@ -95,7 +95,8 @@ export default function InitializeAdminPage() {
           <CardHeader>
             <CardTitle className="text-2xl">One-Time Admin Initialization</CardTitle>
             <CardDescription className="text-base">
-              This process securely connects your Internet Identity to the admin role, granting you access to the leads dashboard and management features.
+              This process securely connects your Internet Identity to the admin role, granting you access to the leads
+              dashboard and management features.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -129,16 +130,16 @@ export default function InitializeAdminPage() {
                 <h3 className="font-semibold text-lg">Setup Instructions:</h3>
                 <ol className="space-y-3 list-decimal list-inside text-muted-foreground">
                   <li className="leading-relaxed">
-                    <span className="font-medium text-foreground">Log in with Internet Identity</span> - 
-                    Authenticate using your Internet Identity to establish your identity.
+                    <span className="font-medium text-foreground">Log in with Internet Identity</span> — Authenticate
+                    using your Internet Identity to establish your identity.
                   </li>
                   <li className="leading-relaxed">
-                    <span className="font-medium text-foreground">Click "Initialize Admin Access"</span> - 
-                    This securely connects your identity to the admin role in the backend.
+                    <span className="font-medium text-foreground">Click "Initialize Admin Access"</span> — This securely
+                    connects your identity to the admin role in the backend.
                   </li>
                   <li className="leading-relaxed">
-                    <span className="font-medium text-foreground">Access the Dashboard</span> - 
-                    Once initialized, you'll be automatically redirected to the leads management page.
+                    <span className="font-medium text-foreground">Access the Dashboard</span> — Once initialized, you'll
+                    be automatically redirected to the leads management page.
                   </li>
                 </ol>
               </div>
@@ -186,7 +187,7 @@ export default function InitializeAdminPage() {
                       )}
                     </Button>
                   )}
-                  
+
                   {isAlreadyInitialized && (
                     <Button
                       size="lg"
@@ -202,9 +203,9 @@ export default function InitializeAdminPage() {
 
             <div className="pt-4 border-t">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                <strong className="text-foreground">Security Note:</strong> This initialization can only be performed once. 
-                The first user to complete this process becomes the admin. Ensure you are authorized to set up admin access 
-                for The Jurists platform.
+                <strong className="text-foreground">Security Note:</strong> This initialization can only be performed
+                once. The first user to complete this process becomes the admin. Ensure you are authorized to set up
+                admin access for The Jurists platform.
               </p>
             </div>
           </CardContent>
@@ -213,8 +214,8 @@ export default function InitializeAdminPage() {
         <div className="text-center text-sm text-muted-foreground">
           <p>
             Need help? Contact support at{' '}
-            <a href="mailto:thejuristshyd@gmail.com" className="text-primary hover:underline">
-              thejuristshyd@gmail.com
+            <a href="mailto:info@thejurists.in" className="text-primary hover:underline">
+              info@thejurists.in
             </a>
           </p>
         </div>

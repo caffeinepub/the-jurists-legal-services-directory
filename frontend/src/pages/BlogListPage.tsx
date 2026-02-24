@@ -48,7 +48,7 @@ export default function BlogListPage() {
         canonical="https://thejurists.in/blog"
         keywords="legal articles, law blog, legal advice India, Hyderabad legal insights"
       />
-      <StructuredData data={[generateLocalBusinessSchema(), generateOrganizationSchema()]} />
+      <StructuredData data={[generateLocalBusinessSchema(), generateOrganizationSchema()]} id="blog-list-schema" />
 
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="container">
@@ -91,19 +91,13 @@ export default function BlogListPage() {
                     <CardTitle className="text-xl line-clamp-2">{article.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
-                    <p className="text-muted-foreground mb-4 line-clamp-3">
-                      {getExcerpt(article.content)}
-                    </p>
+                    <p className="text-muted-foreground mb-4 line-clamp-3">{getExcerpt(article.content)}</p>
                     <div className="flex items-center justify-between mt-auto pt-4 border-t">
                       <div className="flex items-center text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4 mr-1" />
                         {formatDate(article.publishedDate)}
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={() => handleArticleClick(article.id)}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => handleArticleClick(article.id)}>
                         Read More
                       </Button>
                     </div>

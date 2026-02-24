@@ -1,207 +1,174 @@
-import { Scale, MapPin, Mail, Heart, FileText, Landmark, Gavel, Building2, Users, Home, Phone, Clock } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import ContactForm from '../components/ContactForm';
+import { Link } from '@tanstack/react-router';
+import { MapPin, Scale, ArrowRight, CheckCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import StructuredData, { generateLocalBusinessSchema } from '../components/StructuredData';
-import Breadcrumbs from '../components/Breadcrumbs';
+
+type JurisdictionName = 'Hyderabad' | 'Secunderabad' | 'Rangareddy' | 'Cyberabad';
 
 interface JurisdictionPageProps {
-  jurisdiction: 'Hyderabad' | 'Secunderabad' | 'Rangareddy' | 'Cyberabad';
+  jurisdiction: JurisdictionName;
 }
 
-export default function JurisdictionPage({ jurisdiction }: JurisdictionPageProps) {
-  const jurisdictionData = {
-    Hyderabad: {
-      description: 'Comprehensive legal services in Hyderabad covering all major practice areas including corporate law, criminal defense, family law, property law, and civil litigation.',
-      email: 'hyderabad@thejurists.in',
-      practiceAreas: [
-        { name: 'Family Law', icon: Heart, description: 'Divorce, custody, matrimonial disputes' },
-        { name: 'Corporate Law', icon: Building2, description: 'Company formation, compliance, contracts' },
-        { name: 'Criminal Defense', icon: Scale, description: 'Bail, trial defense, appeals' },
-        { name: 'Property Law', icon: Home, description: 'Real estate transactions, disputes' },
-        { name: 'Civil Litigation', icon: Gavel, description: 'Contract disputes, recovery suits' },
-      ],
-    },
-    Secunderabad: {
-      description: 'Expert legal representation in Secunderabad for individuals and businesses across all legal matters including criminal defense, family law, and property disputes.',
-      email: 'secunderabad@thejurists.in',
-      practiceAreas: [
-        { name: 'Criminal Defense', icon: Scale, description: 'Comprehensive criminal law services' },
-        { name: 'Family Law', icon: Heart, description: 'Matrimonial and custody matters' },
-        { name: 'Property Law', icon: Home, description: 'Property transactions and disputes' },
-        { name: 'Documentation', icon: FileText, description: 'Legal documentation services' },
-        { name: 'Civil Litigation', icon: Gavel, description: 'Civil dispute resolution' },
-      ],
-    },
-    Rangareddy: {
-      description: 'Specialized legal services in Rangareddy district covering family law, property law, civil litigation, and documentation services for individuals and families.',
-      email: 'rangareddy@thejurists.in',
-      practiceAreas: [
-        { name: 'Family Law', icon: Heart, description: 'Complete family law solutions' },
-        { name: 'Property Law', icon: Home, description: 'Real estate and land matters' },
-        { name: 'Civil Litigation', icon: Gavel, description: 'Property and contract disputes' },
-        { name: 'Documentation', icon: FileText, description: 'Notarization and legal drafting' },
-        { name: 'Employment Law', icon: Users, description: 'Workplace disputes and compliance' },
-      ],
-    },
-    Cyberabad: {
-      description: 'Modern legal services in Cyberabad focusing on corporate law, intellectual property, startup law, employment law, and technology-related legal matters.',
-      email: 'cyberabad@thejurists.in',
-      practiceAreas: [
-        { name: 'Corporate Law', icon: Building2, description: 'Business and corporate services' },
-        { name: 'IP Law', icon: Landmark, description: 'Trademark, patent, copyright' },
-        { name: 'Startup Law', icon: Scale, description: 'Startup legal advisory' },
-        { name: 'Employment Law', icon: Users, description: 'Labor and employment matters' },
-        { name: 'Property Law', icon: Home, description: 'Commercial real estate' },
-      ],
-    },
-  };
+const jurisdictionData: Record<JurisdictionName, {
+  slug: string;
+  description: string;
+  longDescription: string;
+  image: string;
+  highlights: string[];
+  keywords: string;
+}> = {
+  Hyderabad: {
+    slug: 'hyderabad',
+    description: "Premier legal services in Hyderabad – the heart of Telangana's legal landscape.",
+    longDescription: "Hyderabad is the capital of Telangana and one of India's major legal hubs. Our Hyderabad practice covers all courts including the High Court of Telangana, City Civil Courts, and specialized tribunals.",
+    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
+    highlights: ['High Court of Telangana', 'City Civil Courts', 'District Courts', 'Consumer Forums', 'Labour Tribunals', 'RERA Hyderabad'],
+    keywords: 'lawyer hyderabad, advocate hyderabad, legal services hyderabad, high court hyderabad',
+  },
+  Secunderabad: {
+    slug: 'secunderabad',
+    description: 'Expert legal representation across all courts in Secunderabad.',
+    longDescription: 'Secunderabad, the twin city of Hyderabad, has its own distinct legal landscape. Our Secunderabad practice provides comprehensive legal services across all local courts and tribunals.',
+    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
+    highlights: ['Secunderabad Courts', 'Civil Courts', 'Criminal Courts', 'Consumer Forums', 'Revenue Courts', 'Family Courts'],
+    keywords: 'lawyer secunderabad, advocate secunderabad, legal services secunderabad',
+  },
+  Rangareddy: {
+    slug: 'rangareddy',
+    description: 'Comprehensive legal services covering all courts in Rangareddy district.',
+    longDescription: 'Rangareddy district encompasses a large area around Hyderabad with its own court system. Our Rangareddy practice handles all matters in district courts, revenue courts, and specialized tribunals.',
+    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
+    highlights: ['Rangareddy District Courts', 'Revenue Courts', 'Civil Courts', 'Criminal Courts', 'Family Courts', 'Consumer Forums'],
+    keywords: 'lawyer rangareddy, advocate rangareddy, legal services rangareddy',
+  },
+  Cyberabad: {
+    slug: 'cyberabad',
+    description: "Specialized legal services for Cyberabad's tech-driven business environment.",
+    longDescription: "Cyberabad is home to Hyderabad's IT corridor and a thriving startup ecosystem. Our Cyberabad practice specializes in technology law, startup legal services, IP protection, and corporate law for the tech sector.",
+    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
+    highlights: ['IT & Technology Law', 'Startup Legal Services', 'IP Protection', 'Corporate Law', 'Employment Law', 'Cyberabad Courts'],
+    keywords: 'lawyer cyberabad, advocate cyberabad, IT lawyer hyderabad, startup lawyer cyberabad',
+  },
+};
 
+const otherJurisdictions: { name: JurisdictionName; path: string }[] = [
+  { name: 'Hyderabad', path: '/hyderabad' },
+  { name: 'Secunderabad', path: '/secunderabad' },
+  { name: 'Rangareddy', path: '/rangareddy' },
+  { name: 'Cyberabad', path: '/cyberabad' },
+];
+
+export default function JurisdictionPage({ jurisdiction }: JurisdictionPageProps) {
   const data = jurisdictionData[jurisdiction];
 
   return (
-    <div className="flex flex-col">
+    <>
       <SEOHead
-        title={`Legal Services in ${jurisdiction}`}
+        title={`Legal Services in ${jurisdiction} – The Jurists`}
         description={data.description}
-        canonical={`https://thejurists.in/jurisdiction/${jurisdiction.toLowerCase()}`}
-        ogImage="/assets/generated/hyderabad-courthouse.dim_800x500.jpg"
-        keywords={`lawyers ${jurisdiction}, legal services ${jurisdiction}, attorney ${jurisdiction}`}
+        keywords={data.keywords}
+        canonical={`https://thejurists.in/${data.slug}`}
       />
-      <StructuredData data={generateLocalBusinessSchema()} />
+      <StructuredData id={`jurisdiction-${data.slug}-schema`} data={generateLocalBusinessSchema()} />
 
-      <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: '/' },
-                { label: jurisdiction, href: `/jurisdiction/${jurisdiction.toLowerCase()}` },
-              ]}
-            />
-            <div className="text-center space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-primary/10 px-5 py-2.5 rounded-full border border-primary/20">
-                <MapPin className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-primary tracking-wide">{jurisdiction}</span>
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={data.image}
+            alt={`Legal services in ${jurisdiction}`}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-navy/75" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="flex items-center gap-2 text-white/60 text-sm mb-4">
+            <MapPin className="h-4 w-4 text-gold" />
+            <span>Serving {jurisdiction}</span>
+          </div>
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4">
+            Legal Services in <span className="text-gold">{jurisdiction}</span>
+          </h1>
+          <p className="text-white/80 text-lg max-w-2xl leading-relaxed">
+            {data.description}
+          </p>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-16 bg-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {/* Main */}
+            <div className="lg:col-span-2">
+              <h2 className="font-serif text-2xl font-bold text-navy mb-4">
+                Our {jurisdiction} Practice
+              </h2>
+              <p className="text-muted-foreground leading-relaxed mb-8">{data.longDescription}</p>
+
+              <h2 className="font-serif text-2xl font-bold text-navy mb-4">Courts & Tribunals We Cover</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {data.highlights.map((highlight) => (
+                  <div key={highlight} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-border shadow-luxury">
+                    <CheckCircle className="h-4 w-4 text-gold shrink-0" />
+                    <span className="text-sm text-navy font-medium">{highlight}</span>
+                  </div>
+                ))}
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-                Legal Services in {jurisdiction}
-              </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {data.description}
-              </p>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              <div className="bg-navy text-white rounded-lg p-6 shadow-luxury-lg">
+                <h3 className="font-serif text-lg font-bold mb-3">
+                  Need Legal Help in {jurisdiction}?
+                </h3>
+                <p className="text-white/70 text-sm mb-4">
+                  Our advocates are available 24/7 to assist you with any legal matter.
+                </p>
+                <Link
+                  to="/contact"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-gold text-navy font-semibold rounded hover:bg-gold-light transition-colors text-sm"
+                >
+                  Get Consultation <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 shadow-luxury border border-border">
+                <h3 className="font-serif text-lg font-bold text-navy mb-3">Other Jurisdictions</h3>
+                <ul className="space-y-2">
+                  {otherJurisdictions
+                    .filter((j) => j.name !== jurisdiction)
+                    .map((j) => (
+                      <li key={j.path}>
+                        <Link
+                          to={j.path as '/hyderabad' | '/secunderabad' | '/rangareddy' | '/cyberabad'}
+                          className="text-sm text-muted-foreground hover:text-gold transition-colors flex items-center gap-1"
+                        >
+                          <MapPin className="h-3 w-3" /> {j.name}
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 shadow-luxury border border-border">
+                <h3 className="font-serif text-lg font-bold text-navy mb-3">Contact Us</h3>
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p className="flex items-center gap-2">
+                    <Scale className="h-4 w-4 text-gold shrink-0" />
+                    Available 24/7
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-gold shrink-0" />
+                    Hyderabad, Telangana
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
-      <section className="py-16 bg-muted/20">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5 text-primary" />
-                  Email
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <a href="mailto:thejuristshyd@gmail.com" className="text-primary hover:underline">
-                  thejuristshyd@gmail.com
-                </a>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Phone className="h-5 w-5 text-primary" />
-                  Phone
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <a href="tel:+918008012892" className="text-primary hover:underline">
-                  +91-80080-12892
-                </a>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-primary" />
-                  Office Hours
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Mon - Sat: 9:00 AM - 6:00 PM</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="max-w-5xl mx-auto mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  Office Location
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Jubilee Hills, Hyderabad, Telangana 500033, India
-                </p>
-                <div className="w-full h-96 rounded-lg overflow-hidden border border-border">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243647.3160407253!2d78.24323209999999!3d17.385044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99daeaebd2c7%3A0xae93b78392bafbc2!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1234567890"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title={`The Jurists office location in ${jurisdiction}`}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24">
-        <div className="container">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold">Practice Areas in {jurisdiction}</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Our comprehensive legal services tailored for {jurisdiction}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {data.practiceAreas.map((area) => (
-              <Card key={area.name} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <area.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg mb-2">{area.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{area.description}</p>
-                    </div>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-
-          <div className="max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold mb-6 text-center">Contact Us for Legal Assistance</h3>
-            <ContactForm defaultJurisdiction={jurisdiction} />
-          </div>
-        </div>
-      </section>
-    </div>
+    </>
   );
 }

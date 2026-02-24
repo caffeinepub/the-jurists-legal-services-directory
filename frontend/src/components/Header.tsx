@@ -1,238 +1,198 @@
-import { Link, useRouterState, useNavigate } from '@tanstack/react-router';
-import { Scale, Menu, X, ChevronDown, Shield } from 'lucide-react';
-import { Button } from './ui/button';
-import { useState, useEffect } from 'react';
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { useQueryClient } from '@tanstack/react-query';
-import { useIsCallerAdmin, useIsAdminActorFieldInitialized } from '../hooks/useQueries';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { Menu, X, ChevronDown, Scale } from 'lucide-react';
+
+const services = [
+  { name: 'Family Law', slug: 'family-law' },
+  { name: 'Corporate Law', slug: 'corporate-law' },
+  { name: 'Criminal Defense', slug: 'criminal-defense' },
+  { name: 'Civil Litigation', slug: 'civil-litigation' },
+  { name: 'Property Law', slug: 'property-law' },
+  { name: 'Documentation Services', slug: 'documentation-services' },
+  { name: 'Tax Law', slug: 'tax-law' },
+  { name: 'IP Law', slug: 'ip-law' },
+  { name: 'Startup Law', slug: 'startup-law' },
+  { name: 'Employment Law', slug: 'employment-law' },
+  { name: 'Contracts & Agreements', slug: 'contracts-agreements' },
+];
+
+const jurisdictions = [
+  { name: 'Hyderabad', path: '/hyderabad' },
+  { name: 'Secunderabad', path: '/secunderabad' },
+  { name: 'Rangareddy', path: '/rangareddy' },
+  { name: 'Cyberabad', path: '/cyberabad' },
+];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { identity, login, clear, loginStatus } = useInternetIdentity();
-  const queryClient = useQueryClient();
-  const { pathname } = useRouterState().location;
-  const navigate = useNavigate();
-  const { data: isAdmin, isLoading: isAdminLoading, refetch: refetchAdminStatus } = useIsCallerAdmin();
-  const { data: isInitialized, isLoading: isInitializedLoading } = useIsAdminActorFieldInitialized();
-
-  const isAuthenticated = !!identity;
-  const isLoggingIn = loginStatus === 'logging-in';
-
-  useEffect(() => {
-    if (isAuthenticated && !isAdminLoading) {
-      refetchAdminStatus();
-    }
-  }, [isAuthenticated, refetchAdminStatus, isAdminLoading]);
-
-  const showAdminButton = isAuthenticated && !isAdminLoading && isAdmin === true;
-  const showInitializeLink = !isInitializedLoading && isInitialized === false;
-
-  const handleAuth = async () => {
-    if (isAuthenticated) {
-      await clear();
-      queryClient.clear();
-    } else {
-      try {
-        await login();
-      } catch (error: any) {
-        console.error('Login error:', error);
-        if (error.message === 'User is already authenticated') {
-          await clear();
-          setTimeout(() => login(), 300);
-        }
-      }
-    }
-  };
-
-  const handleAdminClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate({ to: '/leads' });
-    setMobileMenuOpen(false);
-  };
-
-  const handleInitializeClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate({ to: '/initialize-admin' });
-    setMobileMenuOpen(false);
-  };
-
-  const jurisdictions = [
-    { href: '/jurisdiction/hyderabad', label: 'Hyderabad' },
-    { href: '/jurisdiction/secunderabad', label: 'Secunderabad' },
-    { href: '/jurisdiction/rangareddy', label: 'Rangareddy' },
-    { href: '/jurisdiction/cyberabad', label: 'Cyberabad' },
-  ];
-
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/services', label: 'Services' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
-  ];
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [jurisdictionsOpen, setJurisdictionsOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-20 items-center justify-between">
-        <Link to="/" className="flex items-center space-x-3 group">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:shadow-lg transition-shadow">
-            <Scale className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            The Jurists
-          </span>
-        </Link>
+    <header className="bg-navy text-white shadow-luxury-lg sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <Scale className="h-7 w-7 text-gold group-hover:scale-110 transition-transform" />
+            <div>
+              <span className="font-serif text-xl font-bold text-white">The Jurists</span>
+              <span className="hidden sm:block text-xs text-gold/80 tracking-widest uppercase -mt-1">Legal Excellence</span>
+            </div>
+          </Link>
 
-        <nav className="hidden md:flex items-center space-x-1">
-          {navLinks.map((link) => (
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
             <Link
-              key={link.href}
-              to={link.href}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                pathname === link.href
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-              }`}
+              to="/"
+              className="px-3 py-2 text-sm text-white/80 hover:text-gold transition-colors rounded"
             >
-              {link.label}
+              Home
             </Link>
-          ))}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="text-sm font-medium">
-                Jurisdictions
-                <ChevronDown className="ml-1 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              {jurisdictions.map((jurisdiction) => (
-                <DropdownMenuItem key={jurisdiction.href} asChild>
-                  <Link to={jurisdiction.href} className="cursor-pointer">
-                    {jurisdiction.label}
+            {/* Services Dropdown */}
+            <div className="relative" onMouseEnter={() => setServicesOpen(true)} onMouseLeave={() => setServicesOpen(false)}>
+              <button className="flex items-center gap-1 px-3 py-2 text-sm text-white/80 hover:text-gold transition-colors rounded">
+                Services <ChevronDown className="h-3 w-3" />
+              </button>
+              {servicesOpen && (
+                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded shadow-luxury-lg border border-gold/20 py-1 z-50">
+                  <Link
+                    to="/services"
+                    className="block px-4 py-2 text-sm text-navy hover:bg-gold/10 hover:text-navy font-medium border-b border-gray-100"
+                  >
+                    All Services
                   </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  {services.map((service) => (
+                    <Link
+                      key={service.slug}
+                      to="/services/$serviceSlug"
+                      params={{ serviceSlug: service.slug }}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gold/10 hover:text-navy"
+                    >
+                      {service.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          {showAdminButton && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-sm font-medium">
-                  <Shield className="h-4 w-4 mr-2" />
-                  Admin
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={handleAdminClick} className="cursor-pointer">
-                  Leads Dashboard
-                </DropdownMenuItem>
-                {showInitializeLink && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleInitializeClick} className="cursor-pointer">
-                      Initialize Admin
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+            {/* Jurisdictions Dropdown */}
+            <div className="relative" onMouseEnter={() => setJurisdictionsOpen(true)} onMouseLeave={() => setJurisdictionsOpen(false)}>
+              <button className="flex items-center gap-1 px-3 py-2 text-sm text-white/80 hover:text-gold transition-colors rounded">
+                Jurisdictions <ChevronDown className="h-3 w-3" />
+              </button>
+              {jurisdictionsOpen && (
+                <div className="absolute top-full left-0 mt-1 w-44 bg-white rounded shadow-luxury-lg border border-gold/20 py-1 z-50">
+                  {jurisdictions.map((j) => (
+                    <Link
+                      key={j.path}
+                      to={j.path as '/hyderabad' | '/secunderabad' | '/rangareddy' | '/cyberabad'}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gold/10 hover:text-navy"
+                    >
+                      {j.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          <Button
-            onClick={handleAuth}
-            disabled={isLoggingIn}
-            variant={isAuthenticated ? 'outline' : 'default'}
-            className="ml-2"
+            <Link
+              to="/about"
+              className="px-3 py-2 text-sm text-white/80 hover:text-gold transition-colors rounded"
+            >
+              About
+            </Link>
+            <Link
+              to="/blog"
+              className="px-3 py-2 text-sm text-white/80 hover:text-gold transition-colors rounded"
+            >
+              Blog
+            </Link>
+            <Link
+              to="/contact"
+              className="ml-2 px-4 py-2 text-sm bg-gold text-navy font-semibold rounded hover:bg-gold-light transition-colors"
+            >
+              Contact Us
+            </Link>
+          </nav>
+
+          {/* Mobile menu button */}
+          <button
+            className="lg:hidden p-2 text-white/80 hover:text-gold"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
           >
-            {isLoggingIn ? 'Logging in...' : isAuthenticated ? 'Logout' : 'Login'}
-          </Button>
-        </nav>
-
-        <button
-          className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border/40 bg-background">
-          <nav className="container py-4 space-y-2">
-            {navLinks.map((link) => (
+        <div className="lg:hidden bg-navy-light border-t border-white/10">
+          <div className="px-4 py-3 space-y-1">
+            <Link
+              to="/"
+              className="block px-3 py-2 text-sm text-white/80 hover:text-gold"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              to="/services"
+              className="block px-3 py-2 text-sm text-white/80 hover:text-gold"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              All Services
+            </Link>
+            {services.map((service) => (
               <Link
-                key={link.href}
-                to={link.href}
+                key={service.slug}
+                to="/services/$serviceSlug"
+                params={{ serviceSlug: service.slug }}
+                className="block px-6 py-1.5 text-xs text-white/60 hover:text-gold"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  pathname === link.href
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
               >
-                {link.label}
+                {service.name}
               </Link>
             ))}
-
-            <div className="pt-2 border-t border-border/40">
-              <p className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase">Jurisdictions</p>
-              {jurisdictions.map((jurisdiction) => (
+            <div className="pt-1 border-t border-white/10">
+              {jurisdictions.map((j) => (
                 <Link
-                  key={jurisdiction.href}
-                  to={jurisdiction.href}
+                  key={j.path}
+                  to={j.path as '/hyderabad' | '/secunderabad' | '/rangareddy' | '/cyberabad'}
+                  className="block px-3 py-2 text-sm text-white/80 hover:text-gold"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 >
-                  {jurisdiction.label}
+                  {j.name}
                 </Link>
               ))}
             </div>
-
-            {showAdminButton && (
-              <div className="pt-2 border-t border-border/40">
-                <p className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase flex items-center">
-                  <Shield className="h-3 w-3 mr-1" />
-                  Admin
-                </p>
-                <button
-                  onClick={handleAdminClick}
-                  className="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                >
-                  Leads Dashboard
-                </button>
-                {showInitializeLink && (
-                  <button
-                    onClick={handleInitializeClick}
-                    className="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                  >
-                    Initialize Admin
-                  </button>
-                )}
-              </div>
-            )}
-
-            <div className="pt-2 border-t border-border/40">
-              <Button
-                onClick={handleAuth}
-                disabled={isLoggingIn}
-                variant={isAuthenticated ? 'outline' : 'default'}
-                className="w-full"
+            <div className="pt-1 border-t border-white/10">
+              <Link
+                to="/about"
+                className="block px-3 py-2 text-sm text-white/80 hover:text-gold"
+                onClick={() => setMobileMenuOpen(false)}
               >
-                {isLoggingIn ? 'Logging in...' : isAuthenticated ? 'Logout' : 'Login'}
-              </Button>
+                About
+              </Link>
+              <Link
+                to="/blog"
+                className="block px-3 py-2 text-sm text-white/80 hover:text-gold"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Blog
+              </Link>
+              <Link
+                to="/contact"
+                className="block px-3 py-2 text-sm bg-gold text-navy font-semibold rounded mt-2 text-center"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact Us
+              </Link>
             </div>
-          </nav>
+          </div>
         </div>
       )}
     </header>

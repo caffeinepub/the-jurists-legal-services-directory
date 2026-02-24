@@ -1,37 +1,97 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-24T20:31:39.910Z",
+  "generatedAt": "2026-02-24T22:43:16.262Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 0,
+    "total": 4,
+    "implemented": 4,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Deploy the backend Motoko canister and frontend React application to the Internet Computer production network (mainnet).",
-        "status": "missing",
+        "summary": "Revert the visual theme to the previous version: restore the original color palette, typography, and styling that existed before version 44. Undo any theme changes introduced in version 44.",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useActor.ts",
-          "frontend/src/main.tsx",
-          "frontend/src/hooks/useInternetIdentity.ts",
-          "frontend/public/robots.txt",
-          "frontend/public/sitemap.xml",
-          "frontend/src/components/SEOHead.tsx",
-          "frontend/src/components/StructuredData.tsx"
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Restore all original images that were replaced or removed in version 44. Revert any CSS-based visuals back to the original image assets.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/HomePage.tsx",
+          "frontend/src/pages/ServiceDetailPage.tsx",
+          "frontend/src/pages/JurisdictionPage.tsx",
+          "frontend/src/pages/AboutPage.tsx",
+          "frontend/src/pages/ContactPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/HomePage.tsx",
+          "frontend/src/pages/ServiceDetailPage.tsx",
+          "frontend/src/pages/JurisdictionPage.tsx",
+          "frontend/src/pages/AboutPage.tsx",
+          "frontend/src/pages/ContactPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Remove the mobile/phone number from every location it appears across the entire site, including the Header, Footer, Contact page (contact info cards), and any other components or pages that display it.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Footer.tsx",
+          "frontend/src/components/Header.tsx",
+          "frontend/src/pages/ContactPage.tsx",
+          "frontend/src/pages/AboutPage.tsx",
+          "frontend/src/pages/ServiceDetailPage.tsx",
+          "frontend/src/pages/JurisdictionPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Footer.tsx",
+          "frontend/src/components/Header.tsx",
+          "frontend/src/pages/ContactPage.tsx",
+          "frontend/src/pages/AboutPage.tsx",
+          "frontend/src/pages/ServiceDetailPage.tsx",
+          "frontend/src/pages/JurisdictionPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Remove the login button from the Header navigation. The login/authentication UI element (Internet Identity login button) must not be visible to any site visitor.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Header.tsx",
+          "frontend/src/pages/InitializeAdminPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Header.tsx"
+        ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
+    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/Header.tsx",
+    "frontend/src/index.css",
+    "frontend/src/pages/AboutPage.tsx",
+    "frontend/src/pages/ContactPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/JurisdictionPage.tsx",
+    "frontend/src/pages/ServiceDetailPage.tsx",
+    "frontend/tailwind.config.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

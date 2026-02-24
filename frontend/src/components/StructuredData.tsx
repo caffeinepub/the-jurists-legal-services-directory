@@ -1,140 +1,156 @@
 import { useEffect } from 'react';
 
 interface StructuredDataProps {
-  data: object | object[];
+  data?: object | object[];
+  schema?: object | object[];
+  id?: string;
 }
 
-export default function StructuredData({ data }: StructuredDataProps) {
+export default function StructuredData({ data, schema, id }: StructuredDataProps) {
+  const payload = schema ?? data;
+
   useEffect(() => {
-    const schemaArray = Array.isArray(data) ? data : [data];
+    if (!payload) return;
+
+    const schemaArray = Array.isArray(payload) ? payload : [payload];
     const scriptIds: string[] = [];
 
-    schemaArray.forEach((schema, index) => {
-      const scriptId = `structured-data-${index}-${Date.now()}`;
+    schemaArray.forEach((schemaItem, index) => {
+      const scriptId = id ? (index === 0 ? id : `${id}-${index}`) : `structured-data-${index}-${Date.now()}`;
       scriptIds.push(scriptId);
 
-      let scriptElement = document.getElementById(scriptId) as HTMLScriptElement;
-      
+      let scriptElement = document.getElementById(scriptId) as HTMLScriptElement | null;
+
       if (!scriptElement) {
         scriptElement = document.createElement('script');
         scriptElement.id = scriptId;
         scriptElement.type = 'application/ld+json';
         document.head.appendChild(scriptElement);
       }
-      
-      scriptElement.textContent = JSON.stringify(schema);
+
+      scriptElement.textContent = JSON.stringify(schemaItem);
     });
 
-    // Cleanup function to remove scripts when component unmounts
     return () => {
-      scriptIds.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.remove();
-        }
+      scriptIds.forEach((sid) => {
+        const element = document.getElementById(sid);
+        if (element) element.remove();
       });
     };
-  }, [data]);
+  }, [payload, id]);
 
   return null;
 }
 
-// Helper functions to generate common schemas
-export function generateLocalBusinessSchema() {
+// ─── Helper: LocalBusiness schema ────────────────────────────────────────────
+
+interface LocalBusinessOptions {
+  name?: string;
+  description?: string;
+  url?: string;
+  telephone?: string;
+  address?: {
+    streetAddress?: string;
+    addressLocality?: string;
+    addressRegion?: string;
+    postalCode?: string;
+    addressCountry?: string;
+  };
+  openingHours?: string[];
+}
+
+export function generateLocalBusinessSchema(options?: LocalBusinessOptions) {
   return {
     '@context': 'https://schema.org',
     '@type': 'LegalService',
-    name: 'The Jurists',
-    image: 'https://thejurists.in/assets/generated/hero-legal-services.dim_1200x600.jpg',
-    '@id': 'https://thejurists.in',
-    url: 'https://thejurists.in',
-    telephone: '+91-80080-12892',
-    email: 'thejuristshyd@gmail.com',
+    name: options?.name ?? 'The Jurists',
+    description:
+      options?.description ??
+      'Expert legal services in Hyderabad covering property law, corporate law, family law, contracts drafting, and more.',
+    url: options?.url ?? 'https://thejurists.in',
+    telephone: options?.telephone ?? '+91-80080-12892',
+    email: 'info@thejurists.in',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Jubilee Hills',
+      streetAddress: options?.address?.streetAddress ?? 'Hyderabad',
       addressLocality: 'Hyderabad',
       addressRegion: 'Telangana',
-      postalCode: '500033',
+      postalCode: options?.address?.postalCode ?? '500001',
       addressCountry: 'IN',
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday',
+        ],
+        opens: '00:00',
+        closes: '23:59',
+      },
+    ],
+    areaServed: {
+      '@type': 'City',
+      name: 'Hyderabad',
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 17.385,
-      longitude: 78.4867,
+      latitude: 17.4123,
+      longitude: 78.2432,
     },
-    openingHoursSpecification: {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      opens: '09:00',
-      closes: '18:00',
-    },
-    priceRange: '$$',
-    areaServed: [
-      {
-        '@type': 'City',
-        name: 'Hyderabad',
-      },
-      {
-        '@type': 'City',
-        name: 'Secunderabad',
-      },
-      {
-        '@type': 'City',
-        name: 'Rangareddy',
-      },
-      {
-        '@type': 'City',
-        name: 'Cyberabad',
-      },
-    ],
   };
 }
+
+// ─── Helper: Organization schema ─────────────────────────────────────────────
 
 export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'LegalService',
+    '@type': 'Organization',
     name: 'The Jurists',
     url: 'https://thejurists.in',
-    logo: 'https://thejurists.in/assets/generated/scales-justice-icon-transparent.dim_200x200.png',
-    description: 'Premier legal services in Hyderabad, Secunderabad, Cyberabad, and Rangareddy. Expert attorneys specializing in family law, corporate law, criminal defense, and more.',
-    email: 'thejuristshyd@gmail.com',
-    telephone: '+91-80080-12892',
+    logo: 'https://thejurists.in/logo.png',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+91-80080-12892',
+      contactType: 'customer service',
+      availableLanguage: ['English', 'Telugu', 'Hindi'],
+    },
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Hyderabad',
       addressRegion: 'Telangana',
       addressCountry: 'IN',
     },
-    sameAs: [
-      'https://www.linkedin.com/company/thejurists',
-      'https://www.facebook.com/thejurists',
-      'https://twitter.com/thejurists',
-    ],
   };
 }
+
+// ─── Helper: LegalService schema ─────────────────────────────────────────────
 
 export function generateLegalServiceSchema(serviceType: string, areaServed: string[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    serviceType: serviceType,
+    serviceType,
     provider: {
       '@type': 'LegalService',
       name: 'The Jurists',
       url: 'https://thejurists.in',
     },
-    areaServed: areaServed.map((area) => ({
-      '@type': 'City',
-      name: area,
-    })),
+    areaServed: areaServed.map((area) => ({ '@type': 'City', name: area })),
     availableChannel: {
       '@type': 'ServiceChannel',
       serviceUrl: 'https://thejurists.in/contact',
     },
   };
 }
+
+// ─── Helper: Breadcrumb schema ────────────────────────────────────────────────
 
 export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
   return {
@@ -148,6 +164,8 @@ export function generateBreadcrumbSchema(items: { name: string; url: string }[])
     })),
   };
 }
+
+// ─── Helper: FAQ schema ───────────────────────────────────────────────────────
 
 export function generateFAQSchema(faqs: { question: string; answer: string }[]) {
   return {
@@ -164,9 +182,12 @@ export function generateFAQSchema(faqs: { question: string; answer: string }[]) 
   };
 }
 
+// ─── Helper: Article schema ───────────────────────────────────────────────────
+
 export function generateArticleSchema(article: {
   title: string;
   description: string;
+  url?: string;
   datePublished: string;
   dateModified?: string;
   author: string;
@@ -177,9 +198,10 @@ export function generateArticleSchema(article: {
     '@type': 'Article',
     headline: article.title,
     description: article.description,
-    image: article.image || 'https://thejurists.in/assets/generated/hero-legal-services.dim_1200x600.jpg',
+    url: article.url ?? 'https://thejurists.in/blog',
+    image: article.image ?? 'https://thejurists.in/logo.png',
     datePublished: article.datePublished,
-    dateModified: article.dateModified || article.datePublished,
+    dateModified: article.dateModified ?? article.datePublished,
     author: {
       '@type': 'Person',
       name: article.author,
@@ -187,10 +209,7 @@ export function generateArticleSchema(article: {
     publisher: {
       '@type': 'Organization',
       name: 'The Jurists',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://thejurists.in/assets/generated/scales-justice-icon-transparent.dim_200x200.png',
-      },
+      url: 'https://thejurists.in',
     },
   };
 }

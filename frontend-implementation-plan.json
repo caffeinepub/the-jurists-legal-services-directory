@@ -1,52 +1,123 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Deploy frontend and backend to Internet Computer production network",
+  "title": "Revert theme/images, remove mobile number, remove login button",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Configure frontend to connect to the deployed mainnet backend canister and verify all routes function correctly on production",
+      "summary": "Revert the visual theme to the previous version by restoring the original color palette, typography, and styling that existed before version 44",
       "acceptanceCriteria": [
-        "Backend canister is successfully deployed to the IC mainnet and accessible via its canister ID.",
-        "Frontend assets are deployed to the IC mainnet and served from the production canister URL.",
-        "The deployed frontend correctly connects to the deployed backend canister on mainnet.",
-        "All existing routes and features function correctly on the production deployment."
+        "The site's color scheme, fonts, and layout match the pre-version-44 appearance.",
+        "No visual changes from the v44 theme update remain visible."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useActor.ts",
+          "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Update the actor initialization to support both local development and mainnet production environments. Ensure the hook correctly resolves the backend canister ID for mainnet deployments using environment-specific configuration or canister ID detection. Verify that the AuthClient and actor creation logic work seamlessly on the IC mainnet."
+          "description": "Revert all CSS custom properties and color palette definitions to their pre-v44 state. Restore the original OKLCH color values, typography settings, and any other theme variables that were changed in version 44. Remove any v44-specific styles."
         },
         {
-          "path": "frontend/src/main.tsx",
+          "path": "frontend/tailwind.config.js",
           "operation": "modify",
-          "description": "Add environment detection logic to configure the application for production mainnet deployment. Ensure that any hardcoded localhost references are replaced with production-ready configuration that works on the IC network. Verify Internet Identity integration uses the production Internet Identity canister URL."
+          "description": "Revert Tailwind configuration to pre-v44 settings. Restore original color token definitions, theme extensions, spacing values, and any other configuration changes introduced in v44."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Restore all original images that were replaced or removed in version 44 and revert any CSS-based visuals back to the original image assets",
+      "acceptanceCriteria": [
+        "All images that existed before the v44 update are displayed again.",
+        "No CSS placeholder visuals are shown in place of original images."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Restore original hero section image reference that existed before v44. Replace any CSS-based background or placeholder with the original image asset reference from frontend/public/assets/generated/hero-legal-services.dim_1200x600.jpg. Ensure the img element or background-image CSS properly loads the pre-v44 hero image."
         },
         {
-          "path": "frontend/src/hooks/useInternetIdentity.ts",
+          "path": "frontend/src/pages/ServiceDetailPage.tsx",
           "operation": "modify",
-          "description": "Verify and update the Internet Identity integration to use the correct production Identity Provider URL for mainnet. Ensure the AuthClient initialization points to the production Internet Identity canister (https://identity.ic0.app) rather than local development URLs. Confirm that login/logout flows work correctly on mainnet."
+          "description": "Restore original service detail page images that existed before v44. Ensure each service detail displays its corresponding original image from the assets directory (e.g., family-law-consultation, corporate-law-meeting, civil-litigation-documents, etc.). Remove any CSS placeholder visuals introduced in v44."
         },
         {
-          "path": "frontend/public/robots.txt",
+          "path": "frontend/src/pages/JurisdictionPage.tsx",
           "operation": "modify",
-          "description": "Update the sitemap URL in robots.txt to reference the production IC canister URL instead of thejurists.in domain, ensuring search engines can discover the deployed sitemap on mainnet. The sitemap URL should use the format https://<canister-id>.ic0.app/sitemap.xml or the custom domain if configured."
+          "description": "Restore original jurisdiction-specific images that existed before v44. Ensure the page displays the original hyderabad-courthouse.dim_800x500.jpg or other location-specific images. Replace any CSS-based visuals with the original image references."
         },
         {
-          "path": "frontend/public/sitemap.xml",
+          "path": "frontend/src/pages/AboutPage.tsx",
           "operation": "modify",
-          "description": "Update all URLs in the static sitemap to point to the production IC canister URL (https://<canister-id>.ic0.app) instead of thejurists.in. Ensure all route paths remain intact while changing only the base domain to match the mainnet deployment URL."
+          "description": "Restore any original images or visual elements on the About page that were changed in v44. Replace CSS placeholders with the original image assets such as lawyer-consultation.dim_600x400.jpg or legal-documents-gavel.dim_800x500.jpg if they were part of the pre-v44 design."
         },
         {
-          "path": "frontend/src/components/SEOHead.tsx",
+          "path": "frontend/src/pages/ContactPage.tsx",
           "operation": "modify",
-          "description": "Update the canonical URL generation logic to use the production IC canister URL for mainnet deployments. Ensure Open Graph and Twitter Card URLs point to the correct production domain. Add environment detection to switch between local development URLs and production mainnet URLs dynamically."
+          "description": "Restore any original background images, hero images, or decorative visuals on the Contact page that were replaced with CSS in v44. Ensure all image references point to the original assets in frontend/public/assets/generated/."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Remove the mobile/phone number from every location it appears across the entire site including Header, Footer, Contact page contact info cards, and any other components or pages",
+      "acceptanceCriteria": [
+        "No phone or mobile number is visible anywhere on the site.",
+        "The Footer no longer displays a phone number.",
+        "The Contact page no longer displays a phone number.",
+        "No other page or component displays a phone number."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Remove all phone number and mobile number display elements from the Footer component. Delete any JSX elements, text nodes, or links that render a phone number. Ensure the contact section no longer includes phone/mobile information while preserving email and location details."
         },
         {
-          "path": "frontend/src/components/StructuredData.tsx",
+          "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Update all structured data URL references (LocalBusiness, Organization, LegalService schemas) to use the production IC canister URL for mainnet. Ensure the @id and url fields in JSON-LD schemas point to the correct production URLs. Preserve all schema properties while updating only the base domain."
+          "description": "Remove any phone number display from the Header component if present. Check both desktop and mobile navigation for phone number elements and remove them."
+        },
+        {
+          "path": "frontend/src/pages/ContactPage.tsx",
+          "operation": "modify",
+          "description": "Remove all phone number and mobile number display from the contact info cards section. Delete the entire contact info card that displays the phone number, or remove only the phone number field if the card contains other information. Ensure no phone number is visible on the Contact page while preserving email, location, and hours information."
+        },
+        {
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "modify",
+          "description": "Remove any phone number references from the About page if present. Search for and delete any contact information sections, team member cards, or other elements that display a phone number."
+        },
+        {
+          "path": "frontend/src/pages/ServiceDetailPage.tsx",
+          "operation": "modify",
+          "description": "Remove any phone number display from service detail pages if present in contact sections or CTAs. Ensure no service detail page shows a phone number."
+        },
+        {
+          "path": "frontend/src/pages/JurisdictionPage.tsx",
+          "operation": "modify",
+          "description": "Remove any phone number display from jurisdiction pages if present in location-specific contact information. Ensure no jurisdiction page shows a phone number."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Remove the login button from the Header navigation so the Internet Identity login button is not visible to any site visitor",
+      "acceptanceCriteria": [
+        "The login button is not rendered in the desktop navigation.",
+        "The login button is not rendered in the mobile navigation menu.",
+        "No login or sign-in prompt is visible to unauthenticated users on any page."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Remove the Internet Identity login button from both desktop and mobile navigation sections in the Header component. Delete or comment out the LoginButton component rendering and any associated authentication UI elements. Ensure the admin routes (LeadsPage, InitializeAdminPage) remain protected but do not expose the login button publicly. The header should no longer display any login, sign-in, or authentication prompt to visitors."
+        },
+        {
+          "path": "frontend/src/pages/InitializeAdminPage.tsx",
+          "operation": "modify",
+          "description": "Ensure the InitializeAdminPage retains its internal login functionality for admin setup but is not linked or accessible from public navigation. This page should remain functional for admin initialization but not be publicly discoverable."
         }
       ]
     }

@@ -59,13 +59,14 @@ export default function BlogDetailPage() {
   }
 
   const metaDescription = article.content.substring(0, 160);
+  const articleUrl = `https://thejurists.in/blog/${article.id}`;
 
   return (
     <div className="flex flex-col">
       <SEOHead
         title={article.title}
         description={metaDescription}
-        canonical={`https://thejurists.in/blog/${article.id}`}
+        canonical={articleUrl}
         ogType="article"
       />
       <StructuredData
@@ -73,11 +74,13 @@ export default function BlogDetailPage() {
           generateArticleSchema({
             title: article.title,
             description: metaDescription,
+            url: articleUrl,
             datePublished: getISODate(article.publishedDate),
             author: article.author,
           }),
           generateLocalBusinessSchema(),
         ]}
+        id="blog-detail-schema"
       />
 
       <section className="py-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5">

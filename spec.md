@@ -1,11 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Deploy the "The Jurists" frontend and backend to the Internet Computer mainnet (production network).
+**Goal:** Revert the site's theme and images to the pre-v44 state, and remove the mobile number and login button from all public-facing areas of the site.
 
 **Planned changes:**
-- Deploy the backend Motoko canister to the IC mainnet
-- Deploy the frontend React application assets to the IC mainnet
-- Configure the frontend to connect to the deployed backend canister ID on mainnet
+- Restore the original color palette, typography, and styling from before version 44
+- Restore all original images that were replaced or removed in version 44
+- Remove the phone/mobile number from the Header, Footer, Contact page, and any other location it appears
+- Remove the login button from both desktop and mobile navigation so it is not visible to any site visitor
 
-**User-visible outcome:** The application is live on the Internet Computer production network, accessible via production canister URLs, with all existing routes and features functioning as expected.
+**User-visible outcome:** The site looks and feels as it did before version 44, with no phone number or login button displayed anywhere to visitors.

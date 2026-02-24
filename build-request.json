@@ -1,34 +1,90 @@
 {
   "kind": "build_request",
-  "title": "Deploy frontend and backend to Internet Computer production network",
+  "title": "Revert theme/images, remove mobile number, remove login button",
   "projectName": "The Jurists",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Deploy the backend Motoko canister and frontend React application to the Internet Computer production network (mainnet).",
-      "target": "both",
+      "text": "Revert the visual theme to the previous version: restore the original color palette, typography, and styling that existed before version 44. Undo any theme changes introduced in version 44.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
+        ],
+        "quotes": [
+          "I want the old theme and images back"
         ]
       },
       "acceptanceCriteria": [
-        "Backend canister is successfully deployed to the IC mainnet and accessible via its canister ID.",
-        "Frontend assets are deployed to the IC mainnet and served from the production canister URL.",
-        "The deployed frontend correctly connects to the deployed backend canister on mainnet.",
-        "All existing routes and features function correctly on the production deployment."
+        "The site's color scheme, fonts, and layout match the pre-version-44 appearance.",
+        "No visual changes from the v44 theme update remain visible."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Restore all original images that were replaced or removed in version 44. Revert any CSS-based visuals back to the original image assets.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "I want the old theme and images back"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All images that existed before the v44 update are displayed again.",
+        "No CSS placeholder visuals are shown in place of original images."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Remove the mobile/phone number from every location it appears across the entire site, including the Header, Footer, Contact page (contact info cards), and any other components or pages that display it.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "remove the mobile number from everywhere on site"
+        ]
+      },
+      "acceptanceCriteria": [
+        "No phone or mobile number is visible anywhere on the site.",
+        "The Footer no longer displays a phone number.",
+        "The Contact page no longer displays a phone number.",
+        "No other page or component displays a phone number."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Remove the login button from the Header navigation. The login/authentication UI element (Internet Identity login button) must not be visible to any site visitor.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "remove the login button"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The login button is not rendered in the desktop navigation.",
+        "The login button is not rendered in the mobile navigation menu.",
+        "No login or sign-in prompt is visible to unauthenticated users on any page."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any application logic, data models, or UI components as part of this deployment task.",
-    "Preserve all existing SEO metadata, sitemap, and robots.txt configurations."
+    "Do not modify backend logic or data models.",
+    "Do not alter immutable frontend paths: useInternetIdentity.ts, useActor.ts, main.tsx, or the ui components directory.",
+    "The admin-only routes (LeadsPage, InitializeAdminPage) may retain internal authentication logic but must not expose the login button publicly."
   ],
   "nonGoals": [
-    "Adding new features or modifying existing functionality.",
-    "Changing the backend data schema or frontend UI design.",
-    "Setting up staging or test environments."
+    "Do not add any new features or content.",
+    "Do not change the site's copy, services, or SEO metadata.",
+    "Do not remove admin authentication functionality from protected routes — only hide the public-facing login button."
   ],
   "imageRequirements": {
     "required": [],
