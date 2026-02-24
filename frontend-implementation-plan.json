@@ -1,0 +1,54 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Deploy frontend and backend to Internet Computer production network",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Configure frontend to connect to the deployed mainnet backend canister and verify all routes function correctly on production",
+      "acceptanceCriteria": [
+        "Backend canister is successfully deployed to the IC mainnet and accessible via its canister ID.",
+        "Frontend assets are deployed to the IC mainnet and served from the production canister URL.",
+        "The deployed frontend correctly connects to the deployed backend canister on mainnet.",
+        "All existing routes and features function correctly on the production deployment."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Update the actor initialization to support both local development and mainnet production environments. Ensure the hook correctly resolves the backend canister ID for mainnet deployments using environment-specific configuration or canister ID detection. Verify that the AuthClient and actor creation logic work seamlessly on the IC mainnet."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Add environment detection logic to configure the application for production mainnet deployment. Ensure that any hardcoded localhost references are replaced with production-ready configuration that works on the IC network. Verify Internet Identity integration uses the production Internet Identity canister URL."
+        },
+        {
+          "path": "frontend/src/hooks/useInternetIdentity.ts",
+          "operation": "modify",
+          "description": "Verify and update the Internet Identity integration to use the correct production Identity Provider URL for mainnet. Ensure the AuthClient initialization points to the production Internet Identity canister (https://identity.ic0.app) rather than local development URLs. Confirm that login/logout flows work correctly on mainnet."
+        },
+        {
+          "path": "frontend/public/robots.txt",
+          "operation": "modify",
+          "description": "Update the sitemap URL in robots.txt to reference the production IC canister URL instead of thejurists.in domain, ensuring search engines can discover the deployed sitemap on mainnet. The sitemap URL should use the format https://<canister-id>.ic0.app/sitemap.xml or the custom domain if configured."
+        },
+        {
+          "path": "frontend/public/sitemap.xml",
+          "operation": "modify",
+          "description": "Update all URLs in the static sitemap to point to the production IC canister URL (https://<canister-id>.ic0.app) instead of thejurists.in. Ensure all route paths remain intact while changing only the base domain to match the mainnet deployment URL."
+        },
+        {
+          "path": "frontend/src/components/SEOHead.tsx",
+          "operation": "modify",
+          "description": "Update the canonical URL generation logic to use the production IC canister URL for mainnet deployments. Ensure Open Graph and Twitter Card URLs point to the correct production domain. Add environment detection to switch between local development URLs and production mainnet URLs dynamically."
+        },
+        {
+          "path": "frontend/src/components/StructuredData.tsx",
+          "operation": "modify",
+          "description": "Update all structured data URL references (LocalBusiness, Organization, LegalService schemas) to use the production IC canister URL for mainnet. Ensure the @id and url fields in JSON-LD schemas point to the correct production URLs. Preserve all schema properties while updating only the base domain."
+        }
+      ]
+    }
+  ]
+}

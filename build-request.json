@@ -1,0 +1,37 @@
+{
+  "kind": "build_request",
+  "title": "Deploy frontend and backend to Internet Computer production network",
+  "projectName": "The Jurists",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Deploy the backend Motoko canister and frontend React application to the Internet Computer production network (mainnet).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend canister is successfully deployed to the IC mainnet and accessible via its canister ID.",
+        "Frontend assets are deployed to the IC mainnet and served from the production canister URL.",
+        "The deployed frontend correctly connects to the deployed backend canister on mainnet.",
+        "All existing routes and features function correctly on the production deployment."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify any application logic, data models, or UI components as part of this deployment task.",
+    "Preserve all existing SEO metadata, sitemap, and robots.txt configurations."
+  ],
+  "nonGoals": [
+    "Adding new features or modifying existing functionality.",
+    "Changing the backend data schema or frontend UI design.",
+    "Setting up staging or test environments."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
