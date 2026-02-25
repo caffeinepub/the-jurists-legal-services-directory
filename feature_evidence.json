@@ -2,11 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-replace-all-occurrences-of-the-current-email-address-in-the-frontend-with-thejuristshyd-gmail-com-this-includes-contactpage-tsx-footer-tsx-and-any-other-component-or-page-that-displays-an-email-address",
-      "featureTitle": "Replace all occurrences of the current email address in the frontend with 'thejuristshyd@gmail.com'. This includes ContactPage.tsx, Footer.tsx, and any other component or page that displays an email address.",
+      "featureId": "feature-change-the-hero-tagline-on-the-homepage-from-justice-delivered-with-precision-integrity-to-trusted-legal-counsel-proven-results",
+      "featureTitle": "Change the hero tagline on the HomePage from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.'",
       "files": [
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/pages/ContactPage.tsx"
+        "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
         "authorization@3.0.0",
@@ -23,11 +22,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-revert-the-visual-theme-color-palette-typography-spacing-component-styling-and-any-decorative-elements-to-match-the-42nd-draft-version-of-the-site-apply-this-theme-consistently-across-all-pages-and-components-including-header-footer-homepage-contactpage-aboutpage-servicespage-and-all-other-visible-pages",
-      "featureTitle": "Revert the visual theme (color palette, typography, spacing, component styling, and any decorative elements) to match the 42nd draft version of the site. Apply this theme consistently across all pages and components including Header, Footer, HomePage, ContactPage, AboutPage, ServicesPage, and all other visible pages.",
+      "featureId": "feature-remove-the-chatbotwidget-component-from-the-site-entirely-remove-its-rendering-from-app-tsx-and-delete-or-disable-the-floating-chat-button-so-no-chatbot-ui-is-visible-to-users",
+      "featureTitle": "Remove the ChatbotWidget component from the site entirely. Remove its rendering from App.tsx and delete or disable the floating chat button so no chatbot UI is visible to users.",
       "files": [
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/pages/ContactPage.tsx"
+        "frontend/src/App.tsx"
       ],
       "components": [
         "authorization@3.0.0",
@@ -40,6 +38,115 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-restore-the-legal-notice-banner-that-has-disappeared-re-add-a-prominent-legal-notice-disclaimer-banner-e-g-at-the-top-or-bottom-of-every-page-informing-visitors-that-the-content-on-this-site-does-not-constitute-legal-advice-and-is-for-informational-purposes-only-in-compliance-with-bar-council-rules",
+      "featureTitle": "Restore the legal notice banner that has disappeared. Re-add a prominent legal notice/disclaimer banner (e.g., at the top or bottom of every page) informing visitors that the content on this site does not constitute legal advice and is for informational purposes only, in compliance with Bar Council rules.",
+      "files": [
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/components/LegalNoticeBanner.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-remove-the-meet-our-team-section-from-the-aboutpage-and-any-other-page-where-it-appears-do-not-show-team-member-cards-or-the-team-heading-anywhere-on-the-site",
+      "featureTitle": "Remove the 'Meet Our Team' section from the AboutPage (and any other page where it appears). Do not show team member cards or the team heading anywhere on the site.",
+      "files": [
+        "frontend/src/pages/AboutPage.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-replace-every-instance-of-cyberabad-across-the-entire-frontend-with-medchal-malkajgiri-and-kukatpally-courts-this-includes-the-header-navigation-and-dropdowns-the-footer-jurisdiction-links-the-jurisdictionpage-component-route-slug-page-title-seo-metadata-breadcrumbs-content-the-sitemap-page-and-any-other-component-or-page-that-references-cyberabad-update-the-route-path-from-jurisdiction-cyberabad-to-jurisdiction-medchal-malkajgiri-kukatpally-and-ensure-the-old-path-redirects-or-is-replaced",
+      "featureTitle": "Replace every instance of 'Cyberabad' across the entire frontend with 'Medchal Malkajgiri and Kukatpally Courts'. This includes: the Header navigation and dropdowns, the Footer jurisdiction links, the JurisdictionPage component (route slug, page title, SEO metadata, breadcrumbs, content), the sitemap page, and any other component or page that references 'Cyberabad'. Update the route path from '/jurisdiction/cyberabad' to '/jurisdiction/medchal-malkajgiri-kukatpally' and ensure the old path redirects or is replaced.",
+      "files": [
+        "frontend/public/sitemap.xml",
+        "frontend/src/App.tsx",
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Header.tsx",
+        "frontend/src/pages/JurisdictionPage.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-under-each-court-s-jurisdiction-page-hyderabad-secunderabad-rangareddy-and-medchal-malkajgiri-and-kukatpally-courts-list-all-areas-of-practice-that-are-mentioned-anywhere-on-the-site-from-the-servicespage-and-servicedetailpage-ensure-the-areas-of-practice-section-on-each-court-s-jurisdictionpage-includes-the-full-comprehensive-list-rather-than-a-partial-subset",
+      "featureTitle": "Under each court's jurisdiction page (Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri and Kukatpally Courts), list ALL areas of practice that are mentioned anywhere on the site (from the ServicesPage and ServiceDetailPage). Ensure the 'Areas of Practice' section on each court's JurisdictionPage includes the full comprehensive list rather than a partial subset.",
+      "files": [
+        "frontend/src/pages/JurisdictionPage.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-special-prominent-banner-or-highlight-section-on-the-telangana-high-court-jurisdiction-page-if-it-exists-or-create-a-dedicated-telangana-high-court-section-page-the-banner-should-be-visually-distinct-e-g-gold-border-serif-heading-elevated-card-and-highlight-that-the-firm-practises-at-the-telangana-high-court-including-key-information-such-as-types-of-matters-handled-at-the-high-court-level",
+      "featureTitle": "Add a special prominent banner or highlight section on the Telangana High Court jurisdiction page (if it exists) or create a dedicated Telangana High Court section/page. The banner should be visually distinct (e.g., gold border, serif heading, elevated card) and highlight that the firm practises at the Telangana High Court, including key information such as types of matters handled at the High Court level.",
+      "files": [
+        "frontend/public/sitemap.xml",
+        "frontend/src/App.tsx",
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Header.tsx",
+        "frontend/src/pages/TelanganaHighCourtPage.tsx"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
       ],
       "confidence": "high"
     }

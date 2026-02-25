@@ -194,6 +194,7 @@ export interface backendInterface {
     getBlogArticlesByCategory(category: Variant__1): Promise<Array<BlogArticle>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getChatbotResponse(message: string): Promise<string>;
     getContactFormSubmissionsByJurisdiction(jurisdiction: Variant__3): Promise<Array<ContactFormSubmission>>;
     getContactFormSubmissionsByStatus(status: Variant): Promise<Array<ContactFormSubmission>>;
     getLegalDirectoryByJurisdiction(jurisdiction: Variant__3): Promise<Array<LegalListing>>;
@@ -397,6 +398,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getCallerUserRole();
             return from_candid_UserRole_n40(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getChatbotResponse(arg0: string): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getChatbotResponse(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getChatbotResponse(arg0);
+            return result;
         }
     }
     async getContactFormSubmissionsByJurisdiction(arg0: Variant__3): Promise<Array<ContactFormSubmission>> {

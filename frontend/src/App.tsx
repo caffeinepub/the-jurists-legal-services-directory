@@ -10,6 +10,7 @@ import ContactPage from './pages/ContactPage';
 import BlogListPage from './pages/BlogListPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 import JurisdictionPage from './pages/JurisdictionPage';
+import TelanganaHighCourtPage from './pages/TelanganaHighCourtPage';
 import LeadsPage from './pages/LeadsPage';
 import InitializeAdminPage from './pages/InitializeAdminPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -80,10 +81,23 @@ const rangareddyRoute = createRoute({
   component: () => <JurisdictionPage jurisdiction="Rangareddy" />,
 });
 
+const medchalRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/medchal-malkajgiri-kukatpally',
+  component: () => <JurisdictionPage jurisdiction="MedchalMalkajgiri" />,
+});
+
+// Legacy Cyberabad route redirects to new name
 const cyberabadRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/cyberabad',
-  component: () => <JurisdictionPage jurisdiction="Cyberabad" />,
+  component: () => <JurisdictionPage jurisdiction="MedchalMalkajgiri" />,
+});
+
+const telanganaHighCourtRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/jurisdiction/telangana-high-court',
+  component: TelanganaHighCourtPage,
 });
 
 // Keep legacy jurisdiction paths working
@@ -108,7 +122,13 @@ const legacyRangareddyRoute = createRoute({
 const legacyCyberabadRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/jurisdiction/cyberabad',
-  component: () => <JurisdictionPage jurisdiction="Cyberabad" />,
+  component: () => <JurisdictionPage jurisdiction="MedchalMalkajgiri" />,
+});
+
+const legacyMedchalRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/jurisdiction/medchal-malkajgiri-kukatpally',
+  component: () => <JurisdictionPage jurisdiction="MedchalMalkajgiri" />,
 });
 
 const leadsRoute = createRoute({
@@ -154,11 +174,14 @@ const routeTree = rootRoute.addChildren([
   hyderabadRoute,
   secunderabadRoute,
   rangareddyRoute,
+  medchalRoute,
   cyberabadRoute,
+  telanganaHighCourtRoute,
   legacyHyderabadRoute,
   legacySecunderabadRoute,
   legacyRangareddyRoute,
   legacyCyberabadRoute,
+  legacyMedchalRoute,
   leadsRoute,
   adminLeadsRoute,
   initializeAdminRoute,

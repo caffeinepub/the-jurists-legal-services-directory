@@ -1,113 +1,132 @@
-import { useGetAllBlogArticles } from '../hooks/useQueries';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { Calendar, Tag } from 'lucide-react';
-import { Badge } from '../components/ui/badge';
+import React, { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import { Calendar, User } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
-import StructuredData, { generateLocalBusinessSchema, generateOrganizationSchema } from '../components/StructuredData';
-import Breadcrumbs from '../components/Breadcrumbs';
-import { Variant__1 } from '../backend';
+import { useGetAllBlogArticles } from '../hooks/useQueries';
+import { Skeleton } from '../components/ui/skeleton';
 
-const practiceAreaLabels: Record<Variant__1, string> = {
-  [Variant__1.familyLaw]: 'Family Law',
-  [Variant__1.corporateLaw]: 'Corporate Law',
-  [Variant__1.criminalDefense]: 'Criminal Defense',
-  [Variant__1.civilLitigation]: 'Civil Litigation',
-  [Variant__1.propertyLaw]: 'Property Law',
-  [Variant__1.ipLaw]: 'IP Law',
-  [Variant__1.taxLaw]: 'Tax Law',
-  [Variant__1.employmentLaw]: 'Employment Law',
-  [Variant__1.startupLaw]: 'Startup Law',
-  [Variant__1.documentationServices]: 'Documentation',
+const categoryLabels: Record<string, string> = {
+  familyLaw: 'Family Law',
+  corporateLaw: 'Corporate Law',
+  criminalDefense: 'Criminal Defense',
+  civilLitigation: 'Civil Litigation',
+  propertyLaw: 'Property Law',
+  documentationServices: 'Documentation',
+  taxLaw: 'Tax Law',
+  ipLaw: 'IP Law',
+  startupLaw: 'Startup Law',
+  employmentLaw: 'Employment Law',
 };
 
 export default function BlogListPage() {
-  const { data: articles = [], isLoading } = useGetAllBlogArticles();
   const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const { data: articles, isLoading } = useGetAllBlogArticles();
 
-  const formatDate = (timestamp: bigint) => {
-    const date = new Date(Number(timestamp) / 1000000);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
+  const filtered = activeCategory === 'all'
+    ? (articles ?? [])
+    : (articles ?? []).filter((a) => a.category === activeCategory);
 
-  const getExcerpt = (content: string, maxLength = 150) => {
-    if (content.length <= maxLength) return content;
-    return content.substring(0, maxLength).trim() + '...';
-  };
-
-  const handleArticleClick = (articleId: bigint) => {
-    navigate({ to: '/blog/$articleId', params: { articleId: articleId.toString() } });
-  };
+  const categories = ['all', ...Object.keys(categoryLabels)];
 
   return (
-    <div className="flex flex-col">
+    <>
       <SEOHead
-        title="Legal Articles & Insights"
-        description="Expert legal articles covering family law, corporate law, criminal defense, and more. Get answers to common legal questions in Hyderabad."
+        title="Legal Blog – The Jurists Hyderabad"
+        description="Legal insights, updates, and articles from The Jurists advocates in Hyderabad."
+        keywords="legal blog hyderabad, law articles hyderabad, legal news hyderabad"
         canonical="https://thejurists.in/blog"
-        keywords="legal articles, law blog, legal advice India, Hyderabad legal insights"
       />
-      <StructuredData data={[generateLocalBusinessSchema(), generateOrganizationSchema()]} id="blog-list-schema" />
 
-      <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">Legal Articles & Insights</h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Expert legal guidance and insights from The Jurists team
-            </p>
+      {/* Hero */}
+      <section className="bg-black text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-3">Insights</p>
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4">Legal Blog</h1>
+          <p className="text-gray-300 max-w-xl text-lg">
+            Expert legal insights, case updates, and practical guidance from our advocates.
+          </p>
+        </div>
+      </section>
+
+      {/* Category Filter */}
+      <section className="bg-white border-b border-gray-200 sticky top-16 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex gap-1 overflow-x-auto py-3">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`flex-shrink-0 px-4 py-1.5 text-xs font-medium uppercase tracking-wide border transition-colors ${
+                  activeCategory === cat
+                    ? 'bg-black text-white border-black'
+                    : 'bg-white text-black border-black hover:bg-gray-100'
+                }`}
+              >
+                {cat === 'all' ? 'All' : categoryLabels[cat]}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container">
-          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Blog', href: '/blog' }]} />
-
+      {/* Articles */}
+      <section className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {isLoading ? (
-            <div className="text-center py-12">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading articles...</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="border border-gray-200">
+                  <Skeleton className="h-44 w-full" />
+                  <div className="p-5 space-y-3">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
+                </div>
+              ))}
             </div>
-          ) : articles.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-lg text-muted-foreground mb-6">No articles available yet. Check back soon!</p>
-              <Button asChild>
-                <Link to="/">Return Home</Link>
-              </Button>
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="font-serif text-2xl text-black mb-2">No articles yet</p>
+              <p className="text-gray-500">Check back soon for legal insights and updates.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {articles.map((article) => (
-                <Card key={Number(article.id)} className="hover:shadow-lg transition-shadow flex flex-col">
-                  <CardHeader>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge variant="secondary" className="text-xs">
-                        <Tag className="h-3 w-3 mr-1" />
-                        {practiceAreaLabels[article.category]}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-xl line-clamp-2">{article.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1 flex flex-col">
-                    <p className="text-muted-foreground mb-4 line-clamp-3">{getExcerpt(article.content)}</p>
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t">
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {formatDate(article.publishedDate)}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((article) => (
+                <div
+                  key={String(article.id)}
+                  className="border border-black group cursor-pointer hover:shadow-luxury transition-shadow"
+                  onClick={() => navigate({ to: `/blog/${article.id}` as any })}
+                >
+                  <div className="p-5">
+                    <span className="inline-block bg-black text-white text-xs px-2 py-1 uppercase tracking-wide mb-3">
+                      {categoryLabels[article.category] ?? article.category}
+                    </span>
+                    <h2 className="font-serif text-lg font-semibold text-black mb-2 group-hover:text-gray-700 transition-colors line-clamp-2">
+                      {article.title}
+                    </h2>
+                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">
+                      {article.content.substring(0, 150)}...
+                    </p>
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <User className="w-3 h-3" />
+                        {article.author}
                       </div>
-                      <Button variant="ghost" size="sm" onClick={() => handleArticleClick(article.id)}>
-                        Read More
-                      </Button>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(Number(article.publishedDate) / 1_000_000).toLocaleDateString()}
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           )}
         </div>
       </section>
-    </div>
+    </>
   );
 }

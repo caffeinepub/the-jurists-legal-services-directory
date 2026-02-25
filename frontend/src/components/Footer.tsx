@@ -1,56 +1,37 @@
+import React from 'react';
 import { Link } from '@tanstack/react-router';
-import { Scale, Mail, MapPin, Clock } from 'lucide-react';
-
-const practiceAreas = [
-  { name: 'Family Law', slug: 'family-law' },
-  { name: 'Corporate Law', slug: 'corporate-law' },
-  { name: 'Criminal Defense', slug: 'criminal-defense' },
-  { name: 'Civil Litigation', slug: 'civil-litigation' },
-  { name: 'Property Law', slug: 'property-law' },
-  { name: 'Documentation Services', slug: 'documentation-services' },
-  { name: 'Tax Law', slug: 'tax-law' },
-  { name: 'IP Law', slug: 'ip-law' },
-  { name: 'Startup Law', slug: 'startup-law' },
-  { name: 'Employment Law', slug: 'employment-law' },
-];
-
-const jurisdictions = [
-  { name: 'Hyderabad', path: '/hyderabad' },
-  { name: 'Secunderabad', path: '/secunderabad' },
-  { name: 'Rangareddy', path: '/rangareddy' },
-  { name: 'Cyberabad', path: '/cyberabad' },
-];
+import { MapPin, Mail, Clock, Scale } from 'lucide-react';
 
 export default function Footer() {
   const year = new Date().getFullYear();
   const appId = encodeURIComponent(typeof window !== 'undefined' ? window.location.hostname : 'thejurists');
 
   return (
-    <footer className="bg-navy text-white">
+    <footer className="bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <Scale className="h-6 w-6 text-gold" />
-              <span className="font-serif text-lg font-bold">The Jurists</span>
+              <Scale className="w-6 h-6 text-white" />
+              <span className="font-serif text-xl font-bold text-white">The Jurists</span>
             </div>
-            <p className="text-white/60 text-sm leading-relaxed mb-4">
-              Premier legal services in Hyderabad. Expert counsel across all major practice areas with a commitment to justice and excellence.
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">
+              Professional legal services across Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri & Kukatpally Courts.
             </p>
             <div className="space-y-2">
-              <div className="flex items-start gap-2 text-sm text-white/70">
-                <MapPin className="h-4 w-4 text-gold mt-0.5 shrink-0" />
+              <div className="flex items-start gap-2 text-sm text-gray-400">
+                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-500" />
                 <span>Hyderabad, Telangana, India</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-white/70">
-                <Mail className="h-4 w-4 text-gold shrink-0" />
-                <a href="mailto:thejuristshyd@gmail.com" className="hover:text-gold transition-colors">
+              <div className="flex items-start gap-2 text-sm text-gray-400">
+                <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-500" />
+                <a href="mailto:thejuristshyd@gmail.com" className="hover:text-white transition-colors">
                   thejuristshyd@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-2 text-sm text-white/70">
-                <Clock className="h-4 w-4 text-gold shrink-0" />
+              <div className="flex items-start gap-2 text-sm text-gray-400">
+                <Clock className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-500" />
                 <span>Available 24/7</span>
               </div>
             </div>
@@ -58,21 +39,23 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-serif text-gold font-semibold mb-4 text-sm uppercase tracking-wider">Quick Links</h3>
+            <h3 className="font-serif text-sm font-semibold text-white uppercase tracking-widest mb-4 border-b border-gray-700 pb-2">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
               {[
-                { label: 'Home', to: '/' },
-                { label: 'About Us', to: '/about' },
-                { label: 'Services', to: '/services' },
-                { label: 'Blog', to: '/blog' },
-                { label: 'Contact', to: '/contact' },
+                { name: 'Home', path: '/' },
+                { name: 'About Us', path: '/about' },
+                { name: 'Services', path: '/services' },
+                { name: 'Blog', path: '/blog' },
+                { name: 'Contact', path: '/contact' },
               ].map((link) => (
-                <li key={link.to}>
+                <li key={link.path}>
                   <Link
-                    to={link.to as '/'}
-                    className="text-sm text-white/60 hover:text-gold transition-colors"
+                    to={link.path as any}
+                    className="text-sm text-gray-400 hover:text-white transition-colors"
                   >
-                    {link.label}
+                    {link.name}
                   </Link>
                 </li>
               ))}
@@ -81,16 +64,28 @@ export default function Footer() {
 
           {/* Practice Areas */}
           <div>
-            <h3 className="font-serif text-gold font-semibold mb-4 text-sm uppercase tracking-wider">Practice Areas</h3>
+            <h3 className="font-serif text-sm font-semibold text-white uppercase tracking-widest mb-4 border-b border-gray-700 pb-2">
+              Practice Areas
+            </h3>
             <ul className="space-y-2">
-              {practiceAreas.map((area) => (
-                <li key={area.slug}>
+              {[
+                { name: 'Family Law', path: '/services/family-law' },
+                { name: 'Corporate Law', path: '/services/corporate-law' },
+                { name: 'Criminal Defense', path: '/services/criminal-defense' },
+                { name: 'Property Law', path: '/services/property-law' },
+                { name: 'Employment Law', path: '/services/employment-law' },
+                { name: 'IP Law', path: '/services/ip-law' },
+                { name: 'Tax Law', path: '/services/tax-law' },
+                { name: 'Startup Law', path: '/services/startup-law' },
+                { name: 'Civil Litigation', path: '/services/civil-litigation' },
+                { name: 'Documentation Services', path: '/services/documentation-services' },
+              ].map((link) => (
+                <li key={link.path}>
                   <Link
-                    to="/services/$serviceSlug"
-                    params={{ serviceSlug: area.slug }}
-                    className="text-sm text-white/60 hover:text-gold transition-colors"
+                    to={link.path as any}
+                    className="text-sm text-gray-400 hover:text-white transition-colors"
                   >
-                    {area.name}
+                    {link.name}
                   </Link>
                 </li>
               ))}
@@ -99,40 +94,43 @@ export default function Footer() {
 
           {/* Jurisdictions */}
           <div>
-            <h3 className="font-serif text-gold font-semibold mb-4 text-sm uppercase tracking-wider">Jurisdictions</h3>
+            <h3 className="font-serif text-sm font-semibold text-white uppercase tracking-widest mb-4 border-b border-gray-700 pb-2">
+              Jurisdictions
+            </h3>
             <ul className="space-y-2">
-              {jurisdictions.map((j) => (
-                <li key={j.path}>
+              {[
+                { name: 'Telangana High Court', path: '/jurisdiction/telangana-high-court' },
+                { name: 'Hyderabad', path: '/hyderabad' },
+                { name: 'Secunderabad', path: '/secunderabad' },
+                { name: 'Rangareddy', path: '/rangareddy' },
+                { name: 'Medchal Malkajgiri & Kukatpally', path: '/medchal-malkajgiri-kukatpally' },
+              ].map((link) => (
+                <li key={link.path}>
                   <Link
-                    to={j.path as '/hyderabad' | '/secunderabad' | '/rangareddy' | '/cyberabad'}
-                    className="text-sm text-white/60 hover:text-gold transition-colors"
+                    to={link.path as any}
+                    className="text-sm text-gray-400 hover:text-white transition-colors"
                   >
-                    {j.name}
+                    {link.name}
                   </Link>
                 </li>
               ))}
             </ul>
-            <div className="mt-6">
-              <h3 className="font-serif text-gold font-semibold mb-3 text-sm uppercase tracking-wider">Office Hours</h3>
-              <p className="text-sm text-white/60">Available 24/7</p>
-              <p className="text-sm text-white/60">All days including holidays</p>
-            </div>
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/40">
+        <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-500">
             &copy; {year} The Jurists. All rights reserved.
           </p>
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-gray-500">
             Built with{' '}
-            <span className="text-gold">♥</span>{' '}
+            <span className="text-white">♥</span>{' '}
             using{' '}
             <a
               href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${appId}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gold hover:text-gold-light transition-colors"
+              className="text-gray-300 hover:text-white transition-colors underline"
             >
               caffeine.ai
             </a>

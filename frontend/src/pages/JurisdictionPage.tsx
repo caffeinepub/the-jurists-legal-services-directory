@@ -1,172 +1,210 @@
+import React from 'react';
 import { Link } from '@tanstack/react-router';
-import { MapPin, Scale, ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
-import StructuredData, { generateLocalBusinessSchema } from '../components/StructuredData';
+import Breadcrumbs from '../components/Breadcrumbs';
 
-type JurisdictionName = 'Hyderabad' | 'Secunderabad' | 'Rangareddy' | 'Cyberabad';
+type JurisdictionKey = 'Hyderabad' | 'Secunderabad' | 'Rangareddy' | 'MedchalMalkajgiri';
 
 interface JurisdictionPageProps {
-  jurisdiction: JurisdictionName;
+  jurisdiction: JurisdictionKey;
 }
 
-const jurisdictionData: Record<JurisdictionName, {
-  slug: string;
+// All practice areas listed on the site
+const ALL_PRACTICE_AREAS = [
+  { name: 'Corporate Law', path: '/services/corporate-law' },
+  { name: 'Family Law', path: '/services/family-law' },
+  { name: 'Criminal Defense', path: '/services/criminal-defense' },
+  { name: 'Civil Litigation', path: '/services/civil-litigation' },
+  { name: 'Property Law', path: '/services/property-law' },
+  { name: 'Employment Law', path: '/services/employment-law' },
+  { name: 'Tax Law', path: '/services/tax-law' },
+  { name: 'IP Law', path: '/services/ip-law' },
+  { name: 'Startup Law', path: '/services/startup-law' },
+  { name: 'Documentation Services', path: '/services/documentation-services' },
+];
+
+const jurisdictionPaths: Record<JurisdictionKey, string> = {
+  Hyderabad: '/hyderabad',
+  Secunderabad: '/secunderabad',
+  Rangareddy: '/rangareddy',
+  MedchalMalkajgiri: '/medchal-malkajgiri-kukatpally',
+};
+
+const jurisdictionDisplayNames: Record<JurisdictionKey, string> = {
+  Hyderabad: 'Hyderabad',
+  Secunderabad: 'Secunderabad',
+  Rangareddy: 'Rangareddy',
+  MedchalMalkajgiri: 'Medchal Malkajgiri and Kukatpally Courts',
+};
+
+const jurisdictionData: Record<JurisdictionKey, {
+  court: string;
   description: string;
-  longDescription: string;
-  image: string;
   highlights: string[];
-  keywords: string;
+  img: string;
 }> = {
   Hyderabad: {
-    slug: 'hyderabad',
-    description: "Premier legal services in Hyderabad – the heart of Telangana's legal landscape.",
-    longDescription: "Hyderabad is the capital of Telangana and one of India's major legal hubs. Our Hyderabad practice covers all courts including the High Court of Telangana, City Civil Courts, and specialized tribunals.",
-    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
-    highlights: ['High Court of Telangana', 'City Civil Courts', 'District Courts', 'Consumer Forums', 'Labour Tribunals', 'RERA Hyderabad'],
-    keywords: 'lawyer hyderabad, advocate hyderabad, legal services hyderabad, high court hyderabad',
+    court: 'City Civil Court, Hyderabad',
+    description: 'Our Hyderabad office serves as the primary hub for legal services in the city, covering all matters before the City Civil Court and High Court of Telangana.',
+    highlights: ['High Court of Telangana', 'City Civil Court', 'Family Court', 'Labour Court'],
+    img: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
   },
   Secunderabad: {
-    slug: 'secunderabad',
-    description: 'Expert legal representation across all courts in Secunderabad.',
-    longDescription: 'Secunderabad, the twin city of Hyderabad, has its own distinct legal landscape. Our Secunderabad practice provides comprehensive legal services across all local courts and tribunals.',
-    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
-    highlights: ['Secunderabad Courts', 'Civil Courts', 'Criminal Courts', 'Consumer Forums', 'Revenue Courts', 'Family Courts'],
-    keywords: 'lawyer secunderabad, advocate secunderabad, legal services secunderabad',
+    court: 'Civil Court, Secunderabad',
+    description: 'Our Secunderabad practice handles all civil and criminal matters before the Secunderabad courts, serving the twin city area.',
+    highlights: ['Civil Court', 'Criminal Court', 'Consumer Forum', 'Magistrate Court'],
+    img: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
   },
   Rangareddy: {
-    slug: 'rangareddy',
-    description: 'Comprehensive legal services covering all courts in Rangareddy district.',
-    longDescription: 'Rangareddy district encompasses a large area around Hyderabad with its own court system. Our Rangareddy practice handles all matters in district courts, revenue courts, and specialized tribunals.',
-    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
-    highlights: ['Rangareddy District Courts', 'Revenue Courts', 'Civil Courts', 'Criminal Courts', 'Family Courts', 'Consumer Forums'],
-    keywords: 'lawyer rangareddy, advocate rangareddy, legal services rangareddy',
+    court: 'District Court, Rangareddy',
+    description: 'Our Rangareddy practice covers all legal matters in the Rangareddy district, including family law, property disputes, and criminal defense.',
+    highlights: ['District Court', 'Family Court', 'Revenue Court', 'Fast Track Court'],
+    img: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
   },
-  Cyberabad: {
-    slug: 'cyberabad',
-    description: "Specialized legal services for Cyberabad's tech-driven business environment.",
-    longDescription: "Cyberabad is home to Hyderabad's IT corridor and a thriving startup ecosystem. Our Cyberabad practice specializes in technology law, startup legal services, IP protection, and corporate law for the tech sector.",
-    image: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
-    highlights: ['IT & Technology Law', 'Startup Legal Services', 'IP Protection', 'Corporate Law', 'Employment Law', 'Cyberabad Courts'],
-    keywords: 'lawyer cyberabad, advocate cyberabad, IT lawyer hyderabad, startup lawyer cyberabad',
+  MedchalMalkajgiri: {
+    court: 'District Court, Medchal Malkajgiri & Kukatpally',
+    description: 'Our Medchal Malkajgiri and Kukatpally Courts practice specializes in technology, startup, and employment law matters, serving the IT corridor and surrounding areas.',
+    highlights: ['Civil Court', 'Labour Court', 'Consumer Forum', 'Cyber Crime Cell'],
+    img: '/assets/generated/hyderabad-courthouse.dim_800x500.jpg',
   },
 };
 
-const otherJurisdictions: { name: JurisdictionName; path: string }[] = [
-  { name: 'Hyderabad', path: '/hyderabad' },
-  { name: 'Secunderabad', path: '/secunderabad' },
-  { name: 'Rangareddy', path: '/rangareddy' },
-  { name: 'Cyberabad', path: '/cyberabad' },
-];
-
 export default function JurisdictionPage({ jurisdiction }: JurisdictionPageProps) {
   const data = jurisdictionData[jurisdiction];
+  const slug = jurisdictionPaths[jurisdiction];
+  const displayName = jurisdictionDisplayNames[jurisdiction];
 
   return (
     <>
       <SEOHead
-        title={`Legal Services in ${jurisdiction} – The Jurists`}
+        title={`${displayName} Advocates – The Jurists`}
         description={data.description}
-        keywords={data.keywords}
-        canonical={`https://thejurists.in/${data.slug}`}
+        keywords={`lawyers ${displayName.toLowerCase()}, advocates ${displayName.toLowerCase()}, legal services ${displayName.toLowerCase()}`}
+        canonical={`https://thejurists.in${slug}`}
       />
-      <StructuredData id={`jurisdiction-${data.slug}-schema`} data={generateLocalBusinessSchema()} />
+
+      {/* Breadcrumbs */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: displayName },
+            ]}
+          />
+        </div>
+      </div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={data.image}
-            alt={`Legal services in ${jurisdiction}`}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-navy/75" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="flex items-center gap-2 text-white/60 text-sm mb-4">
-            <MapPin className="h-4 w-4 text-gold" />
-            <span>Serving {jurisdiction}</span>
+      <section className="bg-black text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-3">Jurisdiction</p>
+              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4">
+                {displayName}
+              </h1>
+              <p className="text-gray-300 text-lg leading-relaxed mb-6">{data.description}</p>
+              <p className="text-sm text-gray-400 uppercase tracking-wide">{data.court}</p>
+            </div>
+            <div>
+              <img
+                src={data.img}
+                alt={`${displayName} courthouse`}
+                className="w-full object-cover border border-gray-700"
+              />
+            </div>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4">
-            Legal Services in <span className="text-gold">{jurisdiction}</span>
-          </h1>
-          <p className="text-white/80 text-lg max-w-2xl leading-relaxed">
-            {data.description}
-          </p>
         </div>
       </section>
 
-      {/* Content */}
-      <section className="py-16 bg-cream">
+      {/* Courts & Practice Areas */}
+      <section className="bg-white py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Main */}
-            <div className="lg:col-span-2">
-              <h2 className="font-serif text-2xl font-bold text-navy mb-4">
-                Our {jurisdiction} Practice
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-8">{data.longDescription}</p>
-
-              <h2 className="font-serif text-2xl font-bold text-navy mb-4">Courts & Tribunals We Cover</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {data.highlights.map((highlight) => (
-                  <div key={highlight} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-border shadow-luxury">
-                    <CheckCircle className="h-4 w-4 text-gold shrink-0" />
-                    <span className="text-sm text-navy font-medium">{highlight}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Courts */}
+            <div>
+              <h2 className="font-serif text-2xl font-bold text-black mb-6">Courts We Appear In</h2>
+              <div className="space-y-3">
+                {data.highlights.map((court) => (
+                  <div key={court} className="flex items-center gap-3 border border-black p-4">
+                    <CheckCircle className="w-5 h-5 text-black flex-shrink-0" />
+                    <span className="text-black font-medium">{court}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              <div className="bg-navy text-white rounded-lg p-6 shadow-luxury-lg">
-                <h3 className="font-serif text-lg font-bold mb-3">
-                  Need Legal Help in {jurisdiction}?
-                </h3>
-                <p className="text-white/70 text-sm mb-4">
-                  Our advocates are available 24/7 to assist you with any legal matter.
-                </p>
-                <Link
-                  to="/contact"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-gold text-navy font-semibold rounded hover:bg-gold-light transition-colors text-sm"
-                >
-                  Get Consultation <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-
-              <div className="bg-white rounded-lg p-6 shadow-luxury border border-border">
-                <h3 className="font-serif text-lg font-bold text-navy mb-3">Other Jurisdictions</h3>
-                <ul className="space-y-2">
-                  {otherJurisdictions
-                    .filter((j) => j.name !== jurisdiction)
-                    .map((j) => (
-                      <li key={j.path}>
-                        <Link
-                          to={j.path as '/hyderabad' | '/secunderabad' | '/rangareddy' | '/cyberabad'}
-                          className="text-sm text-muted-foreground hover:text-gold transition-colors flex items-center gap-1"
-                        >
-                          <MapPin className="h-3 w-3" /> {j.name}
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-
-              <div className="bg-white rounded-lg p-6 shadow-luxury border border-border">
-                <h3 className="font-serif text-lg font-bold text-navy mb-3">Contact Us</h3>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p className="flex items-center gap-2">
-                    <Scale className="h-4 w-4 text-gold shrink-0" />
-                    Available 24/7
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-gold shrink-0" />
-                    Hyderabad, Telangana
-                  </p>
-                </div>
+            {/* Practice Areas */}
+            <div>
+              <h2 className="font-serif text-2xl font-bold text-black mb-6">
+                Areas of Practice
+              </h2>
+              <div className="space-y-3">
+                {ALL_PRACTICE_AREAS.map((area) => (
+                  <Link
+                    key={area.path}
+                    to={area.path as any}
+                    className="flex items-center justify-between border border-black p-4 group hover:bg-black hover:text-white transition-colors"
+                  >
+                    <span className="font-medium text-black group-hover:text-white">{area.name}</span>
+                    <ArrowRight className="w-4 h-4 text-black group-hover:text-white" />
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Other Jurisdictions */}
+      <section className="bg-gray-50 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-serif text-2xl font-bold text-black mb-6 text-center">
+            Other Jurisdictions
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {(Object.keys(jurisdictionData) as JurisdictionKey[])
+              .filter((k) => k !== jurisdiction)
+              .map((k) => (
+                <Link
+                  key={k}
+                  to={jurisdictionPaths[k] as any}
+                  className="border border-black p-4 text-center hover:bg-black hover:text-white transition-colors group"
+                >
+                  <p className="font-serif font-semibold text-black group-hover:text-white text-sm">
+                    {jurisdictionDisplayNames[k]}
+                  </p>
+                </Link>
+              ))}
+            <Link
+              to={'/jurisdiction/telangana-high-court' as any}
+              className="border border-black p-4 text-center hover:bg-black hover:text-white transition-colors group"
+            >
+              <p className="font-serif font-semibold text-black group-hover:text-white text-sm">
+                Telangana High Court
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-black text-white py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-serif text-3xl font-bold mb-4">
+            Need Legal Help in {displayName}?
+          </h2>
+          <p className="text-gray-400 mb-8">
+            Our advocates are registered in {data.court} and available 24/7.
+          </p>
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 bg-white text-black px-8 py-3 font-medium uppercase tracking-wide hover:bg-gray-100 transition-colors"
+          >
+            Contact Us <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
     </>

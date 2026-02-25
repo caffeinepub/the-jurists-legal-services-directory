@@ -1,14 +1,18 @@
-import Array "mo:core/Array";
 import List "mo:core/List";
-import AccessControl "authorization/access-control";
 import Map "mo:core/Map";
-import Order "mo:core/Order";
 import Nat "mo:core/Nat";
+import Iter "mo:core/Iter";
 import Time "mo:core/Time";
+import Text "mo:core/Text";
+import Array "mo:core/Array";
+import Order "mo:core/Order";
 import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
+import AccessControl "authorization/access-control";
 
+// Actor definition
 actor {
+  // Type modules for enums
   module Jurisdiction {
     public type Variant = {
       #Hyderabad;
@@ -98,23 +102,15 @@ actor {
     public func compare(a1 : Variant, a2 : Variant) : Order.Order {
       Nat.compare(toNat(a1), toNat(a2));
     };
-
-    public func toText(area : Variant) : Text {
-      switch (area) {
-        case (#familyLaw) { "Family Law" };
-        case (#corporateLaw) { "Corporate Law" };
-        case (#criminalDefense) { "Criminal Defense" };
-        case (#civilLitigation) { "Civil Litigation" };
-        case (#propertyLaw) { "Property Law" };
-        case (#documentationServices) { "Documentation Services" };
-        case (#taxLaw) { "Tax Law" };
-        case (#ipLaw) { "Intellectual Property (IP) Law" };
-        case (#startupLaw) { "Startup Law" };
-        case (#employmentLaw) { "Employment Law" };
-      };
-    };
   };
 
+  // Chatbot Q&A types
+  type ChatbotQuestion = {
+    trigger : Text;
+    response : Text;
+  };
+
+  // Contact form types
   type ContactFormSubmission = {
     id : Nat;
     phoneNumber : Text;
@@ -132,6 +128,104 @@ actor {
     };
   };
 
+  // Initial persistent state for chatbot questions and directory data
+  let chatbotQuestions = Map.fromIter<Text, ChatbotQuestion>(
+    [
+      (
+        "family law",
+        {
+          trigger = "family law";
+          response = "Absolutely! We offer a full range of family law services including divorce, child custody, adoption, and inheritance matters.";
+        },
+      ),
+      (
+        "corporate law",
+        {
+          trigger = "corporate law";
+          response = "Yes, we specialize in corporate law, including company formation, mergers, acquisitions, and compliance matters. Contact us for details.";
+        },
+      ),
+      (
+        "criminal law",
+        {
+          trigger = "criminal law";
+          response = "Yes, Narsing Advocate specializes in criminal defense, handling various criminal cases.";
+        },
+      ),
+      (
+        "employment law",
+        {
+          trigger = "employment law";
+          response = "Our Cyberabad location offers comprehensive employment law services. Please share your company information for more details.";
+        },
+      ),
+      (
+        "divorce and custody",
+        {
+          trigger = "divorce and custody";
+          response = "Our Rangareddy office is known for family law cases including divorce and child custody matters.";
+        },
+      ),
+      (
+        "intellectual property",
+        {
+          trigger = "intellectual property";
+          response = "We have an expert team handling intellectual property and patent cases. Contact us for innovative rights protection.";
+        },
+      ),
+      (
+        "services offered",
+        {
+          trigger = "services offered";
+          response = "We offer a wide range of legal services including corporate law, criminal defense, family law, property law, employment law, and intellectual property law.";
+        },
+      ),
+      (
+        "location",
+        {
+          trigger = "location";
+          response = "Our main office is centrally located in Hyderabad. We also have branches in Secunderabad, Rangareddy, and Cyberabad for your convenience.";
+        },
+      ),
+      (
+        "consultation",
+        {
+          trigger = "consultation";
+          response = "To book a consultation, please fill out our online contact form or give us a call. We offer both virtual and in-person consultations.";
+        },
+      ),
+      (
+        "jurisdictions",
+        {
+          trigger = "jurisdictions";
+          response = "We are registered advocates in all four Hyderabad courts: Hyderabad, Secunderabad, Rangareddy, and Cyberabad.";
+        },
+      ),
+      (
+        "startup law",
+        {
+          trigger = "startup law";
+          response = "We specialize in startup legal services, including company formation, contracts, and IP protection. Reach out to discuss your needs.";
+        },
+      ),
+      (
+        "documentation",
+        {
+          trigger = "documentation";
+          response = "We provide assistance with contract drafting, documentation services, and legal paperwork.";
+        },
+      ),
+      (
+        "tax law",
+        {
+          trigger = "tax law";
+          response = "Our team offers expert guidance on tax laws and compliance for individuals and businesses.";
+        },
+      ),
+    ].values()
+  );
+
+  // Persistent contact form submissions and IDs
   let contactFormSubmissions = Map.empty<Nat, ContactFormSubmission>();
   let contactFormSubmissionIds = List.empty<Nat>();
   var nextSubmissionId = 1;
@@ -140,146 +234,7 @@ actor {
   let accessControlState = AccessControl.initState();
   var isAccessControlInitialized = false;
 
-  public shared ({ caller }) func initializeAccessControl() : async () {
-    if (isAccessControlInitialized) {
-      Runtime.trap("Access control already initialized");
-    };
-    AccessControl.initialize(accessControlState, caller);
-    isAccessControlInitialized := true;
-  };
-
-  public query ({ caller }) func isAdminActorFieldInitialized() : async Bool {
-    isAccessControlInitialized;
-  };
-
-  // Allow all callers including anonymous to check their role (guests return #guest)
-  public query ({ caller }) func getCallerUserRole() : async AccessControl.UserRole {
-    AccessControl.getUserRole(accessControlState, caller);
-  };
-
-  public shared ({ caller }) func assignCallerUserRole(user : Principal, role : AccessControl.UserRole) : async () {
-    // Admin-only check happens inside AccessControl.assignRole
-    AccessControl.assignRole(accessControlState, caller, user, role);
-  };
-
-  // Return false for anonymous users instead of trapping
-  public query ({ caller }) func isCallerAdmin() : async Bool {
-    if (caller.isAnonymous()) {
-      return false;
-    };
-    AccessControl.isAdmin(accessControlState, caller);
-  };
-
-  // User profile management
-  public type UserProfile = {
-    name : Text;
-    email : ?Text;
-  };
-
-  let userProfiles = Map.empty<Principal, UserProfile>();
-
-  public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access profiles");
-    };
-    userProfiles.get(caller);
-  };
-
-  public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
-      Runtime.trap("Unauthorized: Can only view your own profile");
-    };
-    userProfiles.get(user);
-  };
-
-  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
-    userProfiles.add(caller, profile);
-  };
-
-  // Contact form submission
-  public type CreateContactFormSubmissionInput = {
-    phoneNumber : Text;
-    name : Text;
-    jurisdiction : Jurisdiction.Variant;
-    email : Text;
-    message : ?Text;
-  };
-
-  public shared ({ caller }) func createContactFormSubmission(input : CreateContactFormSubmissionInput) : async Nat {
-    // No authorization check - public contact form accessible to everyone including guests
-    let id = nextSubmissionId;
-    nextSubmissionId += 1;
-
-    let submission : ContactFormSubmission = {
-      id;
-      phoneNumber = input.phoneNumber;
-      name = input.name;
-      jurisdiction = input.jurisdiction;
-      email = input.email;
-      message = input.message;
-      timestamp = Time.now();
-      status = #new;
-    };
-
-    contactFormSubmissions.add(id, submission);
-    contactFormSubmissionIds.add(id);
-    id;
-  };
-
-  public query ({ caller }) func getAllContactFormSubmissions() : async [ContactFormSubmission] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access leads");
-    };
-
-    let submissions = contactFormSubmissionIds.values().toArray().map(
-      func(id) {
-        switch (contactFormSubmissions.get(id)) {
-          case (null) { Runtime.trap("Inconsistent submission state") };
-          case (?submission) { submission };
-        };
-      }
-    );
-    submissions.sort();
-  };
-
-  public shared ({ caller }) func updateContactFormSubmissionStatus(id : Nat, status : LeadStatus.Variant) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can update lead status");
-    };
-
-    switch (contactFormSubmissions.get(id)) {
-      case (null) { Runtime.trap("Contact form submission not found") };
-      case (?submission) {
-        let updatedSubmission = { submission with status = status };
-        contactFormSubmissions.add(id, updatedSubmission);
-      };
-    };
-  };
-
-  public query ({ caller }) func getContactFormSubmissionsByStatus(status : LeadStatus.Variant) : async [ContactFormSubmission] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access leads");
-    };
-
-    contactFormSubmissions.values().toArray().filter(
-      func(submission) { submission.status == status }
-    );
-  };
-
-  public query ({ caller }) func getContactFormSubmissionsByJurisdiction(jurisdiction : Jurisdiction.Variant) : async [ContactFormSubmission] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access leads");
-    };
-
-    contactFormSubmissions.values().toArray().filter(
-      func(submission) { submission.jurisdiction == jurisdiction }
-    );
-  };
-
-  // XML Sitemap Functionality
+  // Sitemap entry type
   public type SitemapEntry = {
     loc : Text;
     lastMod : ?Text;
@@ -287,7 +242,7 @@ actor {
     priority : ?Nat;
   };
 
-  // Explicitly define persistent site pages for sitemap
+  // Persistent pages for sitemap
   let persistentPages = List.fromArray([
     "/",
     "/hyderabad",
@@ -297,23 +252,7 @@ actor {
     "/contact"
   ]);
 
-  public query ({ caller }) func getSitemapEntries() : async [SitemapEntry] {
-    // No authorization check - sitemap must be publicly accessible for search engines
-    let entries = persistentPages.values().toArray().map(
-      func(page) {
-        {
-          loc = "https://thejurists.in" # page;
-          lastMod = null;
-          changeFreq = null;
-          priority = null;
-        };
-      }
-    );
-    entries;
-  };
-
-  // Blog Article Type and Functionality
-
+  // Blog article type and persistent storage
   public type BlogArticle = {
     id : Nat;
     title : Text;
@@ -323,53 +262,10 @@ actor {
     category : PracticeArea.Variant;
   };
 
-  // Use List for persistent blog article storage
   let blogArticles = List.empty<BlogArticle>();
   var nextBlogArticleId = 1;
 
-  // Blog article management
-  public shared ({ caller }) func addOrUpdateBlogArticle(article : BlogArticle) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can manage blog articles");
-    };
-
-    let filtered = blogArticles.filter(
-      func(existing) { existing.id != article.id }
-    );
-    blogArticles.clear();
-    blogArticles.addAll(filtered.values());
-
-    let fullArticle = {
-      article with id = if (article.id == 0) {
-        nextBlogArticleId;
-      } else {
-        article.id;
-      };
-    };
-    blogArticles.add(fullArticle);
-
-    if (article.id == 0) {
-      nextBlogArticleId += 1;
-    };
-  };
-
-  public query ({ caller }) func getAllBlogArticles() : async [BlogArticle] {
-    blogArticles.toArray();
-  };
-
-  public query ({ caller }) func getBlogArticleById(id : Nat) : async ?BlogArticle {
-    blogArticles.values().find(
-      func(article) { article.id == id }
-    );
-  };
-
-  public query ({ caller }) func getBlogArticlesByCategory(category : PracticeArea.Variant) : async [BlogArticle] {
-    blogArticles.toArray().filter(
-      func(article) { article.category == category }
-    );
-  };
-
-  // Trending topics functionality
+  // Trending topic type and persistent storage
   public type TrendingTopic = {
     id : Nat;
     title : Text;
@@ -393,108 +289,7 @@ actor {
   let trendingTopicIds = List.empty<Nat>();
   var nextTrendingTopicId = 1;
 
-  public shared ({ caller }) func createTrendingTopic(
-    title : Text,
-    keywords : [Text],
-    popularityScore : Nat,
-    practiceArea : PracticeArea.Variant,
-    trendRelevance : TrendRelevance.Variant
-  ) : async Nat {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can create trending topics");
-    };
-
-    let id = nextTrendingTopicId;
-    nextTrendingTopicId += 1;
-
-    let topic : TrendingTopic = {
-      id;
-      title;
-      keywords;
-      popularityScore;
-      practiceArea;
-      trendRelevance;
-      isPosted = false;
-      timestamp = Time.now();
-    };
-
-    trendingTopics.add(id, topic);
-    trendingTopicIds.add(id);
-
-    id;
-  };
-
-  public query ({ caller }) func getAllTrendingTopics() : async [TrendingTopic] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access trending topics");
-    };
-
-    trendingTopicIds.values().toArray().map(
-      func(id) {
-        switch (trendingTopics.get(id)) {
-          case (null) { Runtime.trap("Inconsistent trending topic state") };
-          case (?topic) { topic };
-        };
-      }
-    );
-  };
-
-  public query ({ caller }) func getTrendingTopicsByPracticeArea(practiceArea : PracticeArea.Variant) : async [TrendingTopic] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access trending topics");
-    };
-
-    trendingTopics.values().toArray().filter(
-      func(topic) { topic.practiceArea == practiceArea }
-    );
-  };
-
-  public query ({ caller }) func getTrendingTopicsByTrendRelevance(trendRelevance : TrendRelevance.Variant) : async [TrendingTopic] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access trending topics");
-    };
-
-    trendingTopics.values().toArray().filter(
-      func(topic) { topic.trendRelevance == trendRelevance }
-    );
-  };
-
-  public shared ({ caller }) func markTrendingTopicAsPosted(id : Nat) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can update trending topics");
-    };
-
-    switch (trendingTopics.get(id)) {
-      case (null) { Runtime.trap("Trending topic not found") };
-      case (?topic) {
-        let updatedTopic = { topic with isPosted = true };
-        trendingTopics.add(id, updatedTopic);
-      };
-    };
-  };
-
-  public query ({ caller }) func getUnpostedTrendingTopics() : async [TrendingTopic] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access trending topics");
-    };
-
-    trendingTopics.values().toArray().filter(
-      func(topic) { not topic.isPosted }
-    );
-  };
-
-  public query ({ caller }) func getPostedTrendingTopics() : async [TrendingTopic] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can access trending topics");
-    };
-
-    trendingTopics.values().toArray().filter(
-      func(topic) { topic.isPosted }
-    );
-  };
-
-  // Service & Directory Expansion
-
+  // Service details and legal listing types
   public type ServiceDetails = {
     title : Text;
     description : Text;
@@ -503,69 +298,14 @@ actor {
     practiceArea : PracticeArea.Variant;
   };
 
-  public query ({ caller }) func getServicesByJurisdiction(jurisdiction : Jurisdiction.Variant) : async [ServiceDetails] {
-    // No authorization check - services are public
-    servicesDirectory.values().toArray().filter(
-      func(service) { service.jurisdiction == jurisdiction }
-    );
-  };
-
-  public query ({ caller }) func getServicesByPracticeArea(practiceArea : PracticeArea.Variant) : async [ServiceDetails] {
-    // No authorization check - services are public
-    servicesDirectory.values().toArray().filter(
-      func(service) { service.practiceArea == practiceArea }
-    );
-  };
-
-  public query ({ caller }) func getAllServices() : async [ServiceDetails] {
-    // No authorization check - services are public
-    servicesDirectory.values().toArray();
-  };
-
-  // Legal Directory Expansion
-
   public type LegalListing = {
-    name : Text;
-    specialization : PracticeArea.Variant;
-    jurisdiction : Jurisdiction.Variant;
-    contact : Text;
+    name: Text;
+    specialization: PracticeArea.Variant;
+    jurisdiction: Jurisdiction.Variant;
+    contact: Text;
   };
 
-  public shared ({ caller }) func addLegalListing(listing : LegalListing) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can modify directory");
-    };
-
-    legalDirectory.add(legalDirectory.size(), listing);
-  };
-
-  public query ({ caller }) func getLegalDirectoryByJurisdiction(jurisdiction : Jurisdiction.Variant) : async [LegalListing] {
-    // No authorization check - directory is public
-    legalDirectory.values().toArray().filter(
-      func(listing) { listing.jurisdiction == jurisdiction }
-    );
-  };
-
-  public query ({ caller }) func getLegalDirectoryByPracticeArea(practiceArea : PracticeArea.Variant) : async [LegalListing] {
-    // No authorization check - directory is public
-    legalDirectory.values().toArray().filter(
-      func(listing) { listing.specialization == practiceArea }
-    );
-  };
-
-  public query ({ caller }) func getLegalDirectoryByJurisdictionAndPracticeArea(
-    jurisdiction : Jurisdiction.Variant,
-    practiceArea : PracticeArea.Variant
-  ) : async [LegalListing] {
-    // No authorization check - directory is public
-    legalDirectory.values().toArray().filter(
-      func(listing) {
-        listing.jurisdiction == jurisdiction and listing.specialization == practiceArea
-      }
-    );
-  };
-
-  // Directory Data
+  // Persistent directory data
   let servicesDirectory = Map.fromIter<Nat, ServiceDetails>([
     (
       1,
@@ -685,4 +425,363 @@ actor {
       },
     ),
   ].values());
+
+  // Initialize access control (unchanged)
+  public shared ({ caller }) func initializeAccessControl() : async () {
+    if (isAccessControlInitialized) {
+      Runtime.trap("Access control already initialized");
+    };
+    AccessControl.initialize(accessControlState, caller);
+    isAccessControlInitialized := true;
+  };
+
+  public query ({ caller }) func isAdminActorFieldInitialized() : async Bool {
+    isAccessControlInitialized;
+  };
+
+  public query ({ caller }) func getCallerUserRole() : async AccessControl.UserRole {
+    AccessControl.getUserRole(accessControlState, caller);
+  };
+
+  public shared ({ caller }) func assignCallerUserRole(user : Principal, role : AccessControl.UserRole) : async () {
+    AccessControl.assignRole(accessControlState, caller, user, role);
+  };
+
+  public query ({ caller }) func isCallerAdmin() : async Bool {
+    if (caller.isAnonymous()) {
+      return false;
+    };
+    AccessControl.isAdmin(accessControlState, caller);
+  };
+
+  public type UserProfile = {
+    name : Text;
+    email : ?Text;
+  };
+
+  let userProfiles = Map.empty<Principal, UserProfile>();
+
+  public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can access profiles");
+    };
+    userProfiles.get(caller);
+  };
+
+  public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
+    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Can only view your own profile");
+    };
+    userProfiles.get(user);
+  };
+
+  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can save profiles");
+    };
+    userProfiles.add(caller, profile);
+  };
+
+  // Chatbot backend function
+  public query ({ caller }) func getChatbotResponse(message : Text) : async Text {
+    let normalized = message.toLower();
+    var found : ?ChatbotQuestion = null;
+
+    for ((_, qa) in chatbotQuestions.entries()) {
+      if (normalized.contains(#text(qa.trigger))) {
+        found := ?qa;
+      };
+    };
+
+    switch (found) {
+      case (null) {
+        // Fallback for unrecognized queries
+        "I apologize, I am not able to answer that specific question. Please fill out our contact form for further assistance. If your inquiry relates to legal services, family law, criminal cases, property issues, documentation, startup law, intellectual property, or consultation in Hyderabad, Secunderabad, Rangareddy, or Cyberabad, we will route your request to a qualified advocate.";
+      };
+      case (?qa) { qa.response };
+    };
+  };
+
+  // Contact form submission types and functions
+  public type CreateContactFormSubmissionInput = {
+    phoneNumber : Text;
+    name : Text;
+    jurisdiction : Jurisdiction.Variant;
+    email : Text;
+    message : ?Text;
+  };
+
+  public shared ({ caller }) func createContactFormSubmission(input : CreateContactFormSubmissionInput) : async Nat {
+    let id = nextSubmissionId;
+    nextSubmissionId += 1;
+
+    let submission : ContactFormSubmission = {
+      id;
+      phoneNumber = input.phoneNumber;
+      name = input.name;
+      jurisdiction = input.jurisdiction;
+      email = input.email;
+      message = input.message;
+      timestamp = Time.now();
+      status = #new;
+    };
+
+    contactFormSubmissions.add(id, submission);
+    contactFormSubmissionIds.add(id);
+    id;
+  };
+
+  public query ({ caller }) func getAllContactFormSubmissions() : async [ContactFormSubmission] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access leads");
+    };
+
+    let submissions = contactFormSubmissionIds.values().toArray().map(
+      func(id) {
+        switch (contactFormSubmissions.get(id)) {
+          case (null) { Runtime.trap("Inconsistent submission state") };
+          case (?submission) { submission };
+        };
+      }
+    );
+    submissions.sort();
+  };
+
+  public shared ({ caller }) func updateContactFormSubmissionStatus(id : Nat, status : LeadStatus.Variant) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can update lead status");
+    };
+
+    switch (contactFormSubmissions.get(id)) {
+      case (null) { Runtime.trap("Contact form submission not found") };
+      case (?submission) {
+        let updatedSubmission = { submission with status = status };
+        contactFormSubmissions.add(id, updatedSubmission);
+      };
+    };
+  };
+
+  public query ({ caller }) func getContactFormSubmissionsByStatus(status : LeadStatus.Variant) : async [ContactFormSubmission] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access leads");
+    };
+
+    contactFormSubmissions.values().toArray().filter(
+      func(submission) { submission.status == status }
+    );
+  };
+
+  public query ({ caller }) func getContactFormSubmissionsByJurisdiction(jurisdiction : Jurisdiction.Variant) : async [ContactFormSubmission] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access leads");
+    };
+
+    contactFormSubmissions.values().toArray().filter(
+      func(submission) { submission.jurisdiction == jurisdiction }
+    );
+  };
+
+  public query ({ caller }) func getSitemapEntries() : async [SitemapEntry] {
+    let entries = persistentPages.values().toArray().map(
+      func(page) {
+        {
+          loc = "https://thejurists.in" # page;
+          lastMod = null;
+          changeFreq = null;
+          priority = null;
+        };
+      }
+    );
+    entries;
+  };
+
+  // Blog article management
+  public shared ({ caller }) func addOrUpdateBlogArticle(article : BlogArticle) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can manage blog articles");
+    };
+
+    let filtered = blogArticles.filter(
+      func(existing) { existing.id != article.id }
+    );
+    blogArticles.clear();
+    blogArticles.addAll(filtered.values());
+
+    let fullArticle = {
+      article with id = if (article.id == 0) {
+        nextBlogArticleId;
+      } else {
+        article.id;
+      };
+    };
+    blogArticles.add(fullArticle);
+
+    if (article.id == 0) {
+      nextBlogArticleId += 1;
+    };
+  };
+
+  public query ({ caller }) func getAllBlogArticles() : async [BlogArticle] {
+    blogArticles.toArray();
+  };
+
+  public query ({ caller }) func getBlogArticleById(id : Nat) : async ?BlogArticle {
+    blogArticles.values().find(
+      func(article) { article.id == id }
+    );
+  };
+
+  public query ({ caller }) func getBlogArticlesByCategory(category : PracticeArea.Variant) : async [BlogArticle] {
+    blogArticles.toArray().filter(
+      func(article) { article.category == category }
+    );
+  };
+
+  // Trending topics
+  public shared ({ caller }) func createTrendingTopic(
+    title : Text,
+    keywords : [Text],
+    popularityScore : Nat,
+    practiceArea : PracticeArea.Variant,
+    trendRelevance : TrendRelevance.Variant
+  ) : async Nat {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can create trending topics");
+    };
+
+    let id = nextTrendingTopicId;
+    nextTrendingTopicId += 1;
+
+    let topic : TrendingTopic = {
+      id;
+      title;
+      keywords;
+      popularityScore;
+      practiceArea;
+      trendRelevance;
+      isPosted = false;
+      timestamp = Time.now();
+    };
+
+    trendingTopics.add(id, topic);
+    trendingTopicIds.add(id);
+
+    id;
+  };
+
+  public query ({ caller }) func getAllTrendingTopics() : async [TrendingTopic] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access trending topics");
+    };
+
+    trendingTopicIds.values().toArray().map(
+      func(id) {
+        switch (trendingTopics.get(id)) {
+          case (null) { Runtime.trap("Inconsistent trending topic state") };
+          case (?topic) { topic };
+        };
+      }
+    );
+  };
+
+  public query ({ caller }) func getTrendingTopicsByPracticeArea(practiceArea : PracticeArea.Variant) : async [TrendingTopic] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access trending topics");
+    };
+
+    trendingTopics.values().toArray().filter(
+      func(topic) { topic.practiceArea == practiceArea }
+    );
+  };
+
+  public query ({ caller }) func getTrendingTopicsByTrendRelevance(trendRelevance : TrendRelevance.Variant) : async [TrendingTopic] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access trending topics");
+    };
+
+    trendingTopics.values().toArray().filter(
+      func(topic) { topic.trendRelevance == trendRelevance }
+    );
+  };
+
+  public shared ({ caller }) func markTrendingTopicAsPosted(id : Nat) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can update trending topics");
+    };
+
+    switch (trendingTopics.get(id)) {
+      case (null) { Runtime.trap("Trending topic not found") };
+      case (?topic) {
+        let updatedTopic = { topic with isPosted = true };
+        trendingTopics.add(id, updatedTopic);
+      };
+    };
+  };
+
+  public query ({ caller }) func getUnpostedTrendingTopics() : async [TrendingTopic] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access trending topics");
+    };
+
+    trendingTopics.values().toArray().filter(
+      func(topic) { not topic.isPosted }
+    );
+  };
+
+  public query ({ caller }) func getPostedTrendingTopics() : async [TrendingTopic] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can access trending topics");
+    };
+
+    trendingTopics.values().toArray().filter(
+      func(topic) { topic.isPosted }
+    );
+  };
+
+  public query ({ caller }) func getServicesByJurisdiction(jurisdiction : Jurisdiction.Variant) : async [ServiceDetails] {
+    servicesDirectory.values().toArray().filter(
+      func(service) { service.jurisdiction == jurisdiction }
+    );
+  };
+
+  public query ({ caller }) func getServicesByPracticeArea(practiceArea : PracticeArea.Variant) : async [ServiceDetails] {
+    servicesDirectory.values().toArray().filter(
+      func(service) { service.practiceArea == practiceArea }
+    );
+  };
+
+  public query ({ caller }) func getAllServices() : async [ServiceDetails] {
+    servicesDirectory.values().toArray();
+  };
+
+  public shared ({ caller }) func addLegalListing(listing : LegalListing) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can modify directory");
+    };
+
+    legalDirectory.add(legalDirectory.size(), listing);
+  };
+
+  public query ({ caller }) func getLegalDirectoryByJurisdiction(jurisdiction : Jurisdiction.Variant) : async [LegalListing] {
+    legalDirectory.values().toArray().filter(
+      func(listing) { listing.jurisdiction == jurisdiction }
+    );
+  };
+
+  public query ({ caller }) func getLegalDirectoryByPracticeArea(practiceArea : PracticeArea.Variant) : async [LegalListing] {
+    legalDirectory.values().toArray().filter(
+      func(listing) { listing.specialization == practiceArea }
+    );
+  };
+
+  public query ({ caller }) func getLegalDirectoryByJurisdictionAndPracticeArea(
+    jurisdiction : Jurisdiction.Variant,
+    practiceArea : PracticeArea.Variant
+  ) : async [LegalListing] {
+    legalDirectory.values().toArray().filter(
+      func(listing) {
+        listing.jurisdiction == jurisdiction and listing.specialization == practiceArea
+      }
+    );
+  };
 };

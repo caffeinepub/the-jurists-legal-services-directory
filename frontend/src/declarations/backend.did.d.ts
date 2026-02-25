@@ -111,6 +111,7 @@ export interface _SERVICE {
   'getBlogArticlesByCategory' : ActorMethod<[Variant__1], Array<BlogArticle>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getChatbotResponse' : ActorMethod<[string], string>,
   'getContactFormSubmissionsByJurisdiction' : ActorMethod<
     [Variant__3],
     Array<ContactFormSubmission>

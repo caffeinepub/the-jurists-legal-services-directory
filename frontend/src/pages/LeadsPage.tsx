@@ -1,285 +1,205 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
-import { Badge } from '../components/ui/badge';
-import { Button } from '../components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
-import { useGetAllContactFormSubmissions, useIsCallerAdmin, useUpdateContactFormSubmissionStatus } from '../hooks/useQueries';
-import { CheckCircle2, Clock, AlertCircle, Download, Loader2 } from 'lucide-react';
+import { Download, Filter, RefreshCw } from 'lucide-react';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { Variant } from '../backend';
-import { toast } from 'sonner';
+import {
+  useGetAllContactFormSubmissions,
+  useIsCallerAdmin,
+  useUpdateContactFormSubmissionStatus,
+} from '../hooks/useQueries';
+import { Variant, Variant__3 } from '../backend';
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '../components/ui/table';
+import { Skeleton } from '../components/ui/skeleton';
+
+const statusLabels: Record<string, string> = {
+  new: 'New',
+  contacted: 'Contacted',
+  resolved: 'Resolved',
+};
+
+const statusColors: Record<string, string> = {
+  new: 'bg-black text-white',
+  contacted: 'bg-gray-600 text-white',
+  resolved: 'bg-gray-300 text-black',
+};
+
+const jurisdictionLabels: Record<string, string> = {
+  Hyderabad: 'Hyderabad',
+  Secunderabad: 'Secunderabad',
+  Rangareddy: 'Rangareddy',
+  Cyberabad: 'Cyberabad',
+};
 
 export default function LeadsPage() {
   const navigate = useNavigate();
   const { identity } = useInternetIdentity();
-  const { data: isAdmin, isLoading: isAdminLoading, isFetched: isAdminFetched } = useIsCallerAdmin();
-  const { data: submissions = [], isLoading, refetch } = useGetAllContactFormSubmissions();
-  const updateStatusMutation = useUpdateContactFormSubmissionStatus();
+  const isAuthenticated = !!identity;
+
+  const { data: isAdmin, isLoading: adminLoading } = useIsCallerAdmin();
+  const { data: submissions, isLoading: submissionsLoading, refetch } = useGetAllContactFormSubmissions();
+  const updateStatus = useUpdateContactFormSubmissionStatus();
+
   const [filterJurisdiction, setFilterJurisdiction] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
-  // Check authentication - only redirect if we're certain user is not authenticated
-  if (!identity && !isAdminLoading) {
+  if (!isAuthenticated || (!adminLoading && !isAdmin)) {
     return (
-      <div className="container py-24">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Authentication Required</AlertTitle>
-          <AlertDescription>
-            You must be logged in to access this page. Please log in and try again.
-          </AlertDescription>
-        </Alert>
-        <div className="mt-4 text-center">
-          <Button onClick={() => navigate({ to: '/' })}>Go to Home</Button>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center border border-black p-10">
+          <h1 className="font-serif text-2xl font-bold text-black mb-3">Access Denied</h1>
+          <p className="text-gray-600 mb-6">You must be an admin to view this page.</p>
+          <button
+            onClick={() => navigate({ to: '/' })}
+            className="bg-black text-white px-6 py-2 text-sm font-medium uppercase tracking-wide hover:bg-gray-900 transition-colors"
+          >
+            Go Home
+          </button>
         </div>
       </div>
     );
   }
 
-  // Show loading state while checking admin status
-  if (isAdminLoading || !isAdminFetched) {
-    return (
-      <div className="container py-24">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Verifying admin access...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Check admin access - only show denial if we're certain user is not admin
-  if (isAdminFetched && isAdmin === false) {
-    return (
-      <div className="container py-24">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Access Denied</AlertTitle>
-          <AlertDescription>
-            You do not have permission to access this page. Only administrators can view client leads.
-          </AlertDescription>
-        </Alert>
-        <div className="mt-4 text-center">
-          <Button onClick={() => navigate({ to: '/' })}>Go to Home</Button>
-        </div>
-      </div>
-    );
-  }
-
-  const filteredSubmissions = submissions.filter((submission) => {
-    const jurisdictionMatch = filterJurisdiction === 'all' || submission.jurisdiction === filterJurisdiction;
-    const statusMatch = filterStatus === 'all' || submission.status === filterStatus;
-    return jurisdictionMatch && statusMatch;
+  const filtered = (submissions ?? []).filter((s) => {
+    const jMatch = filterJurisdiction === 'all' || s.jurisdiction === filterJurisdiction;
+    const sMatch = filterStatus === 'all' || s.status === filterStatus;
+    return jMatch && sMatch;
   });
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'new':
-        return <Badge variant="default" className="bg-blue-500"><Clock className="h-3 w-3 mr-1" />New</Badge>;
-      case 'contacted':
-        return <Badge variant="secondary"><CheckCircle2 className="h-3 w-3 mr-1" />Contacted</Badge>;
-      case 'resolved':
-        return <Badge variant="outline" className="text-green-600 border-green-600"><CheckCircle2 className="h-3 w-3 mr-1" />Resolved</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
-  };
-
-  const formatDate = (timestamp: bigint) => {
-    const date = new Date(Number(timestamp) / 1000000);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const handleStatusChange = async (id: bigint, newStatus: string) => {
-    try {
-      await updateStatusMutation.mutateAsync({ 
-        id, 
-        status: newStatus as Variant 
-      });
-      toast.success('Status updated successfully');
-      refetch();
-    } catch (error) {
-      toast.error('Failed to update status');
-      console.error(error);
-    }
-  };
-
-  const exportToCSV = () => {
-    const headers = ['ID', 'Name', 'Phone', 'Email', 'Jurisdiction', 'Status', 'Message', 'Date'];
-    const rows = filteredSubmissions.map(sub => [
-      sub.id.toString(),
-      sub.name,
-      sub.phoneNumber,
-      sub.email,
-      sub.jurisdiction,
-      sub.status,
-      sub.message || '',
-      formatDate(sub.timestamp)
-    ]);
-
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
+  const exportCSV = () => {
+    const rows = [
+      ['ID', 'Name', 'Email', 'Phone', 'Jurisdiction', 'Message', 'Status', 'Date'],
+      ...filtered.map((s) => [
+        String(s.id),
+        s.name,
+        s.email,
+        s.phoneNumber,
+        s.jurisdiction,
+        s.message ?? '',
+        s.status,
+        new Date(Number(s.timestamp) / 1_000_000).toLocaleDateString(),
+      ]),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `leads-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a);
+    a.download = 'leads.csv';
     a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="container py-12">
-      <div className="space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold">Client Leads</h1>
-            <p className="text-muted-foreground mt-2">
-              Manage all contact form submissions from The Jurists website
+            <h1 className="font-serif text-3xl font-bold text-black">Leads Dashboard</h1>
+            <p className="text-gray-600 mt-1">
+              {filtered.length} submission{filtered.length !== 1 ? 's' : ''}
             </p>
           </div>
-          <Button onClick={exportToCSV} variant="outline" disabled={filteredSubmissions.length === 0}>
-            <Download className="h-4 w-4 mr-2" />
-            Export to CSV
-          </Button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => refetch()}
+              className="flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black hover:bg-gray-100 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" /> Refresh
+            </button>
+            <button
+              onClick={exportCSV}
+              className="flex items-center gap-2 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-900 transition-colors"
+            >
+              <Download className="w-4 h-4" /> Export CSV
+            </button>
+          </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Filter Leads</CardTitle>
-            <CardDescription>Filter submissions by jurisdiction and status</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Jurisdiction</label>
-                <Select value={filterJurisdiction} onValueChange={setFilterJurisdiction}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Jurisdictions" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Jurisdictions</SelectItem>
-                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="Secunderabad">Secunderabad</SelectItem>
-                    <SelectItem value="Rangareddy">Rangareddy</SelectItem>
-                    <SelectItem value="Cyberabad">Cyberabad</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Status</label>
-                <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Statuses" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
-                    <SelectItem value="new">New</SelectItem>
-                    <SelectItem value="contacted">Contacted</SelectItem>
-                    <SelectItem value="resolved">Resolved</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Filters */}
+        <div className="flex flex-wrap gap-3 mb-6 p-4 border border-black bg-gray-50">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-black" />
+            <span className="text-sm font-medium text-black uppercase tracking-wide">Filters:</span>
+          </div>
+          <select
+            value={filterJurisdiction}
+            onChange={(e) => setFilterJurisdiction(e.target.value)}
+            className="border border-black px-3 py-1.5 text-sm text-black bg-white focus:outline-none focus:ring-1 focus:ring-black"
+          >
+            <option value="all">All Jurisdictions</option>
+            {Object.entries(jurisdictionLabels).map(([val, label]) => (
+              <option key={val} value={val}>{label}</option>
+            ))}
+          </select>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="border border-black px-3 py-1.5 text-sm text-black bg-white focus:outline-none focus:ring-1 focus:ring-black"
+          >
+            <option value="all">All Statuses</option>
+            {Object.entries(statusLabels).map(([val, label]) => (
+              <option key={val} value={val}>{label}</option>
+            ))}
+          </select>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              Submissions ({filteredSubmissions.length})
-            </CardTitle>
-            <CardDescription>
-              {filterJurisdiction !== 'all' || filterStatus !== 'all' 
-                ? 'Filtered results' 
-                : 'All contact form submissions'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="text-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-                <p className="text-muted-foreground">Loading submissions...</p>
-              </div>
-            ) : filteredSubmissions.length === 0 ? (
-              <div className="text-center py-12">
-                <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-medium mb-2">No submissions found</p>
-                <p className="text-muted-foreground">
-                  {submissions.length === 0 
-                    ? 'No contact form submissions yet.' 
-                    : 'Try adjusting your filters.'}
-                </p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Phone</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Jurisdiction</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Message</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredSubmissions.map((submission) => (
-                      <TableRow key={submission.id.toString()}>
-                        <TableCell className="font-mono text-xs">{submission.id.toString()}</TableCell>
-                        <TableCell className="font-medium">{submission.name}</TableCell>
-                        <TableCell>{submission.phoneNumber}</TableCell>
-                        <TableCell>{submission.email}</TableCell>
-                        <TableCell>{submission.jurisdiction}</TableCell>
-                        <TableCell>{getStatusBadge(submission.status)}</TableCell>
-                        <TableCell className="max-w-xs truncate">
-                          {submission.message || <span className="text-muted-foreground italic">No message</span>}
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
-                          {formatDate(submission.timestamp)}
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={submission.status}
-                            onValueChange={(value) => handleStatusChange(submission.id, value)}
-                            disabled={updateStatusMutation.isPending}
-                          >
-                            <SelectTrigger className="w-32">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="new">New</SelectItem>
-                              <SelectItem value="contacted">Contacted</SelectItem>
-                              <SelectItem value="resolved">Resolved</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Table */}
+        {submissionsLoading ? (
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20 border border-black">
+            <p className="font-serif text-xl text-black mb-2">No leads found</p>
+            <p className="text-gray-500 text-sm">Try adjusting your filters.</p>
+          </div>
+        ) : (
+          <div className="border border-black overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-b border-black bg-black">
+                  <TableHead className="text-white font-medium uppercase tracking-wide text-xs">Name</TableHead>
+                  <TableHead className="text-white font-medium uppercase tracking-wide text-xs">Email</TableHead>
+                  <TableHead className="text-white font-medium uppercase tracking-wide text-xs">Phone</TableHead>
+                  <TableHead className="text-white font-medium uppercase tracking-wide text-xs">Jurisdiction</TableHead>
+                  <TableHead className="text-white font-medium uppercase tracking-wide text-xs">Message</TableHead>
+                  <TableHead className="text-white font-medium uppercase tracking-wide text-xs">Date</TableHead>
+                  <TableHead className="text-white font-medium uppercase tracking-wide text-xs">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((s) => (
+                  <TableRow key={String(s.id)} className="border-b border-gray-200 hover:bg-gray-50">
+                    <TableCell className="font-medium text-black">{s.name}</TableCell>
+                    <TableCell className="text-gray-700 text-sm">{s.email}</TableCell>
+                    <TableCell className="text-gray-700 text-sm">{s.phoneNumber}</TableCell>
+                    <TableCell className="text-gray-700 text-sm">{s.jurisdiction}</TableCell>
+                    <TableCell className="text-gray-700 text-sm max-w-xs truncate">{s.message ?? '—'}</TableCell>
+                    <TableCell className="text-gray-700 text-sm">
+                      {new Date(Number(s.timestamp) / 1_000_000).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <select
+                        value={s.status}
+                        onChange={(e) =>
+                          updateStatus.mutate({ id: s.id, status: e.target.value as Variant })
+                        }
+                        className={`text-xs px-2 py-1 border border-black font-medium uppercase tracking-wide focus:outline-none ${statusColors[s.status] ?? 'bg-white text-black'}`}
+                      >
+                        {Object.entries(statusLabels).map(([val, label]) => (
+                          <option key={val} value={val}>{label}</option>
+                        ))}
+                      </select>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
     </div>
   );

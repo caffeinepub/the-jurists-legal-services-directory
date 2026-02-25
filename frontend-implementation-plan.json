@@ -1,103 +1,162 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix email address and apply 42nd draft theme",
+  "title": "Update tagline, remove chatbot, restore legal notice banner, remove team section, replace Cyberabad, update court practice areas, add Telangana High Court banner",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Replace all occurrences of the current email address in the frontend with 'thejuristshyd@gmail.com'",
+      "summary": "Change the hero tagline on the HomePage from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.'",
       "acceptanceCriteria": [
-        "Every visible email address on the site shows 'thejuristshyd@gmail.com'",
-        "mailto: links (if any) use 'thejuristshyd@gmail.com'",
-        "No old/placeholder email address remains anywhere in the UI"
+        "The old tagline 'Justice Delivered with Precision & Integrity' no longer appears anywhere on the site",
+        "The new tagline 'Trusted Legal Counsel. Proven Results.' is displayed in the hero section of the HomePage"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/ContactPage.tsx",
+          "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Replace the current email address with 'thejuristshyd@gmail.com' in all email display locations and mailto: links within the ContactPage component."
-        },
-        {
-          "path": "frontend/src/components/Footer.tsx",
-          "operation": "modify",
-          "description": "Replace the current email address with 'thejuristshyd@gmail.com' in the Footer component where contact information is displayed."
+          "description": "Update the hero section tagline text from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.' Locate the tagline in the hero section and replace the text content only, preserving all styling and structure."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Revert the visual theme (color palette, typography, spacing, component styling, and decorative elements) to match the 42nd draft version",
+      "summary": "Remove the ChatbotWidget component from the site entirely",
       "acceptanceCriteria": [
-        "The color palette, font choices, and overall visual style match the 42nd draft",
-        "The theme is applied consistently across all pages and shared components (Header, Footer, etc.)",
-        "No elements from later theme versions remain visible",
-        "index.css and tailwind.config.js reflect the 42nd draft design tokens"
+        "No chatbot button or chat panel is visible on any page",
+        "ChatbotWidget is not rendered in App.tsx or any other component"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Revert the global stylesheet to the 42nd draft version, restoring the original color palette (CSS custom properties for navy/gold luxury theme), typography (Playfair Display and Lato fonts), spacing, and utility classes. Ensure both light and dark mode variables match the 42nd draft configuration."
+          "description": "Remove the ChatbotWidget component rendering and its import statement from App.tsx. Ensure the component is no longer rendered anywhere in the router outlet or globally."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Restore the legal notice banner that has disappeared",
+      "acceptanceCriteria": [
+        "A legal notice/disclaimer banner is visible on the site (top or bottom of all pages)",
+        "The banner text includes a disclaimer that site content is for informational purposes only and does not constitute legal advice",
+        "The banner was previously present and is now restored"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LegalNoticeBanner.tsx",
+          "operation": "create",
+          "description": "Create a LegalNoticeBanner component that displays a prominent legal disclaimer banner. The banner should inform visitors that site content does not constitute legal advice and is for informational purposes only, in compliance with Bar Council rules. Style the banner to match the black-and-white theme with appropriate padding, background, and text styling."
         },
         {
-          "path": "frontend/tailwind.config.js",
+          "path": "frontend/src/components/Layout.tsx",
           "operation": "modify",
-          "description": "Revert Tailwind configuration to the 42nd draft version, restoring the original OKLCH-based color tokens, serif/sans font families, luxury box shadows, border radius variables, and animation settings (accordion/fade-in)."
-        },
+          "description": "Import and render the LegalNoticeBanner component in the Layout component. Position it at the top of the page (above the Header) or at the bottom (below the Footer) to ensure it appears on all pages. Add the import statement and include the component in the layout structure."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Remove the 'Meet Our Team' section from the AboutPage",
+      "acceptanceCriteria": [
+        "No 'Meet Our Team' heading or team member cards are visible on the About page or any other page",
+        "The rest of the About page content (firm story, values) remains intact"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "modify",
+          "description": "Remove the 'Meet Our Team' section from the AboutPage component, including the section heading, team member cards, and any related markup. Preserve all other sections including the firm's story and values. Ensure the page layout remains balanced after removal."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Replace every instance of 'Cyberabad' across the entire frontend with 'Medchal Malkajgiri and Kukatpally Courts'",
+      "acceptanceCriteria": [
+        "The word 'Cyberabad' does not appear anywhere on the site in any user-facing text",
+        "All references now read 'Medchal Malkajgiri and Kukatpally Courts'",
+        "The jurisdiction page for this court loads correctly at the updated route",
+        "Header and Footer links point to the updated route",
+        "SEO metadata for the court page uses the updated name"
+      ],
+      "file_operations": [
         {
           "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Revert Header component styling to match the 42nd draft theme, ensuring navigation, dropdowns, and mobile menu use the correct color palette, typography, spacing, and decorative elements from the 42nd draft."
+          "description": "Update the Jurisdictions dropdown navigation links and labels from 'Cyberabad' to 'Medchal Malkajgiri and Kukatpally Courts'. Update the href to point to '/jurisdiction/medchal-malkajgiri-kukatpally'."
         },
         {
           "path": "frontend/src/components/Footer.tsx",
           "operation": "modify",
-          "description": "Revert Footer component styling to match the 42nd draft theme, ensuring brand info, links, and layout use the correct color palette, typography, and spacing from the 42nd draft."
-        },
-        {
-          "path": "frontend/src/pages/HomePage.tsx",
-          "operation": "modify",
-          "description": "Revert HomePage styling to match the 42nd draft theme, ensuring the hero section, practice areas grid, and 'Why Choose Us' section use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
-        },
-        {
-          "path": "frontend/src/pages/ContactPage.tsx",
-          "operation": "modify",
-          "description": "Revert ContactPage styling to match the 42nd draft theme, ensuring the hero section, contact info cards, form, and map embed use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
-        },
-        {
-          "path": "frontend/src/pages/AboutPage.tsx",
-          "operation": "modify",
-          "description": "Revert AboutPage styling to match the 42nd draft theme, ensuring the hero section, firm story, team members, and core values sections use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
-        },
-        {
-          "path": "frontend/src/pages/ServicesPage.tsx",
-          "operation": "modify",
-          "description": "Revert ServicesPage styling to match the 42nd draft theme, ensuring the service cards grid with icons, descriptions, and gradient styling use the correct color palette, typography, spacing, and visual elements from the 42nd draft."
-        },
-        {
-          "path": "frontend/src/pages/ServiceDetailPage.tsx",
-          "operation": "modify",
-          "description": "Revert ServiceDetailPage styling to match the 42nd draft theme, ensuring the detail view, features list, and layout use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
+          "description": "Update all footer jurisdiction links and text from 'Cyberabad' to 'Medchal Malkajgiri and Kukatpally Courts'. Update the href to point to '/jurisdiction/medchal-malkajgiri-kukatpally'."
         },
         {
           "path": "frontend/src/pages/JurisdictionPage.tsx",
           "operation": "modify",
-          "description": "Revert JurisdictionPage styling to match the 42nd draft theme, ensuring the location-specific content, service listings, and layout use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
+          "description": "Update the JurisdictionPage component to handle the new route slug 'medchal-malkajgiri-kukatpally' instead of 'cyberabad'. Update all references to 'Cyberabad' in court-specific content, titles, descriptions, and SEO metadata to 'Medchal Malkajgiri and Kukatpally Courts'. Update breadcrumb labels and canonical URLs to use the new name and route path."
         },
         {
-          "path": "frontend/src/pages/BlogListPage.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Revert BlogListPage styling to match the 42nd draft theme, ensuring the article cards grid, category badges, excerpts, and navigation use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
+          "description": "Update the route registration for the Cyberabad jurisdiction page. Change the route path from '/jurisdiction/cyberabad' to '/jurisdiction/medchal-malkajgiri-kukatpally'. If legacy redirect handling exists, add a redirect from the old path to the new path."
         },
         {
-          "path": "frontend/src/pages/BlogDetailPage.tsx",
+          "path": "frontend/public/sitemap.xml",
           "operation": "modify",
-          "description": "Revert BlogDetailPage styling to match the 42nd draft theme, ensuring the article title, author info, date display, category badge, and content rendering use the correct color palette, typography, spacing, and visual styling from the 42nd draft."
+          "description": "Update the sitemap.xml to replace the URL for /jurisdiction/cyberabad with /jurisdiction/medchal-malkajgiri-kukatpally. Ensure the loc element uses the updated path."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Under each court's jurisdiction page, list ALL areas of practice that are mentioned anywhere on the site",
+      "acceptanceCriteria": [
+        "Each court jurisdiction page shows a complete list of all practice areas available on the site",
+        "No practice area listed on the Services page is missing from any court's jurisdiction page",
+        "The practice areas section is clearly labelled 'Areas of Practice' on each court page"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/JurisdictionPage.tsx",
+          "operation": "modify",
+          "description": "Update the 'Areas of Practice' section in the JurisdictionPage component to display a comprehensive list of all practice areas from the ServicesPage and ServiceDetailPage. Ensure the list includes: Corporate Law, Tax Law, Startup Law, Employment Law, Property Law, Intellectual Property Law, Civil Litigation, Criminal Defense, Family Law, and Documentation Services. Apply this comprehensive list to all courts (Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri and Kukatpally Courts) regardless of court-specific filtering."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Add a special prominent banner on the Telangana High Court jurisdiction page",
+      "acceptanceCriteria": [
+        "A special banner or highlighted section labelled 'Practising at Telangana High Court' is visible on the relevant page",
+        "The banner is visually distinct from regular content sections",
+        "The banner includes descriptive text about the firm's High Court practice",
+        "The Telangana High Court is accessible from the site navigation (Header Jurisdictions dropdown and Footer)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TelanganaHighCourtPage.tsx",
+          "operation": "create",
+          "description": "Create a dedicated TelanganaHighCourtPage component featuring a special prominent banner section. The banner should have a visually distinct design with a gold border, serif heading, and elevated card styling. Include a heading 'Practising at Telangana High Court' and descriptive text highlighting the firm's High Court practice including types of matters handled at the High Court level (e.g., writs, appeals, constitutional matters). Include SEO metadata, breadcrumbs, and structured data for the High Court page."
         },
         {
-          "path": "frontend/src/components/ContactForm.tsx",
+          "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Revert ContactForm component styling to match the 42nd draft theme, ensuring the Card container, luxury theme borders, and iframe embed use the correct color palette, spacing, and visual styling from the 42nd draft."
+          "description": "Add a navigation link for 'Telangana High Court' to the Jurisdictions dropdown in the Header. The link should point to '/jurisdiction/telangana-high-court' and be positioned prominently in the dropdown menu (e.g., first in the list)."
+        },
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Add a link for 'Telangana High Court' to the jurisdiction links section in the Footer. The link should point to '/jurisdiction/telangana-high-court' and be styled consistently with other jurisdiction links."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register the TelanganaHighCourtPage route in the router configuration. Add a route with path '/jurisdiction/telangana-high-court' that renders the TelanganaHighCourtPage component. Import the component at the top of the file."
+        },
+        {
+          "path": "frontend/public/sitemap.xml",
+          "operation": "modify",
+          "description": "Add an entry for the Telangana High Court page in the sitemap.xml with the URL https://thejurists.in/jurisdiction/telangana-high-court, appropriate priority (e.g., 0.8), and changefreq (e.g., monthly)."
         }
       ]
     }

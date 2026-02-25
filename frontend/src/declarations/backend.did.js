@@ -130,6 +130,7 @@ export const idlService = IDL.Service({
     ),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getChatbotResponse' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
   'getContactFormSubmissionsByJurisdiction' : IDL.Func(
       [Variant__3],
       [IDL.Vec(ContactFormSubmission)],
@@ -321,6 +322,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getChatbotResponse' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
     'getContactFormSubmissionsByJurisdiction' : IDL.Func(
         [Variant__3],
         [IDL.Vec(ContactFormSubmission)],

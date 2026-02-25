@@ -1,144 +1,137 @@
+import React from 'react';
 import { useParams, Link } from '@tanstack/react-router';
-import { useGetBlogArticleById } from '../hooks/useQueries';
-import { Button } from '../components/ui/button';
-import { Calendar, User, ArrowLeft, Tag } from 'lucide-react';
-import { Badge } from '../components/ui/badge';
+import { Calendar, User, ArrowLeft } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
-import StructuredData, { generateArticleSchema, generateLocalBusinessSchema } from '../components/StructuredData';
+import StructuredData, { generateArticleSchema } from '../components/StructuredData';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { Variant__1 } from '../backend';
+import { useGetBlogArticleById } from '../hooks/useQueries';
+import { Skeleton } from '../components/ui/skeleton';
 
-const practiceAreaLabels: Record<Variant__1, string> = {
-  [Variant__1.familyLaw]: 'Family Law',
-  [Variant__1.corporateLaw]: 'Corporate Law',
-  [Variant__1.criminalDefense]: 'Criminal Defense',
-  [Variant__1.civilLitigation]: 'Civil Litigation',
-  [Variant__1.propertyLaw]: 'Property Law',
-  [Variant__1.ipLaw]: 'IP Law',
-  [Variant__1.taxLaw]: 'Tax Law',
-  [Variant__1.employmentLaw]: 'Employment Law',
-  [Variant__1.startupLaw]: 'Startup Law',
-  [Variant__1.documentationServices]: 'Documentation',
+const categoryLabels: Record<string, string> = {
+  familyLaw: 'Family Law',
+  corporateLaw: 'Corporate Law',
+  criminalDefense: 'Criminal Defense',
+  civilLitigation: 'Civil Litigation',
+  propertyLaw: 'Property Law',
+  documentationServices: 'Documentation',
+  taxLaw: 'Tax Law',
+  ipLaw: 'IP Law',
+  startupLaw: 'Startup Law',
+  employmentLaw: 'Employment Law',
 };
 
 export default function BlogDetailPage() {
-  const { articleId } = useParams({ strict: false });
-  const { data: article, isLoading } = useGetBlogArticleById(articleId ? BigInt(articleId) : BigInt(0));
-
-  const formatDate = (timestamp: bigint) => {
-    const date = new Date(Number(timestamp) / 1000000);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
-
-  const getISODate = (timestamp: bigint) => {
-    const date = new Date(Number(timestamp) / 1000000);
-    return date.toISOString();
-  };
+  const { articleId } = useParams({ strict: false }) as { articleId: string };
+  const { data: article, isLoading } = useGetBlogArticleById(BigInt(articleId ?? '0'));
 
   if (isLoading) {
     return (
-      <div className="container py-24">
-        <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading article...</p>
-        </div>
+      <div className="max-w-4xl mx-auto px-4 py-16 space-y-4">
+        <Skeleton className="h-8 w-3/4" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-64 w-full" />
       </div>
     );
   }
 
   if (!article) {
     return (
-      <div className="container py-24 text-center">
-        <h1 className="text-4xl font-bold mb-4">Article Not Found</h1>
-        <p className="text-muted-foreground mb-8">The article you're looking for doesn't exist.</p>
-        <Button asChild>
-          <Link to="/blog">Back to Blog</Link>
-        </Button>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="font-serif text-3xl font-bold text-black mb-4">Article Not Found</h1>
+          <Link to="/blog" className="text-black underline hover:text-gray-600">
+            Back to Blog
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const metaDescription = article.content.substring(0, 160);
-  const articleUrl = `https://thejurists.in/blog/${article.id}`;
+  const publishedDate = new Date(Number(article.publishedDate) / 1_000_000);
 
   return (
-    <div className="flex flex-col">
+    <>
       <SEOHead
-        title={article.title}
-        description={metaDescription}
-        canonical={articleUrl}
-        ogType="article"
+        title={`${article.title} – The Jurists Blog`}
+        description={article.content.substring(0, 160)}
+        keywords={`${categoryLabels[article.category] ?? ''}, legal blog hyderabad`}
+        canonical={`https://thejurists.in/blog/${article.id}`}
       />
       <StructuredData
-        data={[
-          generateArticleSchema({
-            title: article.title,
-            description: metaDescription,
-            url: articleUrl,
-            datePublished: getISODate(article.publishedDate),
-            author: article.author,
-          }),
-          generateLocalBusinessSchema(),
-        ]}
-        id="blog-detail-schema"
+        schema={generateArticleSchema({
+          title: article.title,
+          description: article.content.substring(0, 160),
+          datePublished: publishedDate.toISOString(),
+          author: article.author,
+        })}
       />
 
-      <section className="py-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: '/' },
-                { label: 'Blog', href: '/blog' },
-                { label: article.title, href: `/blog/${article.id}` },
-              ]}
-            />
-            <Button variant="ghost" size="sm" className="mb-6" asChild>
-              <Link to="/blog">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Blog
-              </Link>
-            </Button>
-            <Badge variant="secondary" className="mb-4">
-              <Tag className="h-3 w-3 mr-1" />
-              {practiceAreaLabels[article.category]}
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">{article.title}</h1>
-            <div className="flex items-center gap-6 text-muted-foreground mb-8">
-              <div className="flex items-center">
-                <User className="h-4 w-4 mr-2" />
-                <span>{article.author}</span>
-              </div>
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 mr-2" />
-                <span>{formatDate(article.publishedDate)}</span>
-              </div>
+      {/* Breadcrumbs */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Blog', href: '/blog' },
+              { label: article.title },
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Article */}
+      <article className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Category */}
+          <span className="inline-block bg-black text-white text-xs px-3 py-1 uppercase tracking-widest mb-6">
+            {categoryLabels[article.category] ?? article.category}
+          </span>
+
+          {/* Title */}
+          <h1 className="font-serif text-3xl lg:text-5xl font-bold text-black mb-6 leading-tight">
+            {article.title}
+          </h1>
+
+          {/* Meta */}
+          <div className="flex items-center gap-6 text-sm text-gray-500 mb-8 pb-8 border-b border-black">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4" />
+              <span>{article.author}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              <span>
+                {publishedDate.toLocaleDateString('en-IN', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="py-16">
-        <div className="container">
-          <article className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
-            <div className="whitespace-pre-wrap leading-relaxed">{article.content}</div>
-          </article>
-        </div>
-      </section>
+          {/* Content */}
+          <div className="prose prose-lg max-w-none text-black">
+            {article.content.split('\n').map((para, i) =>
+              para.trim() ? (
+                <p key={i} className="mb-4 text-gray-800 leading-relaxed">
+                  {para}
+                </p>
+              ) : null
+            )}
+          </div>
 
-      <section className="py-16 bg-muted/20">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Need Legal Assistance?</h2>
-            <p className="text-lg text-muted-foreground mb-6">
-              Contact our expert legal team for personalized advice and representation.
-            </p>
-            <Button size="lg" asChild>
-              <Link to="/contact">Get Free Consultation</Link>
-            </Button>
+          {/* Back link */}
+          <div className="mt-12 pt-8 border-t border-black">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 text-black font-medium hover:text-gray-600 transition-colors uppercase tracking-wide text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back to Blog
+            </Link>
           </div>
         </div>
-      </section>
-    </div>
+      </article>
+    </>
   );
 }

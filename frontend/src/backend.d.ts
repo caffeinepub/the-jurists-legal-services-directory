@@ -112,6 +112,7 @@ export interface backendInterface {
     getBlogArticlesByCategory(category: Variant__1): Promise<Array<BlogArticle>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getChatbotResponse(message: string): Promise<string>;
     getContactFormSubmissionsByJurisdiction(jurisdiction: Variant__3): Promise<Array<ContactFormSubmission>>;
     getContactFormSubmissionsByStatus(status: Variant): Promise<Array<ContactFormSubmission>>;
     getLegalDirectoryByJurisdiction(jurisdiction: Variant__3): Promise<Array<LegalListing>>;
