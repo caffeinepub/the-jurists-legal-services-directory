@@ -136,6 +136,13 @@ export default function Footer() {
             </a>
           </p>
         </div>
+
+        {/* Legal Disclaimer */}
+        <div className="mt-4 pt-4 border-t border-gray-900">
+          <p className="text-xs text-gray-600 text-center leading-relaxed">
+            The information on this site is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed. As per Bar Council of India rules, advocates are not permitted to solicit work or advertise.
+          </p>
+        </div>
       </div>
     </footer>
   );

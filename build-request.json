@@ -1,147 +1,58 @@
 {
   "kind": "build_request",
-  "title": "Update tagline, remove chatbot, restore legal notice banner, remove team section, replace Cyberabad, update court practice areas, add Telangana High Court banner",
+  "title": "Shorten legal disclaimer to footer and add promotional banner on homepage",
   "projectName": "The Jurists",
-  "priority": "high",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Change the hero tagline on the HomePage from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.'",
+      "text": "Replace the existing LegalNoticeBanner (dismissible top banner with full disclaimer text) with a condensed legal disclaimer line placed at the very bottom of the page, inside or just above the Footer component in Layout.tsx. The shortened text should read: 'The information on this site is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed. As per Bar Council of India rules, advocates are not permitted to solicit work or advertise.'",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "Justice Delivered with Precision & Integrity change this tagline"
+          "shorten and shift this to the bottom of the page"
         ]
       },
       "acceptanceCriteria": [
-        "The old tagline 'Justice Delivered with Precision & Integrity' no longer appears anywhere on the site",
-        "The new tagline 'Trusted Legal Counsel. Proven Results.' is displayed in the hero section of the HomePage"
+        "The full-length dismissible top banner (LegalNoticeBanner) is no longer rendered at the top of the page",
+        "A compact, non-dismissible legal disclaimer line appears at the bottom of every page, below or within the footer area",
+        "The shortened disclaimer text matches the specified condensed version",
+        "The disclaimer is styled subtly (small font, muted color) to not overshadow page content"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Remove the ChatbotWidget component from the site entirely. Remove its rendering from App.tsx and delete or disable the floating chat button so no chatbot UI is visible to users.",
+      "text": "Add a prominent promotional banner on the HomePage (frontend/src/pages/HomePage.tsx) that displays the text: 'Send a Legal Notice / Reply to a Legal Notice under 24 hours'. This banner should appear near the top of the homepage content (e.g., just below the hero section or as part of it) and use a visually distinct, attention-grabbing style consistent with the site's existing theme.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "remove the chatbot"
+          "add a banner on the front page itself showing \"Send a Legal Notice/ Reply to a Legal notice under 24 hours\""
         ]
       },
       "acceptanceCriteria": [
-        "No chatbot button or chat panel is visible on any page",
-        "ChatbotWidget is not rendered in App.tsx or any other component"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Restore the legal notice banner that has disappeared. Re-add a prominent legal notice/disclaimer banner (e.g., at the top or bottom of every page) informing visitors that the content on this site does not constitute legal advice and is for informational purposes only, in compliance with Bar Council rules.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "the legal notice banner has disappeared bring it back"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A legal notice/disclaimer banner is visible on the site (top or bottom of all pages)",
-        "The banner text includes a disclaimer that site content is for informational purposes only and does not constitute legal advice",
-        "The banner was previously present and is now restored"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Remove the 'Meet Our Team' section from the AboutPage (and any other page where it appears). Do not show team member cards or the team heading anywhere on the site.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "remove the meet our team"
-        ]
-      },
-      "acceptanceCriteria": [
-        "No 'Meet Our Team' heading or team member cards are visible on the About page or any other page",
-        "The rest of the About page content (firm story, values) remains intact"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Replace every instance of 'Cyberabad' across the entire frontend with 'Medchal Malkajgiri and Kukatpally Courts'. This includes: the Header navigation and dropdowns, the Footer jurisdiction links, the JurisdictionPage component (route slug, page title, SEO metadata, breadcrumbs, content), the sitemap page, and any other component or page that references 'Cyberabad'. Update the route path from '/jurisdiction/cyberabad' to '/jurisdiction/medchal-malkajgiri-kukatpally' and ensure the old path redirects or is replaced.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "in every place remove cyberabad with medchal malkajgiri and kukatpally courts"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The word 'Cyberabad' does not appear anywhere on the site in any user-facing text",
-        "All references now read 'Medchal Malkajgiri and Kukatpally Courts'",
-        "The jurisdiction page for this court loads correctly at the updated route",
-        "Header and Footer links point to the updated route",
-        "SEO metadata for the court page uses the updated name"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Under each court's jurisdiction page (Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri and Kukatpally Courts), list ALL areas of practice that are mentioned anywhere on the site (from the ServicesPage and ServiceDetailPage). Ensure the 'Areas of Practice' section on each court's JurisdictionPage includes the full comprehensive list rather than a partial subset.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "under each court's areas of practise you add all areas of practise mentioned in our site"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Each court jurisdiction page shows a complete list of all practice areas available on the site",
-        "No practice area listed on the Services page is missing from any court's jurisdiction page",
-        "The practice areas section is clearly labelled 'Areas of Practice' on each court page"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Add a special prominent banner or highlight section on the Telangana High Court jurisdiction page (if it exists) or create a dedicated Telangana High Court section/page. The banner should be visually distinct (e.g., gold border, serif heading, elevated card) and highlight that the firm practises at the Telangana High Court, including key information such as types of matters handled at the High Court level.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "give speclai banner under courts of Practising at Telangana High Court"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A special banner or highlighted section labelled 'Practising at Telangana High Court' is visible on the relevant page",
-        "The banner is visually distinct from regular content sections",
-        "The banner includes descriptive text about the firm's High Court practice",
-        "The Telangana High Court is accessible from the site navigation (Header Jurisdictions dropdown and Footer)"
+        "A banner with the exact text 'Send a Legal Notice / Reply to a Legal Notice under 24 hours' is visible on the homepage",
+        "The banner is prominently placed near the top of the homepage (e.g., below the hero or as a highlighted strip)",
+        "The banner styling is visually distinct and attention-grabbing while matching the site's color palette and typography",
+        "The banner does not appear on other pages (it is homepage-only)"
       ]
     }
   ],
   "constraints": [
-    "Do not alter the black-and-white visual theme established in the project",
-    "Do not modify files listed in frontend.immutablePaths",
-    "All user-facing text must be in English",
-    "Do not change any backend Motoko logic or data models"
+    "Do not modify any files under frontend/src/hooks/ or frontend/src/components/ui/",
+    "Preserve all existing footer content in Footer.tsx; only append the disclaimer, do not replace existing footer elements",
+    "The promotional banner text must be verbatim: 'Send a Legal Notice / Reply to a Legal Notice under 24 hours'"
   ],
   "nonGoals": [
-    "Adding AI capabilities to the chatbot (it is being removed entirely)",
-    "Changing any backend canister logic",
-    "Adding new blog articles or service pages beyond what is requested",
-    "Modifying the Google Form integration in ContactPage"
+    "Adding any new backend logic or data models",
+    "Changing the site's overall visual theme or color palette",
+    "Adding click/navigation behavior to the promotional banner unless it was requested",
+    "Modifying any other pages beyond HomePage.tsx and Layout.tsx"
   ],
   "imageRequirements": {
     "required": [],

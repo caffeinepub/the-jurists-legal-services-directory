@@ -1,162 +1,44 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update tagline, remove chatbot, restore legal notice banner, remove team section, replace Cyberabad, update court practice areas, add Telangana High Court banner",
+  "title": "Shorten legal disclaimer to footer and add promotional banner on homepage",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Change the hero tagline on the HomePage from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.'",
+      "summary": "Replace the dismissible top LegalNoticeBanner with a condensed legal disclaimer line at the bottom of the page within or above the Footer component",
       "acceptanceCriteria": [
-        "The old tagline 'Justice Delivered with Precision & Integrity' no longer appears anywhere on the site",
-        "The new tagline 'Trusted Legal Counsel. Proven Results.' is displayed in the hero section of the HomePage"
+        "The full-length dismissible top banner (LegalNoticeBanner) is no longer rendered at the top of the page",
+        "A compact, non-dismissible legal disclaimer line appears at the bottom of every page, below or within the footer area",
+        "The shortened disclaimer text matches the specified condensed version",
+        "The disclaimer is styled subtly (small font, muted color) to not overshadow page content"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/HomePage.tsx",
+          "path": "frontend/src/components/Layout.tsx",
           "operation": "modify",
-          "description": "Update the hero section tagline text from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.' Locate the tagline in the hero section and replace the text content only, preserving all styling and structure."
+          "description": "Remove the LegalNoticeBanner import and its rendering from the Layout component. The banner currently appears at the top of the layout and must be completely removed."
+        },
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Add a new condensed legal disclaimer section at the bottom of the Footer component (after existing footer content). The disclaimer text must read exactly: 'The information on this site is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed. As per Bar Council of India rules, advocates are not permitted to solicit work or advertise.' Style it with small font size (text-xs), muted text color (text-gray-500 or text-gray-600), center alignment, and appropriate padding. The disclaimer should be non-dismissible and appear as a simple text paragraph or div."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Remove the ChatbotWidget component from the site entirely",
+      "summary": "Add a prominent promotional banner on the HomePage displaying '24-hour legal notice service' messaging",
       "acceptanceCriteria": [
-        "No chatbot button or chat panel is visible on any page",
-        "ChatbotWidget is not rendered in App.tsx or any other component"
+        "A banner with the exact text 'Send a Legal Notice / Reply to a Legal Notice under 24 hours' is visible on the homepage",
+        "The banner is prominently placed near the top of the homepage (e.g., below the hero or as a highlighted strip)",
+        "The banner styling is visually distinct and attention-grabbing while matching the site's color palette and typography",
+        "The banner does not appear on other pages (it is homepage-only)"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Remove the ChatbotWidget component rendering and its import statement from App.tsx. Ensure the component is no longer rendered anywhere in the router outlet or globally."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Restore the legal notice banner that has disappeared",
-      "acceptanceCriteria": [
-        "A legal notice/disclaimer banner is visible on the site (top or bottom of all pages)",
-        "The banner text includes a disclaimer that site content is for informational purposes only and does not constitute legal advice",
-        "The banner was previously present and is now restored"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/LegalNoticeBanner.tsx",
-          "operation": "create",
-          "description": "Create a LegalNoticeBanner component that displays a prominent legal disclaimer banner. The banner should inform visitors that site content does not constitute legal advice and is for informational purposes only, in compliance with Bar Council rules. Style the banner to match the black-and-white theme with appropriate padding, background, and text styling."
-        },
-        {
-          "path": "frontend/src/components/Layout.tsx",
-          "operation": "modify",
-          "description": "Import and render the LegalNoticeBanner component in the Layout component. Position it at the top of the page (above the Header) or at the bottom (below the Footer) to ensure it appears on all pages. Add the import statement and include the component in the layout structure."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Remove the 'Meet Our Team' section from the AboutPage",
-      "acceptanceCriteria": [
-        "No 'Meet Our Team' heading or team member cards are visible on the About page or any other page",
-        "The rest of the About page content (firm story, values) remains intact"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AboutPage.tsx",
-          "operation": "modify",
-          "description": "Remove the 'Meet Our Team' section from the AboutPage component, including the section heading, team member cards, and any related markup. Preserve all other sections including the firm's story and values. Ensure the page layout remains balanced after removal."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Replace every instance of 'Cyberabad' across the entire frontend with 'Medchal Malkajgiri and Kukatpally Courts'",
-      "acceptanceCriteria": [
-        "The word 'Cyberabad' does not appear anywhere on the site in any user-facing text",
-        "All references now read 'Medchal Malkajgiri and Kukatpally Courts'",
-        "The jurisdiction page for this court loads correctly at the updated route",
-        "Header and Footer links point to the updated route",
-        "SEO metadata for the court page uses the updated name"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/Header.tsx",
-          "operation": "modify",
-          "description": "Update the Jurisdictions dropdown navigation links and labels from 'Cyberabad' to 'Medchal Malkajgiri and Kukatpally Courts'. Update the href to point to '/jurisdiction/medchal-malkajgiri-kukatpally'."
-        },
-        {
-          "path": "frontend/src/components/Footer.tsx",
-          "operation": "modify",
-          "description": "Update all footer jurisdiction links and text from 'Cyberabad' to 'Medchal Malkajgiri and Kukatpally Courts'. Update the href to point to '/jurisdiction/medchal-malkajgiri-kukatpally'."
-        },
-        {
-          "path": "frontend/src/pages/JurisdictionPage.tsx",
-          "operation": "modify",
-          "description": "Update the JurisdictionPage component to handle the new route slug 'medchal-malkajgiri-kukatpally' instead of 'cyberabad'. Update all references to 'Cyberabad' in court-specific content, titles, descriptions, and SEO metadata to 'Medchal Malkajgiri and Kukatpally Courts'. Update breadcrumb labels and canonical URLs to use the new name and route path."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Update the route registration for the Cyberabad jurisdiction page. Change the route path from '/jurisdiction/cyberabad' to '/jurisdiction/medchal-malkajgiri-kukatpally'. If legacy redirect handling exists, add a redirect from the old path to the new path."
-        },
-        {
-          "path": "frontend/public/sitemap.xml",
-          "operation": "modify",
-          "description": "Update the sitemap.xml to replace the URL for /jurisdiction/cyberabad with /jurisdiction/medchal-malkajgiri-kukatpally. Ensure the loc element uses the updated path."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Under each court's jurisdiction page, list ALL areas of practice that are mentioned anywhere on the site",
-      "acceptanceCriteria": [
-        "Each court jurisdiction page shows a complete list of all practice areas available on the site",
-        "No practice area listed on the Services page is missing from any court's jurisdiction page",
-        "The practice areas section is clearly labelled 'Areas of Practice' on each court page"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/JurisdictionPage.tsx",
-          "operation": "modify",
-          "description": "Update the 'Areas of Practice' section in the JurisdictionPage component to display a comprehensive list of all practice areas from the ServicesPage and ServiceDetailPage. Ensure the list includes: Corporate Law, Tax Law, Startup Law, Employment Law, Property Law, Intellectual Property Law, Civil Litigation, Criminal Defense, Family Law, and Documentation Services. Apply this comprehensive list to all courts (Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri and Kukatpally Courts) regardless of court-specific filtering."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Add a special prominent banner on the Telangana High Court jurisdiction page",
-      "acceptanceCriteria": [
-        "A special banner or highlighted section labelled 'Practising at Telangana High Court' is visible on the relevant page",
-        "The banner is visually distinct from regular content sections",
-        "The banner includes descriptive text about the firm's High Court practice",
-        "The Telangana High Court is accessible from the site navigation (Header Jurisdictions dropdown and Footer)"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/TelanganaHighCourtPage.tsx",
-          "operation": "create",
-          "description": "Create a dedicated TelanganaHighCourtPage component featuring a special prominent banner section. The banner should have a visually distinct design with a gold border, serif heading, and elevated card styling. Include a heading 'Practising at Telangana High Court' and descriptive text highlighting the firm's High Court practice including types of matters handled at the High Court level (e.g., writs, appeals, constitutional matters). Include SEO metadata, breadcrumbs, and structured data for the High Court page."
-        },
-        {
-          "path": "frontend/src/components/Header.tsx",
-          "operation": "modify",
-          "description": "Add a navigation link for 'Telangana High Court' to the Jurisdictions dropdown in the Header. The link should point to '/jurisdiction/telangana-high-court' and be positioned prominently in the dropdown menu (e.g., first in the list)."
-        },
-        {
-          "path": "frontend/src/components/Footer.tsx",
-          "operation": "modify",
-          "description": "Add a link for 'Telangana High Court' to the jurisdiction links section in the Footer. The link should point to '/jurisdiction/telangana-high-court' and be styled consistently with other jurisdiction links."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Register the TelanganaHighCourtPage route in the router configuration. Add a route with path '/jurisdiction/telangana-high-court' that renders the TelanganaHighCourtPage component. Import the component at the top of the file."
-        },
-        {
-          "path": "frontend/public/sitemap.xml",
-          "operation": "modify",
-          "description": "Add an entry for the Telangana High Court page in the sitemap.xml with the URL https://thejurists.in/jurisdiction/telangana-high-court, appropriate priority (e.g., 0.8), and changefreq (e.g., monthly)."
+          "description": "Add a prominent promotional banner component or section within HomePage.tsx that displays the exact text: 'Send a Legal Notice / Reply to a Legal Notice under 24 hours'. Position this banner near the top of the page content, ideally just below the hero section or as a highlighted strip above the practice areas grid. Style the banner to be visually distinct and attention-grabbing using the site's existing color palette (consider using bg-blue-600 or bg-amber-500 with contrasting text, larger font size, bold weight, and adequate padding). Ensure the banner is homepage-only and does not require any backend integration."
         }
       ]
     }

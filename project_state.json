@@ -1,69 +1,24 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Legal services website (law firm) with court-specific practice area pages. Key requirements: updated tagline, no chatbot, legal notice banner visible, no 'Meet Our Team' section, replace 'Cyberabad' with 'Medchal Malkajgiri' and 'Kukatpally Courts' throughout, full areas of practice listed under each court, and a special banner for 'Practising at Telangana High Court'.",
-  "architectural_notes": [
-    "Site is for a law firm with court-specific practice area pages including Telangana High Court, Medchal Malkajgiri, and Kukatpally Courts"
-  ],
-  "known_issues": [
-    "Legal notice banner has disappeared and needs to be restored",
-    "App generation has failed multiple times — may need to break requests into smaller updates"
-  ],
-  "isFixRequest": true,
+  "summary": "Legal/advocate website with legal disclaimer at the bottom and a promotional banner on the front page for fast legal notice services.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-change-the-hero-tagline-on-the-homepage-from-justice-delivered-with-precision-integrity-to-trusted-legal-counsel-proven-results",
-      "title": "Change the hero tagline on the HomePage from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.'",
+      "id": "feature-replace-the-existing-legalnoticebanner-dismissible-top-banner-with-full-disclaimer-text-with-a-condensed-legal-disclaimer-line-placed-at-the-very-bottom-of-the-page-inside-or-just-above-the-footer-component-in-layout-tsx-the-shortened-text-should-read-the-information-on-this-site-is-for-general-informational-purposes-only-and-does-not-constitute-legal-advice-no-attorney-client-relationship-is-formed-as-per-bar-council-of-india-rules-advocates-are-not-permitted-to-solicit-work-or-advertise",
+      "title": "Replace the existing LegalNoticeBanner (dismissible top banner with full disclaimer text) with a condensed legal disclaimer line placed at the very bottom of the page, inside or just above the Footer component in Layout.tsx. The shortened text should read: 'The information on this site is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed. As per Bar Council of India rules, advocates are not permitted to solicit work or advertise.'",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-remove-the-chatbotwidget-component-from-the-site-entirely-remove-its-rendering-from-app-tsx-and-delete-or-disable-the-floating-chat-button-so-no-chatbot-ui-is-visible-to-users",
-      "title": "Remove the ChatbotWidget component from the site entirely. Remove its rendering from App.tsx and delete or disable the floating chat button so no chatbot UI is visible to users.",
+      "id": "feature-add-a-prominent-promotional-banner-on-the-homepage-frontend-src-pages-homepage-tsx-that-displays-the-text-send-a-legal-notice-reply-to-a-legal-notice-under-24-hours-this-banner-should-appear-near-the-top-of-the-homepage-content-e-g-just-below-the-hero-section-or-as-part-of-it-and-use-a-visually-distinct-attention-grabbing-style-consistent-with-the-site-s-existing-theme",
+      "title": "Add a prominent promotional banner on the HomePage (frontend/src/pages/HomePage.tsx) that displays the text: 'Send a Legal Notice / Reply to a Legal Notice under 24 hours'. This banner should appear near the top of the homepage content (e.g., just below the hero section or as part of it) and use a visually distinct, attention-grabbing style consistent with the site's existing theme.",
       "reqIds": [
         "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-restore-the-legal-notice-banner-that-has-disappeared-re-add-a-prominent-legal-notice-disclaimer-banner-e-g-at-the-top-or-bottom-of-every-page-informing-visitors-that-the-content-on-this-site-does-not-constitute-legal-advice-and-is-for-informational-purposes-only-in-compliance-with-bar-council-rules",
-      "title": "Restore the legal notice banner that has disappeared. Re-add a prominent legal notice/disclaimer banner (e.g., at the top or bottom of every page) informing visitors that the content on this site does not constitute legal advice and is for informational purposes only, in compliance with Bar Council rules.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-the-meet-our-team-section-from-the-aboutpage-and-any-other-page-where-it-appears-do-not-show-team-member-cards-or-the-team-heading-anywhere-on-the-site",
-      "title": "Remove the 'Meet Our Team' section from the AboutPage (and any other page where it appears). Do not show team member cards or the team heading anywhere on the site.",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-replace-every-instance-of-cyberabad-across-the-entire-frontend-with-medchal-malkajgiri-and-kukatpally-courts-this-includes-the-header-navigation-and-dropdowns-the-footer-jurisdiction-links-the-jurisdictionpage-component-route-slug-page-title-seo-metadata-breadcrumbs-content-the-sitemap-page-and-any-other-component-or-page-that-references-cyberabad-update-the-route-path-from-jurisdiction-cyberabad-to-jurisdiction-medchal-malkajgiri-kukatpally-and-ensure-the-old-path-redirects-or-is-replaced",
-      "title": "Replace every instance of 'Cyberabad' across the entire frontend with 'Medchal Malkajgiri and Kukatpally Courts'. This includes: the Header navigation and dropdowns, the Footer jurisdiction links, the JurisdictionPage component (route slug, page title, SEO metadata, breadcrumbs, content), the sitemap page, and any other component or page that references 'Cyberabad'. Update the route path from '/jurisdiction/cyberabad' to '/jurisdiction/medchal-malkajgiri-kukatpally' and ensure the old path redirects or is replaced.",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-under-each-court-s-jurisdiction-page-hyderabad-secunderabad-rangareddy-and-medchal-malkajgiri-and-kukatpally-courts-list-all-areas-of-practice-that-are-mentioned-anywhere-on-the-site-from-the-servicespage-and-servicedetailpage-ensure-the-areas-of-practice-section-on-each-court-s-jurisdictionpage-includes-the-full-comprehensive-list-rather-than-a-partial-subset",
-      "title": "Under each court's jurisdiction page (Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri and Kukatpally Courts), list ALL areas of practice that are mentioned anywhere on the site (from the ServicesPage and ServiceDetailPage). Ensure the 'Areas of Practice' section on each court's JurisdictionPage includes the full comprehensive list rather than a partial subset.",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-special-prominent-banner-or-highlight-section-on-the-telangana-high-court-jurisdiction-page-if-it-exists-or-create-a-dedicated-telangana-high-court-section-page-the-banner-should-be-visually-distinct-e-g-gold-border-serif-heading-elevated-card-and-highlight-that-the-firm-practises-at-the-telangana-high-court-including-key-information-such-as-types-of-matters-handled-at-the-high-court-level",
-      "title": "Add a special prominent banner or highlight section on the Telangana High Court jurisdiction page (if it exists) or create a dedicated Telangana High Court section/page. The banner should be visually distinct (e.g., gold border, serif heading, elevated card) and highlight that the firm practises at the Telangana High Court, including key information such as types of matters handled at the High Court level.",
-      "reqIds": [
-        "REQ-7"
       ],
       "version": 1
     }
@@ -71,49 +26,19 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Change tagline from 'Justice Delivered with Precision & Integrity' to a new tagline",
+      "summary": "Shorten legal disclaimer text and move it to the bottom of the page",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Remove the chatbot from the site",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Restore the missing legal notice banner",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Remove the 'Meet Our Team' section",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "Replace all instances of 'Cyberabad' with 'Medchal Malkajgiri' and 'Kukatpally Courts' throughout the site",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Add all areas of practice (from the site) under each court's section",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-7",
-      "summary": "Add a special banner under the 'Practising at Telangana High Court' section",
+      "summary": "Add a front page banner: 'Send a Legal Notice / Reply to a Legal Notice under 24 hours'",
       "reqIds": [],
       "status": "pending"
     }
   ],
   "gameProjectType": "none",
-  "projectName": "Law Firm Legal Services Website",
+  "projectName": "The Jurists",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

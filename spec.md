@@ -1,15 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Apply several targeted updates to The Jurists website: update the hero tagline, remove the chatbot, restore the legal notice banner, remove the team section, replace all "Cyberabad" references, expand court practice area listings, and add a Telangana High Court banner.
+**Goal:** Move the legal disclaimer to a compact footer line and add a promotional banner on the homepage.
 
 **Planned changes:**
-- Change the hero tagline from "Justice Delivered with Precision & Integrity" to "Trusted Legal Counsel. Proven Results."
-- Remove the ChatbotWidget component entirely from App.tsx and all other locations so no chat button or panel appears anywhere
-- Restore the legal notice/disclaimer banner (top or bottom of all pages) stating that site content is for informational purposes only and does not constitute legal advice, in compliance with Bar Council rules
-- Remove the "Meet Our Team" section and team member cards from the About page and any other page where they appear
-- Replace every instance of "Cyberabad" across the entire frontend with "Medchal Malkajgiri and Kukatpally Courts", update the route from `/jurisdiction/cyberabad` to `/jurisdiction/medchal-malkajgiri-kukatpally`, and update all Header/Footer links and SEO metadata accordingly
-- Update each court jurisdiction page (Hyderabad, Secunderabad, Rangareddy, Medchal Malkajgiri and Kukatpally Courts) to display the full comprehensive list of all practice areas mentioned anywhere on the site
-- Add a visually distinct banner (gold border, serif heading, elevated card style) labelled "Practising at Telangana High Court" on the Telangana High Court jurisdiction page, including descriptive text about the firm's High Court practice; ensure Telangana High Court is accessible from the Header jurisdictions dropdown and Footer
+- Remove the existing dismissible `LegalNoticeBanner` from the top of the page in `Layout.tsx`
+- Add a short, non-dismissible legal disclaimer line at the bottom of every page (inside or just above the Footer), with small, muted styling
+- Add a prominent promotional banner on `HomePage.tsx` (below the hero section) with the exact text: "Send a Legal Notice / Reply to a Legal Notice under 24 hours", styled to match the site's existing theme
 
-**User-visible outcome:** Visitors will see the updated tagline, no chatbot, a restored legal disclaimer banner, no team section, the corrected court name throughout the site, full practice area lists on each court page, and a prominent Telangana High Court banner in the site navigation and on the relevant jurisdiction page.
+**User-visible outcome:** Every page shows a subtle legal disclaimer at the bottom instead of a dismissible top banner, and the homepage features a highlighted promotional strip announcing the 24-hour legal notice service.

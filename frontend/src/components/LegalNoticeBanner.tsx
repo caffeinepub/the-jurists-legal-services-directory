@@ -1,8 +1,25 @@
 import React, { useState } from 'react';
 import { X, AlertCircle } from 'lucide-react';
 
+const DISMISSED_KEY = 'legal_notice_dismissed';
+
 export default function LegalNoticeBanner() {
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem(DISMISSED_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleDismiss = () => {
+    try {
+      sessionStorage.setItem(DISMISSED_KEY, 'true');
+    } catch {
+      // ignore storage errors
+    }
+    setDismissed(true);
+  };
 
   if (dismissed) return null;
 
@@ -17,7 +34,7 @@ export default function LegalNoticeBanner() {
           </p>
         </div>
         <button
-          onClick={() => setDismissed(true)}
+          onClick={handleDismiss}
           className="flex-shrink-0 text-gray-400 hover:text-white transition-colors p-1"
           aria-label="Dismiss legal notice"
         >

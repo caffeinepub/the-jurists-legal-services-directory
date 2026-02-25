@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-change-the-hero-tagline-on-the-homepage-from-justice-delivered-with-precision-integrity-to-trusted-legal-counsel-proven-results",
-      "featureTitle": "Change the hero tagline on the HomePage from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.'",
+      "featureId": "feature-replace-the-existing-legalnoticebanner-dismissible-top-banner-with-full-disclaimer-text-with-a-condensed-legal-disclaimer-line-placed-at-the-very-bottom-of-the-page-inside-or-just-above-the-footer-component-in-layout-tsx-the-shortened-text-should-read-the-information-on-this-site-is-for-general-informational-purposes-only-and-does-not-constitute-legal-advice-no-attorney-client-relationship-is-formed-as-per-bar-council-of-india-rules-advocates-are-not-permitted-to-solicit-work-or-advertise",
+      "featureTitle": "Replace the existing LegalNoticeBanner (dismissible top banner with full disclaimer text) with a condensed legal disclaimer line placed at the very bottom of the page, inside or just above the Footer component in Layout.tsx. The shortened text should read: 'The information on this site is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed. As per Bar Council of India rules, advocates are not permitted to solicit work or advertise.'",
       "files": [
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Layout.tsx"
       ],
       "components": [
         "authorization@3.0.0",
@@ -22,10 +23,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-remove-the-chatbotwidget-component-from-the-site-entirely-remove-its-rendering-from-app-tsx-and-delete-or-disable-the-floating-chat-button-so-no-chatbot-ui-is-visible-to-users",
-      "featureTitle": "Remove the ChatbotWidget component from the site entirely. Remove its rendering from App.tsx and delete or disable the floating chat button so no chatbot UI is visible to users.",
+      "featureId": "feature-add-a-prominent-promotional-banner-on-the-homepage-frontend-src-pages-homepage-tsx-that-displays-the-text-send-a-legal-notice-reply-to-a-legal-notice-under-24-hours-this-banner-should-appear-near-the-top-of-the-homepage-content-e-g-just-below-the-hero-section-or-as-part-of-it-and-use-a-visually-distinct-attention-grabbing-style-consistent-with-the-site-s-existing-theme",
+      "featureTitle": "Add a prominent promotional banner on the HomePage (frontend/src/pages/HomePage.tsx) that displays the text: 'Send a Legal Notice / Reply to a Legal Notice under 24 hours'. This banner should appear near the top of the homepage content (e.g., just below the hero section or as part of it) and use a visually distinct, attention-grabbing style consistent with the site's existing theme.",
       "files": [
-        "frontend/src/App.tsx"
+        "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
         "authorization@3.0.0",
@@ -38,115 +39,6 @@
       ],
       "testIds": [
         "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-restore-the-legal-notice-banner-that-has-disappeared-re-add-a-prominent-legal-notice-disclaimer-banner-e-g-at-the-top-or-bottom-of-every-page-informing-visitors-that-the-content-on-this-site-does-not-constitute-legal-advice-and-is-for-informational-purposes-only-in-compliance-with-bar-council-rules",
-      "featureTitle": "Restore the legal notice banner that has disappeared. Re-add a prominent legal notice/disclaimer banner (e.g., at the top or bottom of every page) informing visitors that the content on this site does not constitute legal advice and is for informational purposes only, in compliance with Bar Council rules.",
-      "files": [
-        "frontend/src/components/Layout.tsx",
-        "frontend/src/components/LegalNoticeBanner.tsx"
-      ],
-      "components": [
-        "authorization@3.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-meet-our-team-section-from-the-aboutpage-and-any-other-page-where-it-appears-do-not-show-team-member-cards-or-the-team-heading-anywhere-on-the-site",
-      "featureTitle": "Remove the 'Meet Our Team' section from the AboutPage (and any other page where it appears). Do not show team member cards or the team heading anywhere on the site.",
-      "files": [
-        "frontend/src/pages/AboutPage.tsx"
-      ],
-      "components": [
-        "authorization@3.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-replace-every-instance-of-cyberabad-across-the-entire-frontend-with-medchal-malkajgiri-and-kukatpally-courts-this-includes-the-header-navigation-and-dropdowns-the-footer-jurisdiction-links-the-jurisdictionpage-component-route-slug-page-title-seo-metadata-breadcrumbs-content-the-sitemap-page-and-any-other-component-or-page-that-references-cyberabad-update-the-route-path-from-jurisdiction-cyberabad-to-jurisdiction-medchal-malkajgiri-kukatpally-and-ensure-the-old-path-redirects-or-is-replaced",
-      "featureTitle": "Replace every instance of 'Cyberabad' across the entire frontend with 'Medchal Malkajgiri and Kukatpally Courts'. This includes: the Header navigation and dropdowns, the Footer jurisdiction links, the JurisdictionPage component (route slug, page title, SEO metadata, breadcrumbs, content), the sitemap page, and any other component or page that references 'Cyberabad'. Update the route path from '/jurisdiction/cyberabad' to '/jurisdiction/medchal-malkajgiri-kukatpally' and ensure the old path redirects or is replaced.",
-      "files": [
-        "frontend/public/sitemap.xml",
-        "frontend/src/App.tsx",
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/components/Header.tsx",
-        "frontend/src/pages/JurisdictionPage.tsx"
-      ],
-      "components": [
-        "authorization@3.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-under-each-court-s-jurisdiction-page-hyderabad-secunderabad-rangareddy-and-medchal-malkajgiri-and-kukatpally-courts-list-all-areas-of-practice-that-are-mentioned-anywhere-on-the-site-from-the-servicespage-and-servicedetailpage-ensure-the-areas-of-practice-section-on-each-court-s-jurisdictionpage-includes-the-full-comprehensive-list-rather-than-a-partial-subset",
-      "featureTitle": "Under each court's jurisdiction page (Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri and Kukatpally Courts), list ALL areas of practice that are mentioned anywhere on the site (from the ServicesPage and ServiceDetailPage). Ensure the 'Areas of Practice' section on each court's JurisdictionPage includes the full comprehensive list rather than a partial subset.",
-      "files": [
-        "frontend/src/pages/JurisdictionPage.tsx"
-      ],
-      "components": [
-        "authorization@3.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-special-prominent-banner-or-highlight-section-on-the-telangana-high-court-jurisdiction-page-if-it-exists-or-create-a-dedicated-telangana-high-court-section-page-the-banner-should-be-visually-distinct-e-g-gold-border-serif-heading-elevated-card-and-highlight-that-the-firm-practises-at-the-telangana-high-court-including-key-information-such-as-types-of-matters-handled-at-the-high-court-level",
-      "featureTitle": "Add a special prominent banner or highlight section on the Telangana High Court jurisdiction page (if it exists) or create a dedicated Telangana High Court section/page. The banner should be visually distinct (e.g., gold border, serif heading, elevated card) and highlight that the firm practises at the Telangana High Court, including key information such as types of matters handled at the High Court level.",
-      "files": [
-        "frontend/public/sitemap.xml",
-        "frontend/src/App.tsx",
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/components/Header.tsx",
-        "frontend/src/pages/TelanganaHighCourtPage.tsx"
-      ],
-      "components": [
-        "authorization@3.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-7"
       ],
       "confidence": "high"
     }

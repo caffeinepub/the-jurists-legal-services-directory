@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from '@tanstack/react-router';
-import { Scale, Shield, Users, Award, ArrowRight, CheckCircle } from 'lucide-react';
+import { Scale, Shield, Users, Award, ArrowRight, Clock, FileText } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import StructuredData, { generateLocalBusinessSchema } from '../components/StructuredData';
 
@@ -65,6 +65,32 @@ export default function HomePage() {
                 Our Services
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Promotional Banner */}
+      <section className="bg-white border-y-2 border-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-10 h-10 bg-black flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <p className="font-serif text-lg sm:text-xl font-bold text-black text-center sm:text-left">
+                Send a Legal Notice / Reply to a Legal Notice under 24 hours
+              </p>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <Clock className="w-4 h-4 text-black" />
+              <span className="text-xs uppercase tracking-widest font-semibold text-black">Fast · Reliable · Professional</span>
+            </div>
+            <Link
+              to="/contact"
+              className="flex-shrink-0 inline-flex items-center gap-2 bg-black text-white px-6 py-2.5 text-sm font-medium uppercase tracking-wide hover:bg-gray-800 transition-colors"
+            >
+              Get Started <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>

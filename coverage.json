@@ -1,108 +1,37 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-25T13:43:47.284Z",
+  "generatedAt": "2026-02-25T20:14:55.419Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 7,
-    "implemented": 7,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Change the hero tagline on the HomePage from 'Justice Delivered with Precision & Integrity' to 'Trusted Legal Counsel. Proven Results.'",
+        "summary": "Replace the existing LegalNoticeBanner (dismissible top banner with full disclaimer text) with a condensed legal disclaimer line placed at the very bottom of the page, inside or just above the Footer component in Layout.tsx. The shortened text should read: 'The information on this site is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed. As per Bar Council of India rules, advocates are not permitted to solicit work or advertise.'",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/Layout.tsx",
+          "frontend/src/components/Footer.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/Layout.tsx",
+          "frontend/src/components/Footer.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Remove the ChatbotWidget component from the site entirely. Remove its rendering from App.tsx and delete or disable the floating chat button so no chatbot UI is visible to users.",
+        "summary": "Add a prominent promotional banner on the HomePage (frontend/src/pages/HomePage.tsx) that displays the text: 'Send a Legal Notice / Reply to a Legal Notice under 24 hours'. This banner should appear near the top of the homepage content (e.g., just below the hero section or as part of it) and use a visually distinct, attention-grabbing style consistent with the site's existing theme.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/App.tsx"
+          "frontend/src/pages/HomePage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Restore the legal notice banner that has disappeared. Re-add a prominent legal notice/disclaimer banner (e.g., at the top or bottom of every page) informing visitors that the content on this site does not constitute legal advice and is for informational purposes only, in compliance with Bar Council rules.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/LegalNoticeBanner.tsx",
-          "frontend/src/components/Layout.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/LegalNoticeBanner.tsx",
-          "frontend/src/components/Layout.tsx"
-        ]
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Remove the 'Meet Our Team' section from the AboutPage (and any other page where it appears). Do not show team member cards or the team heading anywhere on the site.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/AboutPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/AboutPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-5",
-        "summary": "Replace every instance of 'Cyberabad' across the entire frontend with 'Medchal Malkajgiri and Kukatpally Courts'. This includes: the Header navigation and dropdowns, the Footer jurisdiction links, the JurisdictionPage component (route slug, page title, SEO metadata, breadcrumbs, content), the sitemap page, and any other component or page that references 'Cyberabad'. Update the route path from '/jurisdiction/cyberabad' to '/jurisdiction/medchal-malkajgiri-kukatpally' and ensure the old path redirects or is replaced.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/Header.tsx",
-          "frontend/src/components/Footer.tsx",
-          "frontend/src/pages/JurisdictionPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/public/sitemap.xml"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/Header.tsx",
-          "frontend/src/components/Footer.tsx",
-          "frontend/src/pages/JurisdictionPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/public/sitemap.xml"
-        ]
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Under each court's jurisdiction page (Hyderabad, Secunderabad, Rangareddy, and Medchal Malkajgiri and Kukatpally Courts), list ALL areas of practice that are mentioned anywhere on the site (from the ServicesPage and ServiceDetailPage). Ensure the 'Areas of Practice' section on each court's JurisdictionPage includes the full comprehensive list rather than a partial subset.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/JurisdictionPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/JurisdictionPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Add a special prominent banner or highlight section on the Telangana High Court jurisdiction page (if it exists) or create a dedicated Telangana High Court section/page. The banner should be visually distinct (e.g., gold border, serif heading, elevated card) and highlight that the firm practises at the Telangana High Court, including key information such as types of matters handled at the High Court level.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/TelanganaHighCourtPage.tsx",
-          "frontend/src/components/Header.tsx",
-          "frontend/src/components/Footer.tsx",
-          "frontend/src/App.tsx",
-          "frontend/public/sitemap.xml"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/TelanganaHighCourtPage.tsx",
-          "frontend/src/components/Header.tsx",
-          "frontend/src/components/Footer.tsx",
-          "frontend/src/App.tsx",
-          "frontend/public/sitemap.xml"
+          "frontend/src/pages/HomePage.tsx"
         ]
       }
     ]
@@ -112,16 +41,9 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/sitemap.xml",
-    "frontend/src/App.tsx",
     "frontend/src/components/Footer.tsx",
-    "frontend/src/components/Header.tsx",
     "frontend/src/components/Layout.tsx",
-    "frontend/src/components/LegalNoticeBanner.tsx",
-    "frontend/src/pages/AboutPage.tsx",
     "frontend/src/pages/HomePage.tsx",
-    "frontend/src/pages/JurisdictionPage.tsx",
-    "frontend/src/pages/TelanganaHighCourtPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
