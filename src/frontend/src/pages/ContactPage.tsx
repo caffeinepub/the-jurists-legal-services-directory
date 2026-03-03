@@ -1,139 +1,137 @@
-import { Mail, MapPin, Clock, Phone } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import ContactForm from '../components/ContactForm';
-import SEOHead from '../components/SEOHead';
-import StructuredData, { generateLocalBusinessSchema } from '../components/StructuredData';
-import Breadcrumbs from '../components/Breadcrumbs';
+import { Clock, Mail, MapPin } from "lucide-react";
+import React from "react";
+import ContactForm from "../components/ContactForm";
+import SEOHead from "../components/SEOHead";
+import StructuredData, {
+  generateLocalBusinessSchema,
+} from "../components/StructuredData";
+
+const contactInfo = [
+  {
+    icon: MapPin,
+    title: "Office Location",
+    lines: ["Hyderabad, Telangana", "India"],
+  },
+  {
+    icon: Mail,
+    title: "Email",
+    lines: ["thejuristshyd@gmail.com"],
+    link: "mailto:thejuristshyd@gmail.com",
+  },
+  {
+    icon: Clock,
+    title: "Enquiries",
+    lines: ["Available 24/7", "Enquiries accepted all days including holidays"],
+  },
+];
 
 export default function ContactPage() {
   return (
-    <div className="flex flex-col">
+    <>
       <SEOHead
-        title="Contact Us"
-        description="Contact The Jurists for legal consultation in Hyderabad. Office hours: Mon-Sat 9 AM - 6 PM. Expert legal advice for all practice areas."
+        title="Contact – The Jurists Hyderabad"
+        description="Submit an enquiry to The Jurists. This page is for informational enquiries only and does not constitute legal advice or solicitation."
+        keywords="contact lawyers hyderabad, legal enquiry hyderabad, advocates hyderabad contact"
         canonical="https://thejurists.in/contact"
-        keywords="contact lawyer Hyderabad, legal consultation, law firm contact"
       />
-      <StructuredData data={generateLocalBusinessSchema()} />
+      <StructuredData schema={generateLocalBusinessSchema()} />
 
-      <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact', href: '/contact' }]} />
-            <div className="text-center space-y-6">
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight">Contact Us</h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                Get in touch with our legal team. We're here to help with all your legal needs.
-              </p>
-            </div>
-          </div>
+      {/* Hero */}
+      <section className="bg-black text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-3">
+            Enquiries
+          </p>
+          <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4">
+            Contact & Enquiries
+          </h1>
+          <p className="text-gray-300 max-w-xl text-lg">
+            Use the form below to submit an informational enquiry. This does not
+            constitute legal advice or create an attorney-client relationship.
+          </p>
         </div>
       </section>
 
-      <section className="py-16 bg-muted/20">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5 text-primary" />
-                  Email
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <a href="mailto:thejuristshyd@gmail.com" className="text-primary hover:underline">
-                  thejuristshyd@gmail.com
-                </a>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Phone className="h-5 w-5 text-primary" />
-                  Phone
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <a href="tel:+918008012892" className="text-primary hover:underline">
-                  +91-80080-12892
-                </a>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  Location
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Jubilee Hills, Hyderabad, Telangana 500033
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-primary" />
-                  Office Hours
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Mon - Sat: 9:00 AM - 6:00 PM</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="max-w-5xl mx-auto mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  Visit Our Office
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  <strong>The Jurists</strong><br />
-                  Jubilee Hills<br />
-                  Hyderabad, Telangana 500033<br />
-                  India
-                </p>
-                <div className="w-full h-96 rounded-lg overflow-hidden border border-border">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243647.3160407253!2d78.24323209999999!3d17.385044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99daeaebd2c7%3A0xae93b78392bafbc2!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1234567890"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="The Jurists office location in Hyderabad"
-                  />
+      {/* Contact Info Cards */}
+      <section className="bg-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {contactInfo.map((info) => (
+              <div
+                key={info.title}
+                className="border border-black p-6 text-center"
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 border border-black mb-4">
+                  <info.icon className="w-5 h-5 text-black" />
                 </div>
-              </CardContent>
-            </Card>
+                <h3 className="font-serif text-lg font-semibold text-black mb-2">
+                  {info.title}
+                </h3>
+                {info.lines.map((line, i) =>
+                  info.link && i === 0 ? (
+                    <a
+                      key={line}
+                      href={info.link}
+                      className="block text-sm text-gray-600 hover:text-black transition-colors"
+                    >
+                      {line}
+                    </a>
+                  ) : (
+                    <p key={line} className="text-sm text-gray-600">
+                      {line}
+                    </p>
+                  ),
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-24">
-        <div className="container">
-          <div className="max-w-2xl mx-auto">
-            <div className="text-center mb-12 space-y-4">
-              <h2 className="text-4xl md:text-5xl font-bold">Send Us a Message</h2>
-              <p className="text-lg text-muted-foreground">
-                Fill out the form below and we'll get back to you as soon as possible.
-              </p>
-            </div>
+      {/* Disclaimer notice before form */}
+      <section className="bg-gray-50 pt-10 pb-0">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="border border-gray-300 bg-white p-4 text-xs text-gray-600 leading-relaxed">
+            <strong className="text-gray-800">Please note:</strong> Submitting
+            this form is an informational enquiry only. It does not constitute
+            legal advice, create an attorney-client relationship, or amount to
+            solicitation of legal services. As per Bar Council of India Rules,
+            advocates are not permitted to solicit work or advertise. Any
+            information shared via this form will be treated in confidence.
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form */}
+      <section className="bg-gray-50 py-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="font-serif text-3xl font-bold text-black mb-3">
+              Submit an Enquiry
+            </h2>
+            <p className="text-gray-600">
+              Fill out the form below and we will respond to your informational
+              enquiry.
+            </p>
+          </div>
+          <div className="border border-black bg-white p-6">
             <ContactForm />
           </div>
         </div>
       </section>
-    </div>
+
+      {/* Map placeholder */}
+      <section className="bg-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="border border-black overflow-hidden">
+            <img
+              src="/assets/generated/hyderabad-courthouse.dim_800x500.jpg"
+              alt="Hyderabad location"
+              className="w-full h-64 object-cover"
+            />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

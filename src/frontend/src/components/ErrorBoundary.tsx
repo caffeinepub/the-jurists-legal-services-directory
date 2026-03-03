@@ -1,7 +1,8 @@
-import React, { Component, ReactNode } from 'react';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
-import { Button } from './ui/button';
-import { AlertCircle, RefreshCw, Home } from 'lucide-react';
+import { AlertCircle, Home, RefreshCw } from "lucide-react";
+import type React from "react";
+import { Component, type ReactNode } from "react";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Button } from "./ui/button";
 
 interface Props {
   children: ReactNode;
@@ -33,7 +34,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
     this.setState({
       error,
       errorInfo,
@@ -49,7 +50,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   render() {
@@ -62,19 +63,24 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="container py-24">
           <Alert variant="destructive" className="max-w-2xl mx-auto">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle className="text-lg font-semibold mb-2">Something went wrong</AlertTitle>
+            <AlertTitle className="text-lg font-semibold mb-2">
+              Something went wrong
+            </AlertTitle>
             <AlertDescription className="space-y-4">
               <p className="text-sm">
-                An unexpected error occurred while rendering this page. This might be a temporary issue.
+                An unexpected error occurred while rendering this page. This
+                might be a temporary issue.
               </p>
               {this.state.error && (
                 <details className="text-xs bg-destructive/10 p-3 rounded-md">
-                  <summary className="cursor-pointer font-medium mb-2">Error Details</summary>
+                  <summary className="cursor-pointer font-medium mb-2">
+                    Error Details
+                  </summary>
                   <pre className="whitespace-pre-wrap break-words">
                     {this.state.error.toString()}
                     {this.state.errorInfo && (
                       <>
-                        {'\n\n'}
+                        {"\n\n"}
                         {this.state.errorInfo.componentStack}
                       </>
                     )}

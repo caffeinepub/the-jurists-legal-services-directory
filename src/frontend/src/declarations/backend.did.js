@@ -8,6 +8,17 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const _CaffeineStorageCreateCertificateResult = IDL.Record({
+  'method' : IDL.Text,
+  'blob_hash' : IDL.Text,
+});
+export const _CaffeineStorageRefillInformation = IDL.Record({
+  'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+});
+export const _CaffeineStorageRefillResult = IDL.Record({
+  'success' : IDL.Opt(IDL.Bool),
+  'topped_up_amount' : IDL.Opt(IDL.Nat),
+});
 export const Variant__3 = IDL.Variant({
   'Secunderabad' : IDL.Null,
   'Cyberabad' : IDL.Null,
@@ -89,10 +100,7 @@ export const TrendingTopic = IDL.Record({
   'timestamp' : Time,
   'trendRelevance' : Variant__2,
 });
-export const UserProfile = IDL.Record({
-  'name' : IDL.Text,
-  'email' : IDL.Opt(IDL.Text),
-});
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 export const SitemapEntry = IDL.Record({
   'loc' : IDL.Text,
   'changeFreq' : IDL.Opt(IDL.Text),
@@ -101,6 +109,32 @@ export const SitemapEntry = IDL.Record({
 });
 
 export const idlService = IDL.Service({
+  '_caffeineStorageBlobIsLive' : IDL.Func(
+      [IDL.Vec(IDL.Nat8)],
+      [IDL.Bool],
+      ['query'],
+    ),
+  '_caffeineStorageBlobsToDelete' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      ['query'],
+    ),
+  '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      [],
+      [],
+    ),
+  '_caffeineStorageCreateCertificate' : IDL.Func(
+      [IDL.Text],
+      [_CaffeineStorageCreateCertificateResult],
+      [],
+    ),
+  '_caffeineStorageRefillCashier' : IDL.Func(
+      [IDL.Opt(_CaffeineStorageRefillInformation)],
+      [_CaffeineStorageRefillResult],
+      [],
+    ),
+  '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   'addLegalListing' : IDL.Func([LegalListing], [], []),
   'addOrUpdateBlogArticle' : IDL.Func([BlogArticle], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
@@ -130,6 +164,7 @@ export const idlService = IDL.Service({
     ),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getChatbotResponse' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
   'getContactFormSubmissionsByJurisdiction' : IDL.Func(
       [Variant__3],
       [IDL.Vec(ContactFormSubmission)],
@@ -198,6 +233,17 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const _CaffeineStorageCreateCertificateResult = IDL.Record({
+    'method' : IDL.Text,
+    'blob_hash' : IDL.Text,
+  });
+  const _CaffeineStorageRefillInformation = IDL.Record({
+    'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+  });
+  const _CaffeineStorageRefillResult = IDL.Record({
+    'success' : IDL.Opt(IDL.Bool),
+    'topped_up_amount' : IDL.Opt(IDL.Nat),
+  });
   const Variant__3 = IDL.Variant({
     'Secunderabad' : IDL.Null,
     'Cyberabad' : IDL.Null,
@@ -276,10 +322,7 @@ export const idlFactory = ({ IDL }) => {
     'timestamp' : Time,
     'trendRelevance' : Variant__2,
   });
-  const UserProfile = IDL.Record({
-    'name' : IDL.Text,
-    'email' : IDL.Opt(IDL.Text),
-  });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
   const SitemapEntry = IDL.Record({
     'loc' : IDL.Text,
     'changeFreq' : IDL.Opt(IDL.Text),
@@ -288,6 +331,32 @@ export const idlFactory = ({ IDL }) => {
   });
   
   return IDL.Service({
+    '_caffeineStorageBlobIsLive' : IDL.Func(
+        [IDL.Vec(IDL.Nat8)],
+        [IDL.Bool],
+        ['query'],
+      ),
+    '_caffeineStorageBlobsToDelete' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        ['query'],
+      ),
+    '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        [],
+        [],
+      ),
+    '_caffeineStorageCreateCertificate' : IDL.Func(
+        [IDL.Text],
+        [_CaffeineStorageCreateCertificateResult],
+        [],
+      ),
+    '_caffeineStorageRefillCashier' : IDL.Func(
+        [IDL.Opt(_CaffeineStorageRefillInformation)],
+        [_CaffeineStorageRefillResult],
+        [],
+      ),
+    '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     'addLegalListing' : IDL.Func([LegalListing], [], []),
     'addOrUpdateBlogArticle' : IDL.Func([BlogArticle], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
@@ -321,6 +390,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getChatbotResponse' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
     'getContactFormSubmissionsByJurisdiction' : IDL.Func(
         [Variant__3],
         [IDL.Vec(ContactFormSubmission)],

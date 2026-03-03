@@ -14,13 +14,11 @@ export interface SitemapEntry {
     lastMod?: string;
 }
 export type Time = bigint;
-export interface BlogArticle {
-    id: bigint;
-    title: string;
-    content: string;
-    publishedDate: Time;
-    author: string;
-    category: Variant__1;
+export interface LegalListing {
+    contact: string;
+    name: string;
+    jurisdiction: Variant__3;
+    specialization: Variant__1;
 }
 export interface TrendingTopic {
     id: bigint;
@@ -32,18 +30,20 @@ export interface TrendingTopic {
     timestamp: Time;
     trendRelevance: Variant__2;
 }
-export interface LegalListing {
-    contact: string;
-    name: string;
-    jurisdiction: Variant__3;
-    specialization: Variant__1;
-}
 export interface ServiceDetails {
     title: string;
     description: string;
     practiceArea: Variant__1;
     jurisdiction: Variant__3;
     keywords: Array<string>;
+}
+export interface BlogArticle {
+    id: bigint;
+    title: string;
+    content: string;
+    publishedDate: Time;
+    author: string;
+    category: Variant__1;
 }
 export interface ContactFormSubmission {
     id: bigint;
@@ -64,7 +64,6 @@ export interface CreateContactFormSubmissionInput {
 }
 export interface UserProfile {
     name: string;
-    email?: string;
 }
 export enum UserRole {
     admin = "admin",
@@ -112,6 +111,7 @@ export interface backendInterface {
     getBlogArticlesByCategory(category: Variant__1): Promise<Array<BlogArticle>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getChatbotResponse(message: string): Promise<string>;
     getContactFormSubmissionsByJurisdiction(jurisdiction: Variant__3): Promise<Array<ContactFormSubmission>>;
     getContactFormSubmissionsByStatus(status: Variant): Promise<Array<ContactFormSubmission>>;
     getLegalDirectoryByJurisdiction(jurisdiction: Variant__3): Promise<Array<LegalListing>>;

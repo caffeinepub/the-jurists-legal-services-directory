@@ -1,482 +1,402 @@
-import { Link } from '@tanstack/react-router';
-import { Heart, Building2, Shield, Gavel, Home, FileText, Landmark, Briefcase, Users, Calculator, CheckCircle2, ArrowRight } from 'lucide-react';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import ContactForm from '../components/ContactForm';
-import SEOHead from '../components/SEOHead';
-import StructuredData, { generateLegalServiceSchema, generateLocalBusinessSchema } from '../components/StructuredData';
-import Breadcrumbs from '../components/Breadcrumbs';
-import FAQSection from '../components/FAQSection';
+import { Link, useParams } from "@tanstack/react-router";
+import { ArrowRight, CheckCircle, Mail } from "lucide-react";
+import React from "react";
+import Breadcrumbs from "../components/Breadcrumbs";
+import SEOHead from "../components/SEOHead";
 
-interface ServiceDetailPageProps {
-  service: string;
-}
+const serviceData: Record<
+  string,
+  {
+    title: string;
+    description: string;
+    longDesc: string;
+    features: string[];
+    img: string;
+    keywords: string;
+  }
+> = {
+  "family-law": {
+    title: "Family Law",
+    description:
+      "Information about family law practice including divorce, child custody, adoption, and inheritance.",
+    longDesc:
+      "Our family law practice covers all aspects of domestic relations. Family matters are deeply personal and require both legal knowledge and careful handling. This page provides information about the family law matters we handle.",
+    features: [
+      "Divorce & Separation",
+      "Child Custody & Support",
+      "Adoption Proceedings",
+      "Inheritance & Succession",
+      "Domestic Violence Protection",
+      "Marriage Registration",
+    ],
+    img: "/assets/generated/family-law-consultation.dim_800x500.jpg",
+    keywords:
+      "family law hyderabad, divorce lawyer hyderabad, child custody hyderabad",
+  },
+  "corporate-law": {
+    title: "Corporate Law",
+    description:
+      "Information about corporate legal practice for businesses of all sizes.",
+    longDesc:
+      "Our corporate law practice covers legal matters for businesses, from incorporation to complex transactions. This page provides information about the corporate law areas we handle, including regulatory matters and corporate governance.",
+    features: [
+      "Company Incorporation",
+      "Mergers & Acquisitions",
+      "Corporate Governance",
+      "Contract Drafting",
+      "Regulatory Compliance",
+      "Board Advisory",
+    ],
+    img: "/assets/generated/corporate-law-meeting.dim_800x500.jpg",
+    keywords:
+      "corporate lawyer hyderabad, company formation hyderabad, business law hyderabad",
+  },
+  "criminal-defense": {
+    title: "Criminal Defense",
+    description:
+      "Information about criminal defense representation across all Hyderabad courts.",
+    longDesc:
+      "Our criminal defense practice covers representation for clients facing criminal charges. We handle matters at all stages of the legal process, from bail applications to trial and appeals. This page provides information about the criminal defense matters we handle.",
+    features: [
+      "Bail Applications",
+      "Trial Representation",
+      "Appeals",
+      "White Collar Crime",
+      "Cybercrime Defense",
+      "Anticipatory Bail",
+    ],
+    img: "/assets/generated/criminal-defense-courtroom.dim_800x500.jpg",
+    keywords:
+      "criminal lawyer hyderabad, criminal defense hyderabad, bail application hyderabad",
+  },
+  "civil-litigation": {
+    title: "Civil Litigation",
+    description:
+      "Information about civil litigation and dispute representation.",
+    longDesc:
+      "Our civil litigation practice handles disputes across all civil courts in the Hyderabad jurisdiction. This page provides information about the types of civil matters we handle, including contract disputes, property matters, and consumer cases.",
+    features: [
+      "Contract Disputes",
+      "Tort Claims",
+      "Property Disputes",
+      "Consumer Cases",
+      "Injunctions",
+      "Arbitration",
+    ],
+    img: "/assets/generated/civil-litigation-documents.dim_800x500.jpg",
+    keywords:
+      "civil litigation hyderabad, civil lawyer hyderabad, dispute resolution hyderabad",
+  },
+  "property-law": {
+    title: "Property Law",
+    description:
+      "Information about property law practice including transactions, disputes, and documentation.",
+    longDesc:
+      "Our property law practice covers all aspects of real estate law in Hyderabad. This page provides information about property-related legal matters including title verification, sale deeds, property disputes, and RERA compliance.",
+    features: [
+      "Title Verification",
+      "Sale Deed Drafting",
+      "Property Disputes",
+      "Encumbrance Certificates",
+      "Land Acquisition",
+      "RERA Compliance",
+    ],
+    img: "/assets/generated/property-law-documents.dim_800x500.jpg",
+    keywords:
+      "property lawyer hyderabad, real estate lawyer hyderabad, property dispute hyderabad",
+  },
+  "documentation-services": {
+    title: "Documentation Services",
+    description:
+      "Information about legal documentation, drafting, and notarization services.",
+    longDesc:
+      "Our documentation practice covers preparation of legally sound documents for various needs. This page provides information about the documentation services available, including contract drafting, affidavits, and notarization.",
+    features: [
+      "Contract Drafting",
+      "Affidavit Preparation",
+      "Power of Attorney",
+      "Notarization",
+      "Legal Translations",
+      "Agreement Review",
+    ],
+    img: "/assets/generated/documentation-services.dim_800x500.jpg",
+    keywords:
+      "legal documentation hyderabad, contract drafting hyderabad, notary hyderabad",
+  },
+  "tax-law": {
+    title: "Tax Law",
+    description:
+      "Information about tax law practice and compliance matters for individuals and businesses.",
+    longDesc:
+      "Our tax law practice covers guidance on tax planning, compliance, and dispute matters. This page provides information about the tax law areas we handle, including GST compliance, income tax, and tax dispute resolution.",
+    features: [
+      "Tax Planning",
+      "GST Compliance",
+      "Income Tax Returns",
+      "Tax Dispute Resolution",
+      "Transfer Pricing",
+      "Tax Audits",
+    ],
+    img: "/assets/generated/tax-law-consultation.dim_800x500.jpg",
+    keywords:
+      "tax lawyer hyderabad, GST consultant hyderabad, income tax hyderabad",
+  },
+  "ip-law": {
+    title: "IP Law",
+    description:
+      "Information about intellectual property practice and enforcement.",
+    longDesc:
+      "Our IP law practice covers matters relating to innovations, brands, and creative works. This page provides information about intellectual property matters including registration, enforcement, and licensing.",
+    features: [
+      "Patent Filing",
+      "Trademark Registration",
+      "Copyright Protection",
+      "IP Litigation",
+      "Trade Secrets",
+      "Licensing Agreements",
+    ],
+    img: "/assets/generated/ip-law-documents.dim_800x500.jpg",
+    keywords:
+      "IP lawyer hyderabad, patent attorney hyderabad, trademark registration hyderabad",
+  },
+  "startup-law": {
+    title: "Startup Law",
+    description:
+      "Information about legal matters for startups and emerging businesses.",
+    longDesc:
+      "Our startup law practice covers the legal matters commonly faced by startups. This page provides information about startup-related legal areas including incorporation, founder agreements, investor contracts, and regulatory compliance.",
+    features: [
+      "Incorporation",
+      "Founder Agreements",
+      "Investor Contracts",
+      "IP Protection",
+      "Employment Contracts",
+      "Regulatory Compliance",
+    ],
+    img: "/assets/generated/startup-law-meeting.dim_800x500.jpg",
+    keywords:
+      "startup lawyer hyderabad, startup legal services hyderabad, company registration hyderabad",
+  },
+  "employment-law": {
+    title: "Employment Law",
+    description:
+      "Information about employment law practice for employers and employees.",
+    longDesc:
+      "Our employment law practice covers all aspects of workplace law. This page provides information about employment law matters including contracts, disputes, labor compliance, and industrial relations.",
+    features: [
+      "Employment Contracts",
+      "Wrongful Termination",
+      "Workplace Harassment",
+      "Labor Compliance",
+      "HR Policy Drafting",
+      "Industrial Disputes",
+    ],
+    img: "/assets/generated/employment-law-workplace.dim_800x500.jpg",
+    keywords:
+      "employment lawyer hyderabad, labor law hyderabad, workplace rights hyderabad",
+  },
+  "contracts-agreements": {
+    title: "Contracts & Agreements",
+    description: "Information about contract drafting and review services.",
+    longDesc:
+      "Our contracts practice covers drafting and review of all types of agreements. This page provides information about the contract and agreement services available, including business contracts, service agreements, and NDAs.",
+    features: [
+      "Business Contracts",
+      "Service Agreements",
+      "NDA Drafting",
+      "Partnership Deeds",
+      "Lease Agreements",
+      "Contract Review",
+    ],
+    img: "/assets/generated/legal-documents-gavel.dim_800x500.jpg",
+    keywords:
+      "contract drafting hyderabad, agreement drafting hyderabad, legal contracts hyderabad",
+  },
+  "contracts-agreements-drafting": {
+    title: "Contracts & Agreements Drafting",
+    description:
+      "Professional drafting and review of all types of contracts and agreements, delivered within 3 days.",
+    longDesc:
+      "The Jurists provides professional contract drafting and review services for all types of agreements. From simple personal agreements to complex commercial contracts for startups and established businesses, our advocates ensure your agreements are legally sound. All contracts are drafted and approved within 3 working days.",
+    features: [
+      "All Types of Commercial Contracts",
+      "Service Agreements & MSAs",
+      "Non-Disclosure Agreements (NDA)",
+      "Partnership & Shareholder Deeds",
+      "Startup & Investor Agreements",
+      "Employment Contracts",
+      "Lease & Rental Agreements",
+      "MOU & Letters of Intent",
+      "Vendor & Supplier Contracts",
+      "E-commerce & Terms of Service",
+      "Franchise Agreements",
+      "Loan & Security Agreements",
+    ],
+    img: "/assets/generated/documentation-services.dim_800x500.jpg",
+    keywords:
+      "contract drafting hyderabad, agreement drafting hyderabad, NDA drafting, startup contracts hyderabad, commercial contracts",
+  },
+};
 
-export default function ServiceDetailPage({ service }: ServiceDetailPageProps) {
-  const serviceData: Record<string, any> = {
-    'family-law': {
-      title: 'Family Law Services in Hyderabad',
-      icon: Heart,
-      description: 'Expert family law services in Hyderabad covering divorce, child custody, matrimonial disputes, and all family legal matters.',
-      image: '/assets/generated/family-law-consultation.dim_800x500.jpg',
-      alt: 'Family law services including divorce and child custody in Hyderabad',
-      services: [
-        'Divorce and Separation',
-        'Child Custody and Visitation',
-        'Alimony and Maintenance',
-        'Domestic Violence Protection',
-        'Adoption Proceedings',
-        'Matrimonial Disputes',
-      ],
-      benefits: [
-        'Compassionate and confidential legal counsel',
-        'Expert negotiation and mediation services',
-        'Strong courtroom representation',
-        'Child-focused custody solutions',
-      ],
-      faqs: [
-        {
-          question: 'What are the grounds for divorce in India?',
-          answer: 'In India, divorce can be filed on grounds including adultery, cruelty, desertion, conversion to another religion, mental disorder, communicable disease, and mutual consent under Section 13 of the Hindu Marriage Act.',
-        },
-        {
-          question: 'How is child custody determined in India?',
-          answer: 'Child custody is determined based on the best interests of the child, considering factors like the child\'s age, preference, parent\'s financial stability, and ability to provide care. Courts prioritize the child\'s welfare above all.',
-        },
-        {
-          question: 'What is the process for legal separation?',
-          answer: 'Legal separation involves filing a petition in family court, attending counseling sessions, negotiating terms for alimony and custody, and obtaining a court order. The process typically takes 6-18 months depending on the case complexity.',
-        },
-        {
-          question: 'Can I get maintenance during divorce proceedings?',
-          answer: 'Yes, you can file for interim maintenance during divorce proceedings. The court can order the spouse to provide financial support for living expenses and legal costs during the pendency of the case.',
-        },
-      ],
-    },
-    'corporate-law': {
-      title: 'Corporate Law Services in Hyderabad',
-      icon: Building2,
-      description: 'Comprehensive corporate law services for businesses in Hyderabad including company formation, compliance, contracts, and corporate governance.',
-      image: '/assets/generated/corporate-law-meeting.dim_800x500.jpg',
-      alt: 'Corporate law services for businesses and startups in Hyderabad',
-      services: [
-        'Company Formation and Registration',
-        'Corporate Compliance and Governance',
-        'Mergers and Acquisitions',
-        'Commercial Contracts',
-        'Shareholder Agreements',
-        'Corporate Restructuring',
-      ],
-      benefits: [
-        'Expert guidance on business structure',
-        'Regulatory compliance support',
-        'Risk mitigation strategies',
-        'Efficient contract management',
-      ],
-      faqs: [
-        {
-          question: 'What legal structure is best for my startup?',
-          answer: 'The choice depends on your business needs. Private Limited Company offers limited liability and easier funding. LLP provides flexibility with limited liability. Sole Proprietorship is simple but offers no liability protection. We help you choose based on your specific requirements.',
-        },
-        {
-          question: 'How do I register a private limited company in India?',
-          answer: 'Registration involves obtaining Digital Signature Certificate (DSC), Director Identification Number (DIN), name approval, filing incorporation documents with MCA, and obtaining Certificate of Incorporation. The process typically takes 10-15 days.',
-        },
-        {
-          question: 'What are the compliance requirements for companies?',
-          answer: 'Companies must file annual returns, maintain statutory registers, conduct board meetings, file income tax returns, comply with GST regulations, and maintain proper accounting records. Requirements vary based on company type and turnover.',
-        },
-      ],
-    },
-    'criminal-defense': {
-      title: 'Criminal Defense Services in Hyderabad',
-      icon: Shield,
-      description: 'Expert criminal defense representation in Hyderabad for all types of criminal cases including bail, trial defense, and appeals.',
-      image: '/assets/generated/criminal-defense-courtroom.dim_800x500.jpg',
-      alt: 'Criminal defense attorney services in Hyderabad courts',
-      services: [
-        'Bail Applications',
-        'Trial Defense',
-        'Criminal Appeals',
-        'White Collar Crime Defense',
-        'Cyber Crime Defense',
-        'Pre-Trial Negotiations',
-      ],
-      benefits: [
-        'Experienced criminal defense attorneys',
-        '24/7 emergency legal support',
-        'Strong courtroom advocacy',
-        'Confidential legal counsel',
-      ],
-      faqs: [
-        {
-          question: 'What should I do if I am arrested?',
-          answer: 'Remain calm and exercise your right to remain silent. Do not make any statements without a lawyer present. Contact a criminal defense attorney immediately. You have the right to legal representation and to know the charges against you.',
-        },
-        {
-          question: 'Can I get bail in a criminal case?',
-          answer: 'Bail availability depends on the nature of the offense. For bailable offenses, bail is a right. For non-bailable offenses, the court has discretion based on factors like severity of crime, flight risk, and likelihood of tampering with evidence.',
-        },
-        {
-          question: 'What are the stages of a criminal trial?',
-          answer: 'A criminal trial involves: FIR filing, investigation, charge sheet filing, framing of charges, prosecution evidence, defense evidence, arguments, and judgment. The process can take months to years depending on case complexity.',
-        },
-      ],
-    },
-    'civil-litigation': {
-      title: 'Civil Litigation Services in Hyderabad',
-      icon: Gavel,
-      description: 'Professional civil litigation services in Hyderabad for contract disputes, recovery suits, and civil legal proceedings.',
-      image: '/assets/generated/civil-litigation-documents.dim_800x500.jpg',
-      alt: 'Civil litigation and dispute resolution services in Hyderabad',
-      services: [
-        'Contract Disputes',
-        'Recovery Suits',
-        'Property Disputes',
-        'Consumer Disputes',
-        'Injunction Applications',
-        'Civil Appeals',
-      ],
-      benefits: [
-        'Strategic litigation planning',
-        'Alternative dispute resolution',
-        'Cost-effective legal solutions',
-        'Experienced trial lawyers',
-      ],
-      faqs: [
-        {
-          question: 'How long does a civil case take in India?',
-          answer: 'Civil cases typically take 2-5 years depending on complexity, court workload, and whether appeals are filed. Simple cases may be resolved faster through mediation or settlement.',
-        },
-        {
-          question: 'What is the limitation period for filing a civil suit?',
-          answer: 'The Limitation Act prescribes different periods for different types of suits. Generally, it\'s 3 years for most civil suits from the date the cause of action arises. Property disputes may have different limitation periods.',
-        },
-        {
-          question: 'Can civil disputes be resolved without going to court?',
-          answer: 'Yes, through Alternative Dispute Resolution (ADR) methods like mediation, arbitration, and negotiation. These methods are faster, less expensive, and can preserve business relationships.',
-        },
-      ],
-    },
-    'property-law': {
-      title: 'Property Law Services in Hyderabad',
-      icon: Home,
-      description: 'Comprehensive property law services in Hyderabad including real estate transactions, title verification, and property disputes.',
-      image: '/assets/generated/property-law-documents.dim_800x500.jpg',
-      alt: 'Property law and real estate legal services in Hyderabad',
-      services: [
-        'Property Title Verification',
-        'Sale and Purchase Agreements',
-        'Property Disputes',
-        'Land Acquisition',
-        'Lease Agreements',
-        'Property Registration',
-      ],
-      benefits: [
-        'Thorough title verification',
-        'Secure property transactions',
-        'Dispute resolution expertise',
-        'Complete legal documentation',
-      ],
-      faqs: [
-        {
-          question: 'Why is title verification important?',
-          answer: 'Title verification ensures the seller has clear ownership, the property is free from encumbrances, and there are no legal disputes. It protects you from future legal complications and financial losses.',
-        },
-        {
-          question: 'What documents are needed for property registration?',
-          answer: 'Required documents include sale deed, encumbrance certificate, property tax receipts, identity and address proofs of buyer and seller, and previous sale deeds. Additional documents may be needed based on property type.',
-        },
-        {
-          question: 'How can I resolve a property dispute?',
-          answer: 'Property disputes can be resolved through negotiation, mediation, or litigation. The approach depends on the nature of the dispute. Legal remedies include filing a suit for specific performance, declaration of title, or injunction.',
-        },
-      ],
-    },
-    'ip-law': {
-      title: 'Intellectual Property Law Services',
-      icon: Landmark,
-      description: 'Expert IP law services including trademark registration, patent filing, copyright protection, and IP litigation.',
-      image: '/assets/generated/ip-law-documents.dim_800x500.jpg',
-      alt: 'Intellectual property law and trademark services',
-      services: [
-        'Trademark Registration',
-        'Patent Filing',
-        'Copyright Protection',
-        'IP Litigation',
-        'Licensing Agreements',
-        'Trade Secret Protection',
-      ],
-      benefits: [
-        'Comprehensive IP protection',
-        'Expert registration services',
-        'IP portfolio management',
-        'Enforcement and litigation support',
-      ],
-      faqs: [
-        {
-          question: 'How long does trademark registration take?',
-          answer: 'Trademark registration in India typically takes 12-18 months. The process includes application filing, examination, publication in the trademark journal, and registration certificate issuance if no opposition is filed.',
-        },
-        {
-          question: 'What can be patented in India?',
-          answer: 'Inventions that are novel, involve an inventive step, and are capable of industrial application can be patented. Software, business methods, and mathematical formulas cannot be patented, but software with technical applications may qualify.',
-        },
-        {
-          question: 'How do I protect my copyright?',
-          answer: 'Copyright protection is automatic upon creation of original work. However, registration with the Copyright Office provides legal evidence of ownership and is useful for enforcement. Registration can be done online through the Copyright Office portal.',
-        },
-      ],
-    },
-    'tax-law': {
-      title: 'Tax Law Services in Hyderabad',
-      icon: Calculator,
-      description: 'Professional tax law services including tax planning, compliance, GST advisory, and tax dispute resolution.',
-      image: '/assets/generated/tax-law-consultation.dim_800x500.jpg',
-      alt: 'Tax law consultation and compliance services',
-      services: [
-        'Tax Planning and Advisory',
-        'GST Compliance',
-        'Income Tax Returns',
-        'Tax Dispute Resolution',
-        'Transfer Pricing',
-        'Tax Litigation',
-      ],
-      benefits: [
-        'Expert tax planning strategies',
-        'Compliance management',
-        'Dispute resolution expertise',
-        'Minimize tax liabilities legally',
-      ],
-      faqs: [
-        {
-          question: 'What is the GST registration threshold?',
-          answer: 'Businesses with annual turnover exceeding Rs. 40 lakhs (Rs. 20 lakhs for special category states) must register for GST. Service providers and e-commerce operators have different thresholds and requirements.',
-        },
-        {
-          question: 'How can I reduce my tax liability legally?',
-          answer: 'Legal tax reduction strategies include claiming all eligible deductions under Section 80C, 80D, etc., investing in tax-saving instruments, optimizing business structure, and proper tax planning with professional guidance.',
-        },
-        {
-          question: 'What should I do if I receive an income tax notice?',
-          answer: 'Do not ignore the notice. Understand the reason for the notice, gather relevant documents, respond within the specified time frame, and consult a tax professional for proper representation and compliance.',
-        },
-      ],
-    },
-    'employment-law': {
-      title: 'Employment Law Services in Hyderabad',
-      icon: Users,
-      description: 'Comprehensive employment law services including labor disputes, employment contracts, and workplace compliance.',
-      image: '/assets/generated/employment-law-workplace.dim_800x500.jpg',
-      alt: 'Employment law and workplace legal services',
-      services: [
-        'Employment Contracts',
-        'Wrongful Termination',
-        'Workplace Discrimination',
-        'Labor Compliance',
-        'Employee Benefits',
-        'Industrial Disputes',
-      ],
-      benefits: [
-        'Protect employee rights',
-        'Employer compliance support',
-        'Dispute resolution expertise',
-        'Contract drafting and review',
-      ],
-      faqs: [
-        {
-          question: 'What constitutes wrongful termination?',
-          answer: 'Wrongful termination includes dismissal without proper notice, termination based on discrimination, retaliation for whistleblowing, or violation of employment contract terms. Employees have legal remedies including reinstatement or compensation.',
-        },
-        {
-          question: 'What are my rights as an employee in India?',
-          answer: 'Employee rights include minimum wages, working hours limits, leave entitlements, safe working conditions, protection against discrimination, and right to form unions. Specific rights depend on applicable labor laws and employment terms.',
-        },
-        {
-          question: 'How do I file a complaint for workplace harassment?',
-          answer: 'File a written complaint with the Internal Complaints Committee (ICC) within 3 months of the incident. If ICC is not constituted or you\'re unsatisfied with the response, you can approach the Local Complaints Committee or file a police complaint.',
-        },
-      ],
-    },
-    'startup-law': {
-      title: 'Startup Law Services in Hyderabad',
-      icon: Briefcase,
-      description: 'Specialized legal services for startups including business formation, funding, contracts, and regulatory compliance.',
-      image: '/assets/generated/startup-law-meeting.dim_800x500.jpg',
-      alt: 'Startup legal services and business formation',
-      services: [
-        'Business Formation',
-        'Funding and Investment',
-        'Founder Agreements',
-        'ESOP Implementation',
-        'Regulatory Compliance',
-        'Exit Strategy Planning',
-      ],
-      benefits: [
-        'Startup-focused legal expertise',
-        'Cost-effective solutions',
-        'Investor-ready documentation',
-        'Scalable legal framework',
-      ],
-      faqs: [
-        {
-          question: 'Should I register as a Private Limited Company or LLP?',
-          answer: 'Private Limited Company is better for startups seeking venture capital funding as investors prefer equity. LLP offers more flexibility and lower compliance but is less attractive to investors. Choose based on your funding and growth plans.',
-        },
-        {
-          question: 'What legal documents do I need for fundraising?',
-          answer: 'Key documents include term sheet, shareholders agreement, subscription agreement, articles of association, board resolutions, and due diligence documents. Proper documentation protects both founders and investors.',
-        },
-        {
-          question: 'How do I protect my startup idea?',
-          answer: 'Use Non-Disclosure Agreements (NDAs) when discussing with potential partners or investors. Register trademarks for your brand, file patents for inventions, and maintain trade secrets. Document your IP creation process.',
-        },
-      ],
-    },
-    'documentation-services': {
-      title: 'Legal Documentation Services',
-      icon: FileText,
-      description: 'Professional legal documentation services including notarization, affidavits, agreements, and document drafting.',
-      image: '/assets/generated/documentation-services.dim_800x500.jpg',
-      alt: 'Legal documentation and notary services',
-      services: [
-        'Notarization Services',
-        'Affidavit Drafting',
-        'Agreement Preparation',
-        'Power of Attorney',
-        'Legal Notices',
-        'Document Verification',
-      ],
-      benefits: [
-        'Accurate legal documentation',
-        'Fast turnaround time',
-        'Affordable pricing',
-        'Expert legal drafting',
-      ],
-      faqs: [
-        {
-          question: 'What is the difference between notarization and attestation?',
-          answer: 'Notarization is done by a notary public who verifies the identity of signatories and witnesses the signing. Attestation is done by a gazetted officer who certifies that a document is a true copy of the original.',
-        },
-        {
-          question: 'When do I need a power of attorney?',
-          answer: 'Power of Attorney is needed when you want to authorize someone to act on your behalf for property transactions, bank operations, legal proceedings, or other matters when you cannot be present personally.',
-        },
-        {
-          question: 'How do I send a legal notice?',
-          answer: 'A legal notice should be drafted by a lawyer, clearly stating facts, legal grounds, and demands. It should be sent via registered post with acknowledgment due or through a courier service that provides proof of delivery.',
-        },
-      ],
-    },
+export default function ServiceDetailPage() {
+  const { serviceSlug } = useParams({ strict: false }) as {
+    serviceSlug: string;
   };
+  const service = serviceData[serviceSlug];
 
-  const data = serviceData[service];
-
-  if (!data) {
+  if (!service) {
     return (
-      <div className="container py-24 text-center">
-        <h1 className="text-4xl font-bold mb-4">Service Not Found</h1>
-        <p className="text-muted-foreground mb-8">The service you're looking for doesn't exist.</p>
-        <Button asChild>
-          <Link to="/services">View All Services</Link>
-        </Button>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="font-serif text-3xl font-bold text-black mb-4">
+            Service Not Found
+          </h1>
+          <Link
+            to="/services"
+            className="text-black underline hover:text-gray-600"
+          >
+            View All Practice Areas
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const Icon = data.icon;
-  const areaServed = ['Hyderabad', 'Secunderabad', 'Rangareddy', 'Cyberabad'];
-
   return (
-    <div className="flex flex-col">
+    <>
       <SEOHead
-        title={data.title}
-        description={data.description}
-        canonical={`https://thejurists.in/services/${service}`}
-        ogImage={data.image}
-        keywords={`${data.title}, ${service} lawyer Hyderabad, ${service} attorney Telangana`}
-      />
-      <StructuredData
-        data={[
-          generateLegalServiceSchema(data.title, areaServed),
-          generateLocalBusinessSchema(),
-        ]}
+        title={`${service.title} – The Jurists Hyderabad`}
+        description={service.description}
+        keywords={service.keywords}
+        canonical={`https://thejurists.in/services/${serviceSlug}`}
       />
 
-      <section className="relative py-24 md:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: '/' },
-                { label: 'Services', href: '/services' },
-                { label: data.title.split(' in ')[0], href: `/services/${service}` },
-              ]}
-            />
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Icon className="h-8 w-8 text-primary" />
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold">{data.title}</h1>
+      {/* Breadcrumbs */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Practice Areas", href: "/services" },
+              { label: service.title },
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Hero */}
+      <section className="bg-black text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-3">
+                Practice Area
+              </p>
+              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-4">
+                {service.title}
+              </h1>
+              <p className="text-gray-300 text-lg leading-relaxed mb-8">
+                {service.description}
+              </p>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 bg-white text-black px-8 py-3 font-medium uppercase tracking-wide hover:bg-gray-100 transition-colors"
+              >
+                Submit an Enquiry <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-            <p className="text-xl text-muted-foreground leading-relaxed">{data.description}</p>
+            <div>
+              <img
+                src={service.img}
+                alt={service.title}
+                className="w-full object-cover border border-gray-700"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <img
-              src={data.image}
-              alt={data.alt}
-              className="w-full rounded-2xl shadow-lg border border-border/50 mb-16"
-            />
+      {/* Details */}
+      <section className="bg-white py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2">
+              <h2 className="font-serif text-2xl font-bold text-black mb-4">
+                Overview
+              </h2>
+              <p className="text-gray-700 leading-relaxed mb-8">
+                {service.longDesc}
+              </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">Our Services</h2>
-                <ul className="space-y-3">
-                  {data.services.map((service: string) => (
-                    <li key={service} className="flex items-start gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
-                      <span className="text-muted-foreground">{service}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h2 className="text-3xl font-bold mb-6">Why Choose Us</h2>
-                <ul className="space-y-3">
-                  {data.benefits.map((benefit: string) => (
-                    <li key={benefit} className="flex items-start gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-muted-foreground">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
+              <h3 className="font-serif text-xl font-bold text-black mb-4">
+                Areas Covered
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {service.features.map((feature) => (
+                  <div
+                    key={feature}
+                    className="flex items-center gap-3 border border-black p-3"
+                  >
+                    <CheckCircle className="w-5 h-5 text-black flex-shrink-0" />
+                    <span className="text-sm text-black font-medium">
+                      {feature}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="mb-16">
-              <FAQSection faqs={data.faqs} />
-            </div>
-
-            <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
-              <CardHeader>
-                <CardTitle className="text-2xl">Ready to Get Started?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">
-                  Contact us today for expert legal assistance. Our experienced team is ready to help you with your {data.title.toLowerCase()}.
+            {/* Sidebar */}
+            <div className="space-y-6">
+              <div className="border border-black p-6">
+                <h3 className="font-serif text-lg font-bold text-black mb-4">
+                  Submit an Enquiry
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  For information about {service.title} matters, please use the
+                  contact form or email us directly.
                 </p>
-                <ContactForm />
-              </CardContent>
-            </Card>
+                <div className="space-y-3">
+                  <a
+                    href="mailto:thejuristshyd@gmail.com"
+                    className="flex items-center gap-2 text-sm text-black hover:text-gray-600"
+                  >
+                    <Mail className="w-4 h-4" />
+                    thejuristshyd@gmail.com
+                  </a>
+                </div>
+                <Link
+                  to="/contact"
+                  className="mt-4 block w-full bg-black text-white text-center py-2 text-sm font-medium uppercase tracking-wide hover:bg-gray-900 transition-colors"
+                >
+                  Contact Page
+                </Link>
+              </div>
+
+              <div className="border border-black p-6">
+                <h3 className="font-serif text-lg font-bold text-black mb-3">
+                  Other Practice Areas
+                </h3>
+                <ul className="space-y-2">
+                  {Object.entries(serviceData)
+                    .filter(([slug]) => slug !== serviceSlug)
+                    .slice(0, 5)
+                    .map(([slug, s]) => (
+                      <li key={slug}>
+                        <Link
+                          to={`/services/${slug}` as any}
+                          className="text-sm text-black hover:text-gray-600 flex items-center gap-1"
+                        >
+                          <ArrowRight className="w-3 h-3" /> {s.title}
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
